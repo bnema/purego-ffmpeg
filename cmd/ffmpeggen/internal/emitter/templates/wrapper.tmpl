@@ -1,0 +1,19 @@
+{{define "wrapper.tmpl"}}
+{{- if .Doc}}// {{.Name}} {{.Doc}}{{end}}
+type {{.Name}} struct {
+	ptr *raw.{{.RawGoName}}
+}
+
+func (w *{{.Name}}) Raw() unsafe.Pointer {
+	if w == nil {
+		return nil
+	}
+	return unsafe.Pointer(w.ptr)
+}
+
+{{range .Fields}}
+func (w *{{$.Name}}) {{.Name}}() {{.PublicType}} {
+	return w.ptr.{{.RawField}}
+}
+{{end}}
+{{end}}
