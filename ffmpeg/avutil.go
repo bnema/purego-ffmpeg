@@ -6,6 +6,7 @@ import (
 	"github.com/bnema/purego-ffmpeg/ffmpeg/internal/raw"
 )
 
+// MediaType /
 type MediaType int32
 
 const (

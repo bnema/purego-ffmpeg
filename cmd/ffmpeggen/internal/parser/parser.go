@@ -29,6 +29,8 @@ var (
 	// Match function declarations: type name(params);
 	// This is broad - we filter by scope. Handles multi-word return types.
 	funcRE = regexp.MustCompile(`^(\w[\w\s\*]+?)\s+(\*?\w+)\s*\(([^)]*)\)\s*;`)
+	// Match __attribute__((...)) patterns
+	attrRE = regexp.MustCompile(`__attribute__\s*\(\([^)]*\)\)`)
 )
 
 // ParseFile reads an FFmpeg header file and returns a parsed Header.
@@ -319,15 +321,6 @@ func parseEnum(name, body string) model.Enum {
 		} else if n, err := strconv.Atoi(val); err == nil {
 			nameToVal[cname] = n
 			nextVal = n + 1
-		} else if strings.HasPrefix(val, "-") {
-			// Negative number
-			if n, err := strconv.Atoi(val); err == nil {
-				nameToVal[cname] = n
-				nextVal = n + 1
-			} else {
-				nameToVal[cname] = nextVal
-				nextVal++
-			}
 		} else if resolved, ok := nameToVal[val]; ok {
 			val = fmt.Sprintf("%d", resolved)
 			nameToVal[cname] = resolved
@@ -340,7 +333,7 @@ func parseEnum(name, body string) model.Enum {
 
 		result.Values = append(result.Values, model.EnumValue{
 			CName:  cname,
-			GoName: model.GoEnumValueName(cname, name),
+			GoName: model.GoEnumValueName(cname),
 			Value:  val,
 		})
 	}
@@ -357,7 +350,6 @@ func mapType(ctype string) string {
 	ct = strings.TrimSpace(ct)
 
 	isPtr := strings.Contains(ct, "*")
-	ptrCount := strings.Count(ct, "*")
 
 	// void* -> unsafe.Pointer
 	if ct == "void *" || ct == "void*" {
@@ -437,7 +429,6 @@ func mapType(ctype string) string {
 
 	// Any pointer type -> unsafe.Pointer
 	if isPtr {
-		_ = ptrCount
 		return "unsafe.Pointer"
 	}
 
@@ -542,7 +533,6 @@ func stripComments(data []byte) []byte {
 		data = bytes.ReplaceAll(data, []byte(macro), nil)
 	}
 	// Strip __attribute__((...)) patterns
-	attrRE := regexp.MustCompile(`__attribute__\s*\(\([^)]*\)\)`)
 	data = attrRE.ReplaceAll(data, nil)
 
 	lines := bytes.Split(data, []byte("\n"))
@@ -696,7 +686,7 @@ func populateEnumDoc(e *model.Enum, rawSource string, docIdx *docIndex) {
 	line := findLineOf(rawSource, needle)
 	if line >= 0 {
 		if db := docIdx.forLine(line); db != nil {
-			_ = cleanDoc(db.lines)
+			e.Doc = cleanDoc(db.lines)
 		}
 	}
 }

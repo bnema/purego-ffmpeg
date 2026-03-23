@@ -8,6 +8,7 @@ import (
 	"github.com/bnema/purego-ffmpeg/ffmpeg/internal/raw"
 )
 
+// FrameSideDataType AVFrame is an abstraction for reference-counted raw multimedia data. /
 type FrameSideDataType int32
 
 const (

@@ -53,6 +53,7 @@ func buildWrapper(s *model.Struct) WrapperData {
 func buildEnum(e *model.Enum) EnumData {
 	ed := EnumData{
 		Name: e.GoName,
+		Doc:  e.Doc,
 	}
 	for _, v := range e.Values {
 		ed.Values = append(ed.Values, EnumValueData{
@@ -154,6 +155,18 @@ func mapTypePublic(ctype string) string {
 		return "int32"
 	case "uint32_t":
 		return "uint32"
+	case "int8_t":
+		return "int8"
+	case "uint8_t":
+		return "uint8"
+	case "int16_t":
+		return "int16"
+	case "uint16_t":
+		return "uint16"
+	case "long":
+		return "int64"
+	case "unsigned long":
+		return "uint64"
 	case "size_t":
 		return "uintptr"
 	case "float":

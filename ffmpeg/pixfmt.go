@@ -2,6 +2,7 @@
 
 package ffmpeg
 
+// PixelFormat Pixel format. AV_PIX_FMT_RGB32 is handled in an endian-specific manner. An RGBA color is put together as: (A << 24) | (R << 16) | (G << 8) | B This is stored as BGRA on little-endian CPU architectures and ARGB on big-endian CPUs. If the resolution is not a multiple of the chroma subsampling factor then the chroma plane resolution must be rounded up. When the pixel format is palettized RGB32 (AV_PIX_FMT_PAL8), the palettized image data is stored in AVFrame.data[0]. The palette is transported in AVFrame.data[1], is 1024 bytes long (256 4-byte entries) and is formatted the same as in AV_PIX_FMT_RGB32 described above (i.e., it is also endian-specific). Note also that the individual RGB32 palette components stored in AVFrame.data[1] should be in the range 0..255. This is important as many custom PAL8 video codecs that were designed to run on the IBM VGA graphics adapter use 6-bit palette components. For all the 8 bits per pixel formats, an RGB32 palette is in data[1] like for pal8. This palette is filled in automatically by the function allocating the picture. /
 type PixelFormat int32
 
 const (

@@ -68,14 +68,15 @@ func run(cfg config) error {
 		// Derive output file name from header path
 		outName := outputName(spec.path)
 		header.RegisterName = registerName(spec.lib, spec.path)
-		// Only register headers that have functions to bind
-		if len(header.Functions) > 0 {
-			registerNames = append(registerNames, header.RegisterName)
-		}
 
 		// Skip empty headers
 		if len(header.Structs) == 0 && len(header.Functions) == 0 && len(header.Enums) == 0 {
 			continue
+		}
+
+		// Only register headers that have functions to bind
+		if len(header.Functions) > 0 {
+			registerNames = append(registerNames, header.RegisterName)
 		}
 
 		// Emit raw

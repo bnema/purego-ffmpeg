@@ -18,7 +18,7 @@ var templateFS embed.FS
 func EmitRaw(header *model.Header) (string, error) {
 	tmpl, err := template.New("raw").ParseFS(templateFS, "templates/raw_file.tmpl")
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("parse raw templates: %w", err)
 	}
 	var buf bytes.Buffer
 	if err := tmpl.ExecuteTemplate(&buf, "raw_file.tmpl", header); err != nil {
@@ -49,7 +49,7 @@ func EmitPublic(data *PublicFileData) (string, error) {
 		"templates/free_func.tmpl",
 	)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("parse public templates: %w", err)
 	}
 	var buf bytes.Buffer
 	if err := tmpl.ExecuteTemplate(&buf, "public_file.tmpl", data); err != nil {

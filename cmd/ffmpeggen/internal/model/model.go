@@ -91,6 +91,7 @@ type Param struct {
 type Enum struct {
 	CName  string
 	GoName string
+	Doc    string
 	Values []EnumValue
 }
 
@@ -227,7 +228,7 @@ func GoEnumName(cName string) string {
 
 // GoEnumValueName converts a C enum value to a Go constant name.
 // e.g. AV_PIX_FMT_YUV420P -> PixFmtYUV420P
-func GoEnumValueName(cName string, enumCName string) string {
+func GoEnumValueName(cName string) string {
 	s := cName
 	// Strip common AV_ prefix
 	s = strings.TrimPrefix(s, "AV_")
