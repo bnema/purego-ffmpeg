@@ -3,6 +3,7 @@
 package ffmpeg
 
 import (
+	"runtime"
 	"unsafe"
 
 	"github.com/bnema/purego-ffmpeg/ffmpeg/internal/raw"
@@ -10,7 +11,8 @@ import (
 
 // AvioOpen Create and initialize a AVIOContext for accessing the resource indicated by url. read+write mode, the AVIOContext can be used only for writing. In case of failure the pointed to value is set to NULL. is to be opened AVERROR code in case of failure /
 func AvioOpen(s unsafe.Pointer, uRL string, flags int32) int32 {
-	uRLC := cString(uRL)
+	uRLC, uRLBuf := cString(uRL)
+	defer runtime.KeepAlive(uRLBuf)
 	return raw.AvioOpen(s, uRLC, flags)
 }
 

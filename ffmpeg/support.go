@@ -11,13 +11,14 @@ import (
 type AVRational = raw.AVRational
 
 // cString converts a Go string to a null-terminated C string (*byte).
-// The returned pointer is only valid for the duration of the current
-// function call — do not store it.
-func cString(s string) *byte {
+// It returns both the pointer and the backing slice. Callers must use
+// runtime.KeepAlive(slice) after the C call to prevent the GC from
+// collecting the backing array while C is reading it.
+func cString(s string) (*byte, []byte) {
 	b := make([]byte, len(s)+1)
 	copy(b, s)
 	// b[len(s)] is already 0
-	return &b[0]
+	return &b[0], b
 }
 
 // goString converts a null-terminated C string to a Go string.

@@ -3,6 +3,7 @@
 package ffmpeg
 
 import (
+	"runtime"
 	"unsafe"
 
 	"github.com/bnema/purego-ffmpeg/ffmpeg/internal/raw"
@@ -15,7 +16,8 @@ func CodecFindDecoder(iD int32) unsafe.Pointer {
 
 // CodecFindDecoderByName Find a registered decoder with the specified name. /
 func CodecFindDecoderByName(name string) unsafe.Pointer {
-	nameC := cString(name)
+	nameC, nameBuf := cString(name)
+	defer runtime.KeepAlive(nameBuf)
 	return raw.AvcodecFindDecoderByName(nameC)
 }
 
@@ -26,6 +28,7 @@ func CodecFindEncoder(iD int32) unsafe.Pointer {
 
 // CodecFindEncoderByName Find a registered encoder with the specified name. /
 func CodecFindEncoderByName(name string) unsafe.Pointer {
-	nameC := cString(name)
+	nameC, nameBuf := cString(name)
+	defer runtime.KeepAlive(nameBuf)
 	return raw.AvcodecFindEncoderByName(nameC)
 }

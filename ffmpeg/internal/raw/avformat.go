@@ -10,14 +10,17 @@ import (
 )
 
 type AVOutputFormat struct {
-	_          structs.HostLayout
-	Name       *byte
-	LongName   *byte
-	MimeType   *byte
-	Extensions *byte
-	Flags      int32
-	CodecTag   unsafe.Pointer
-	PrivClass  unsafe.Pointer
+	_             structs.HostLayout
+	Name          *byte
+	LongName      *byte
+	MimeType      *byte
+	Extensions    *byte
+	AudioCodec    int32
+	VideoCodec    int32
+	SubtitleCodec int32
+	Flags         int32
+	CodecTag      unsafe.Pointer
+	PrivClass     unsafe.Pointer
 }
 
 type AVInputFormat struct {
@@ -43,10 +46,11 @@ type AVStream struct {
 	Duration          int64
 	NbFrames          int64
 	Disposition       int32
+	Discard           int32
 	SampleAspectRatio AVRational
 	Metadata          unsafe.Pointer
 	AvgFrameRate      AVRational
-	AttachedPic       uintptr
+	AttachedPic       [104]byte
 	EventFlags        int32
 	RFrameRate        AVRational
 	PTSWrapBits       int32

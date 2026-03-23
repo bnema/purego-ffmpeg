@@ -2,7 +2,8 @@
 {{- if .Doc}}// {{.Name}} {{.Doc}}{{end}}
 func {{.Name}}({{range $i, $p := .Params}}{{if $i}}, {{end}}{{$p.Name}} {{$p.PublicType}}{{end}}){{if not .Return.IsVoid}} {{.Return.PublicType}}{{end}} {
 	{{- range .Params}}{{if .IsString}}
-	{{.Name}}C := cString({{.Name}})
+	{{.Name}}C, {{.Name}}Buf := cString({{.Name}})
+	defer runtime.KeepAlive({{.Name}}Buf)
 	{{- end}}{{end}}
 	{{- if .Return.IsVoid}}
 	raw.{{.RawGoName}}({{range $i, $p := .Params}}{{if $i}}, {{end}}{{if $p.IsString}}{{$p.Name}}C{{else}}{{$p.Name}}{{end}}{{end}})

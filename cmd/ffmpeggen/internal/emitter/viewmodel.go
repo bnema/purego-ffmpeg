@@ -38,6 +38,13 @@ func (d *PublicFileData) NeedsRuntime() bool {
 			return true
 		}
 	}
+	for _, ff := range d.FreeFunctions {
+		for _, p := range ff.Params {
+			if p.IsString {
+				return true
+			}
+		}
+	}
 	return false
 }
 

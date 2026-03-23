@@ -3,6 +3,7 @@
 package ffmpeg
 
 import (
+	"runtime"
 	"unsafe"
 
 	"github.com/bnema/purego-ffmpeg/ffmpeg/internal/raw"
@@ -34,6 +35,18 @@ func (w *OutputFormat) MimeType() *byte {
 
 func (w *OutputFormat) Extensions() *byte {
 	return w.ptr.Extensions
+}
+
+func (w *OutputFormat) AudioCodec() int32 {
+	return w.ptr.AudioCodec
+}
+
+func (w *OutputFormat) VideoCodec() int32 {
+	return w.ptr.VideoCodec
+}
+
+func (w *OutputFormat) SubtitleCodec() int32 {
+	return w.ptr.SubtitleCodec
 }
 
 func (w *OutputFormat) Flags() int32 {
@@ -140,6 +153,10 @@ func (w *Stream) Disposition() int32 {
 	return w.ptr.Disposition
 }
 
+func (w *Stream) Discard() int32 {
+	return w.ptr.Discard
+}
+
 func (w *Stream) SampleAspectRatio() AVRational {
 	return w.ptr.SampleAspectRatio
 }
@@ -152,7 +169,7 @@ func (w *Stream) AvgFrameRate() AVRational {
 	return w.ptr.AvgFrameRate
 }
 
-func (w *Stream) AttachedPic() uintptr {
+func (w *Stream) AttachedPic() [104]byte {
 	return w.ptr.AttachedPic
 }
 
@@ -187,13 +204,16 @@ func FormatNewStream(s unsafe.Pointer, c unsafe.Pointer) unsafe.Pointer {
 
 // FormatAllocOutputContext2 Allocate an AVFormatContext for an output format. avformat_free_context() can be used to free the context and everything allocated by the framework within it. or to NULL in case of failure format_name and filename are used instead context, if NULL filename is used instead context, may be NULL failure /
 func FormatAllocOutputContext2(ctx unsafe.Pointer, oformat unsafe.Pointer, formatName string, filename string) int32 {
-	formatNameC := cString(formatName)
-	filenameC := cString(filename)
+	formatNameC, formatNameBuf := cString(formatName)
+	defer runtime.KeepAlive(formatNameBuf)
+	filenameC, filenameBuf := cString(filename)
+	defer runtime.KeepAlive(filenameBuf)
 	return raw.AvformatAllocOutputContext2(ctx, oformat, formatNameC, filenameC)
 }
 
 func FormatOpenInput(ps unsafe.Pointer, uRL string, fmt unsafe.Pointer, options unsafe.Pointer) int32 {
-	uRLC := cString(uRL)
+	uRLC, uRLBuf := cString(uRL)
+	defer runtime.KeepAlive(uRLBuf)
 	return raw.AvformatOpenInput(ps, uRLC, fmt, options)
 }
 

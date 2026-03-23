@@ -3,6 +3,7 @@
 package ffmpeg
 
 import (
+	"runtime"
 	"unsafe"
 
 	"github.com/bnema/purego-ffmpeg/ffmpeg/internal/raw"
@@ -29,7 +30,8 @@ func (w *DictionaryEntry) Value() *byte {
 }
 
 func DictGet(m unsafe.Pointer, key string, prev unsafe.Pointer, flags int32) unsafe.Pointer {
-	keyC := cString(key)
+	keyC, keyBuf := cString(key)
+	defer runtime.KeepAlive(keyBuf)
 	return raw.AVDictGet(m, keyC, prev, flags)
 }
 
@@ -39,8 +41,10 @@ func DictCount(m unsafe.Pointer) int32 {
 }
 
 func DictSet(pm unsafe.Pointer, key string, value string, flags int32) int32 {
-	keyC := cString(key)
-	valueC := cString(value)
+	keyC, keyBuf := cString(key)
+	defer runtime.KeepAlive(keyBuf)
+	valueC, valueBuf := cString(value)
+	defer runtime.KeepAlive(valueBuf)
 	return raw.AVDictSet(pm, keyC, valueC, flags)
 }
 

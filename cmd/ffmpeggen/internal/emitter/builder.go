@@ -6,6 +6,15 @@ import (
 	"github.com/bnema/purego-ffmpeg/cmd/ffmpeggen/internal/model"
 )
 
+// skipPublicFuncs lists C function names that should not be generated
+// in the public layer because they have hand-written wrappers in support.go
+// or their signatures cannot be correctly expressed in Go.
+var skipPublicFuncs = map[string]bool{
+	// av_strerror has an output buffer param (char*) that cannot work
+	// with immutable Go strings. Handled by avError.Error() in support.go.
+	"av_strerror": true,
+}
+
 // BuildPublicFileData converts parsed headers into the public API view model.
 func BuildPublicFileData(header *model.Header) *PublicFileData {
 	data := &PublicFileData{
@@ -24,6 +33,9 @@ func BuildPublicFileData(header *model.Header) *PublicFileData {
 
 	for i := range header.Functions {
 		fn := &header.Functions[i]
+		if skipPublicFuncs[fn.CName] {
+			continue
+		}
 		data.FreeFunctions = append(data.FreeFunctions, buildFreeFunc(fn))
 	}
 

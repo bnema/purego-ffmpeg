@@ -4,7 +4,7 @@ import "testing"
 
 func TestCString(t *testing.T) {
 	s := "hello"
-	p := cString(s)
+	p, buf := cString(s)
 	if p == nil {
 		t.Fatal("cString returned nil")
 	}
@@ -12,14 +12,16 @@ func TestCString(t *testing.T) {
 	if got != s {
 		t.Errorf("goString(cString(%q)) = %q", s, got)
 	}
+	_ = buf // keep backing slice alive
 }
 
 func TestCStringEmpty(t *testing.T) {
-	p := cString("")
+	p, buf := cString("")
 	got := goString(p)
 	if got != "" {
 		t.Errorf("goString(cString(%q)) = %q", "", got)
 	}
+	_ = buf // keep backing slice alive
 }
 
 func TestGoStringNil(t *testing.T) {

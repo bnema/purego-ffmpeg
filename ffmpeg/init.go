@@ -47,17 +47,20 @@ func WithSOVersions(v SOVersions) Option {
 	return func(c *initConfig) { c.soVersions = v }
 }
 
-var initOnce sync.Once
+var (
+	initOnce sync.Once
+	initErr  error
+)
 
 // Init loads all FFmpeg shared libraries and registers symbols.
 // Must be called before using any FFmpeg functions.
+// If loading fails, the error is cached and returned on every subsequent call.
 func Init(opts ...Option) error {
 	cfg := initConfig{soVersions: defaultSOVersions}
 	for _, o := range opts {
 		o(&cfg)
 	}
 
-	var initErr error
 	initOnce.Do(func() {
 		initErr = doInit(cfg)
 	})

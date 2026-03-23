@@ -145,9 +145,11 @@ func parseStruct(body, name string) model.Struct {
 		if line == "" {
 			continue
 		}
-		// Skip preprocessor directives and nested struct/union/enum definitions
+		// Skip preprocessor directives and nested struct/union/enum definitions.
+		// Note: "enum Foo bar" (no braces) is an enum-typed field, not a declaration.
 		if strings.HasPrefix(line, "#") || strings.HasPrefix(line, "struct ") ||
-			strings.HasPrefix(line, "union ") || strings.HasPrefix(line, "enum ") ||
+			strings.HasPrefix(line, "union ") ||
+			(strings.HasPrefix(line, "enum ") && strings.Contains(line, "{")) ||
 			strings.Contains(line, "{") || strings.Contains(line, "}") {
 			continue
 		}
@@ -440,6 +442,16 @@ func mapType(ctype string) string {
 	// AVChannelLayout (value type)
 	if ct == "AVChannelLayout" {
 		return "AVChannelLayout"
+	}
+
+	// Known struct-by-value types — mapped to fixed-size byte arrays
+	// to preserve correct struct layout when embedded in other structs.
+	// Sizes are for 64-bit Linux (FFmpeg 7.x/8.x).
+	knownStructSizes := map[string]int{
+		"AVPacket": 104,
+	}
+	if size, ok := knownStructSizes[ct]; ok {
+		return fmt.Sprintf("[%d]byte", size)
 	}
 
 	// Unknown non-pointer
