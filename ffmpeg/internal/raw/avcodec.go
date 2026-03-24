@@ -41,7 +41,10 @@ const (
 )
 
 // ---------------------------------------------------------------------------
-// Offset-based accessors for AVCodecContext
+// Offset-based accessors for AVCodecContext.
+// All functions in this section require ctx to be non-nil. No nil guards are
+// added here because these are hot-path FFI accessors; callers must ensure
+// a valid context before invoking.
 // ---------------------------------------------------------------------------
 
 func CodecCtxCodecType(ctx unsafe.Pointer) int32 {

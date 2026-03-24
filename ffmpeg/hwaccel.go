@@ -91,7 +91,13 @@ func BufferRef(buf unsafe.Pointer) unsafe.Pointer {
 	return raw.AVBufferRef(buf)
 }
 
-// BufferUnref frees a buffer reference and sets the pointer to nil.
-func BufferUnref(buf unsafe.Pointer) {
-	raw.AVBufferUnref(buf)
+// BufferUnref frees a buffer reference and sets the caller's pointer to nil.
+// buf must be a pointer to the variable holding the AVBufferRef* (i.e.,
+// *unsafe.Pointer) so that the caller's copy is nilled out after unref.
+func BufferUnref(buf *unsafe.Pointer) {
+	if buf == nil {
+		return
+	}
+	raw.AVBufferUnref(unsafe.Pointer(buf))
+	*buf = nil
 }

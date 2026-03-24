@@ -41,11 +41,18 @@ func AvioAllocContext(bufSize int, writeable bool, opaque unsafe.Pointer,
 		writeFlag = 1
 	}
 
-	return raw.AvioAllocContext(buf, int32(bufSize), writeFlag, opaque,
+	ctx := raw.AvioAllocContext(buf, int32(bufSize), writeFlag, opaque,
 		readFn, writeFn, seekFn)
+	if ctx == nil {
+		raw.AVFree(buf)
+		return nil
+	}
+	return ctx
 }
 
 // AvioContextFree frees an AVIOContext and its internal buffer.
+// After this call, the underlying buffer (allocated by AvioAllocContext) is
+// also freed; the caller must not reference the buffer afterwards.
 func AvioContextFree(ctx unsafe.Pointer) {
 	raw.AvioContextFree(ctx)
 }

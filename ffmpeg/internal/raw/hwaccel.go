@@ -8,6 +8,9 @@ import (
 
 // --- Device context ---
 
+// AVHwdeviceCtxCreate wraps av_hwdevice_ctx_create. The first argument is a
+// double pointer (AVBufferRef**) — the caller must pass unsafe.Pointer(&buf)
+// so that the function can write the newly-created device context back.
 var AVHwdeviceCtxCreate func(unsafe.Pointer, int32, *byte, unsafe.Pointer, int32) int32
 
 var AVHwdeviceFindTypeByName func(*byte) int32
@@ -28,6 +31,8 @@ var AVHwframeTransferData func(unsafe.Pointer, unsafe.Pointer, int32) int32
 
 var AVBufferRef func(unsafe.Pointer) unsafe.Pointer
 
+// AVBufferUnref wraps av_buffer_unref. The argument is a double pointer
+// (AVBufferRef**); the C function frees the reference and sets *buf to NULL.
 var AVBufferUnref func(unsafe.Pointer)
 
 func RegisterHwaccel(handle uintptr) {

@@ -73,10 +73,16 @@ const (
 // ---------------------------------------------------------------------------
 
 func FmtCtxPB(ctx unsafe.Pointer) unsafe.Pointer {
+	if ctx == nil {
+		return nil
+	}
 	return *(*unsafe.Pointer)(unsafe.Add(ctx, OffsetFmtCtxPB))
 }
 
 func FmtCtxSetPB(ctx unsafe.Pointer, v unsafe.Pointer) {
+	if ctx == nil {
+		return
+	}
 	*(*unsafe.Pointer)(unsafe.Add(ctx, OffsetFmtCtxPB)) = v
 }
 
@@ -90,7 +96,16 @@ func FmtCtxStreams(ctx unsafe.Pointer) unsafe.Pointer {
 }
 
 // FmtCtxStream returns the i-th AVStream* from the streams array.
+// Returns nil if ctx is nil or i is out of range.
 func FmtCtxStream(ctx unsafe.Pointer, i int) unsafe.Pointer {
+	if ctx == nil || i < 0 {
+		return nil
+	}
+	// Bounds check against nb_streams.
+	n := *(*int32)(unsafe.Add(ctx, OffsetFmtCtxNbStreams))
+	if int32(i) >= n {
+		return nil
+	}
 	arr := *(*unsafe.Pointer)(unsafe.Add(ctx, OffsetFmtCtxStreams))
 	// arr is AVStream**, so each element is a pointer (8 bytes on 64-bit).
 	return *(*unsafe.Pointer)(unsafe.Add(arr, uintptr(i)*unsafe.Sizeof(uintptr(0))))

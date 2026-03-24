@@ -15,7 +15,7 @@ const (
 	AV_CODEC_ID_HEVC int32 = 173
 	AV_CODEC_ID_VP8  int32 = 139
 	AV_CODEC_ID_VP9  int32 = 167
-	AV_CODEC_ID_AV1  int32 = 225
+	AV_CODEC_ID_AV1  int32 = 225 // libavcodec/codec_id.h
 
 	AV_CODEC_ID_AAC    int32 = 86018
 	AV_CODEC_ID_OPUS   int32 = 86076
@@ -23,7 +23,7 @@ const (
 )
 
 // ---------------------------------------------------------------------------
-// AVCodecContext accessors (offset-based, safe across minor versions)
+// AVCodecContext accessors (offset-based, compatible with FFmpeg 7.x / libavcodec 62)
 // ---------------------------------------------------------------------------
 
 // CodecCtxCodecType returns the codec_type field of an AVCodecContext.

@@ -22,8 +22,8 @@ const (
 
 // Convenience aliases matching FFmpeg naming.
 const (
-	AVMEDIA_TYPE_VIDEO MediaType = 0
-	AVMEDIA_TYPE_AUDIO MediaType = 1
+	AVMEDIA_TYPE_VIDEO = MediaTypeAvmediaTypeVideo
+	AVMEDIA_TYPE_AUDIO = MediaTypeAvmediaTypeAudio
 )
 
 // AvutilVersion returns the LIBAVUTIL_VERSION_INT constant.

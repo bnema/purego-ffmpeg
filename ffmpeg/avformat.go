@@ -217,11 +217,13 @@ func FmtCtxFlags(ctx unsafe.Pointer) int32 { return raw.FmtCtxFlags(ctx) }
 // FmtCtxSetFlags sets the flags field.
 func FmtCtxSetFlags(ctx unsafe.Pointer, v int32) { raw.FmtCtxSetFlags(ctx, v) }
 
-// AVFMT flags used with FmtCtxSetFlags.
+// AVFormatContext flags (used with FmtCtxSetFlags).
+const AVFMT_FLAG_CUSTOM_IO = 0x0080
+
+// AVOutputFormat/AVInputFormat flags (format-level, not context-level).
 const (
-	AVFMT_FLAG_CUSTOM_IO = 0x0080
-	AVFMT_NOFILE         = 0x0001
-	AVFMT_GLOBALHEADER   = 0x0040
+	AVFMT_NOFILE       = 0x0001
+	AVFMT_GLOBALHEADER = 0x0040
 )
 
 // ---------------------------------------------------------------------------
