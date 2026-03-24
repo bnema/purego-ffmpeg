@@ -21,6 +21,7 @@ func Register(h Handles) {
 	RegisterDict(h.Avutil)
 	RegisterError(h.Avutil)
 	RegisterFrame(h.Avutil)
+	RegisterHwaccel(h.Avutil)
 	RegisterImgutils(h.Avutil)
 	RegisterLog(h.Avutil)
 	RegisterMathematics(h.Avutil)
