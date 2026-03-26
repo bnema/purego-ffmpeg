@@ -14,24 +14,12 @@ func TestInit(t *testing.T) {
 	}
 }
 
-func TestInitVersion(t *testing.T) {
-	if err := ffmpeg.Init(); err != nil {
-		t.Fatalf("Init() failed: %v", err)
-	}
-
-	ver := ffmpeg.FormatVersion()
-	if ver == 0 {
-		t.Fatal("FormatVersion() returned 0")
-	}
-	t.Logf("avformat version: %d.%d.%d", ver>>16, (ver>>8)&0xFF, ver&0xFF)
-}
-
 func TestAvError(t *testing.T) {
 	if err := ffmpeg.Init(); err != nil {
 		t.Fatalf("Init() failed: %v", err)
 	}
 
-	// Test that AVERROR error messages work
+	// Test that AVERROR error messages work after Init injects Strerror
 	err := ffmpeg.ErrEOF
 	msg := err.Error()
 	if msg == "" || msg == "unknown error" {

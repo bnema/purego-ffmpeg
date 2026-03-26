@@ -31,6 +31,8 @@ var (
 	funcRE = regexp.MustCompile(`^(\w[\w\s\*]+?)\s+(\*?\w+)\s*\(([^)]*)\)\s*;`)
 	// Match __attribute__((...)) patterns
 	attrRE = regexp.MustCompile(`__attribute__\s*\(\([^)]*\)\)`)
+	// Match av_alloc_size(...) patterns (FFmpeg allocation hints)
+	allocSizeRE = regexp.MustCompile(`av_alloc_size\s*\([^)]*\)`)
 )
 
 // ParseFile reads an FFmpeg header file and returns a parsed Header.
@@ -320,9 +322,11 @@ func parseEnum(name, body string) model.Enum {
 			val = fmt.Sprintf("%d", nextVal)
 			nameToVal[cname] = nextVal
 			nextVal++
-		} else if n, err := strconv.Atoi(val); err == nil {
-			nameToVal[cname] = n
-			nextVal = n + 1
+		} else if n, err := strconv.ParseInt(val, 0, 64); err == nil {
+			// ParseInt with base 0 handles decimal, hex (0x...), and octal (0...).
+			nameToVal[cname] = int(n)
+			nextVal = int(n) + 1
+			val = fmt.Sprintf("%d", n)
 		} else if resolved, ok := nameToVal[val]; ok {
 			val = fmt.Sprintf("%d", resolved)
 			nameToVal[cname] = resolved
@@ -497,8 +501,21 @@ func goParamName(cname string) string {
 	if len(name) == 0 {
 		return cname
 	}
-	// Lowercase first letter
-	name = strings.ToLower(name[:1]) + name[1:]
+	// If the whole name is an acronym (all uppercase), fully lowercase it.
+	// This prevents e.g. "ID" → "iD"; instead it becomes "id".
+	allUpper := true
+	for _, r := range name {
+		if !unicode.IsUpper(r) {
+			allUpper = false
+			break
+		}
+	}
+	if allUpper {
+		name = strings.ToLower(name)
+	} else {
+		// Lowercase first letter only
+		name = strings.ToLower(name[:1]) + name[1:]
+	}
 	// Escape Go keywords
 	if goKeywords[name] {
 		name = name + "_"
@@ -540,12 +557,15 @@ func stripComments(data []byte) []byte {
 		"av_const",
 		"av_cold",
 		"av_noreturn",
+		"av_malloc_attrib",
 	}
 	for _, macro := range ffmpegMacros {
 		data = bytes.ReplaceAll(data, []byte(macro), nil)
 	}
 	// Strip __attribute__((...)) patterns
 	data = attrRE.ReplaceAll(data, nil)
+	// Strip av_alloc_size(...) patterns (FFmpeg allocation hints)
+	data = allocSizeRE.ReplaceAll(data, nil)
 
 	lines := bytes.Split(data, []byte("\n"))
 	out := make([][]byte, 0, len(lines))
