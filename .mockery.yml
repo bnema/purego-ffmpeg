@@ -1,0 +1,15 @@
+template: testify
+include-auto-generated: true
+packages:
+  github.com/bnema/purego-ffmpeg/internal/ports/in:
+    config:
+      dir: "ffmpeg/mocks"
+      filename: "mock_{{.InterfaceName | snakecase}}.go"
+      pkgname: "mocks"
+      all: true
+  github.com/bnema/purego-ffmpeg/internal/ports/out:
+    config:
+      dir: "internal/ports/out/mocks"
+      filename: "mock_{{.InterfaceName | snakecase}}.go"
+      pkgname: "mocks"
+      all: true

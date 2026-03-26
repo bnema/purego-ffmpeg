@@ -33,10 +33,8 @@ func run(cfg config) error {
 	dirs := []string{
 		filepath.Join(cfg.outputDir, "internal/capi"),
 		filepath.Join(cfg.outputDir, "internal/ports/out"),
-		filepath.Join(cfg.outputDir, "internal/ports/out/mocks"),
 		filepath.Join(cfg.outputDir, "internal/ports/in"),
 		filepath.Join(cfg.outputDir, "ffmpeg"),
-		filepath.Join(cfg.outputDir, "ffmpeg/mocks"),
 	}
 	for _, d := range dirs {
 		if err := os.MkdirAll(d, 0o755); err != nil {
@@ -77,13 +75,6 @@ func run(cfg config) error {
 			return err
 		}
 
-		// internal/ports/out/mocks/{domain}_gen.go
-		if err := emitFile(cfg.outputDir, filepath.Join("internal/ports/out/mocks", dd.Name+"_gen.go"), func() (string, error) {
-			return emitter.EmitPortOutMock(dd)
-		}); err != nil {
-			return err
-		}
-
 		// internal/ports/in/{domain}_gen.go (only if domain has a PublicType)
 		if dd.PublicType != "" {
 			if err := emitFile(cfg.outputDir, filepath.Join("internal/ports/in", dd.Name+"_gen.go"), func() (string, error) {
@@ -98,15 +89,6 @@ func run(cfg config) error {
 			return emitter.EmitPublicFileNew(dd)
 		}); err != nil {
 			return err
-		}
-
-		// ffmpeg/mocks/{domain}_gen.go (only if domain has a PublicType)
-		if dd.PublicType != "" {
-			if err := emitFile(cfg.outputDir, filepath.Join("ffmpeg/mocks", dd.Name+"_gen.go"), func() (string, error) {
-				return emitter.EmitPublicMock(dd)
-			}); err != nil {
-				return err
-			}
 		}
 
 		fmt.Printf("  %s: %d funcs, %d accessors\n", dd.Name, len(dd.Functions), len(dd.Accessors))

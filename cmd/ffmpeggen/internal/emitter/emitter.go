@@ -81,11 +81,6 @@ func EmitPortOutCAPI(domains []DomainData) (string, error) {
 	return renderTemplate("port_out_capi.tmpl", struct{ Domains []DomainData }{domains})
 }
 
-// EmitPortOutMock generates internal/ports/out/mocks/{domain}_gen.go
-func EmitPortOutMock(domain DomainData) (string, error) {
-	return renderTemplate("port_out_mock.tmpl", domain)
-}
-
 // EmitPortIn generates internal/ports/in/{domain}_gen.go
 func EmitPortIn(domain DomainData) (string, error) {
 	return renderTemplate("port_in.tmpl", domain)
@@ -94,11 +89,6 @@ func EmitPortIn(domain DomainData) (string, error) {
 // EmitPublicFileNew generates ffmpeg/{domain}_gen.go
 func EmitPublicFileNew(domain DomainData) (string, error) {
 	return renderTemplate("public_file_new.tmpl", domain)
-}
-
-// EmitPublicMock generates ffmpeg/mocks/{domain}_gen.go
-func EmitPublicMock(domain DomainData) (string, error) {
-	return renderTemplate("public_mock.tmpl", domain)
 }
 
 // EmitTypes generates types_gen.go (used for both ffmpeg/ and internal/ports/in/)
