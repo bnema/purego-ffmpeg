@@ -76,6 +76,11 @@ func EmitPortOut(domain DomainData) (string, error) {
 	return renderTemplate("port_out.tmpl", domain)
 }
 
+// EmitPortOutCAPI generates internal/ports/out/capi_gen.go
+func EmitPortOutCAPI(domains []DomainData) (string, error) {
+	return renderTemplate("port_out_capi.tmpl", struct{ Domains []DomainData }{domains})
+}
+
 // EmitPortOutMock generates internal/ports/out/mocks/{domain}_gen.go
 func EmitPortOutMock(domain DomainData) (string, error) {
 	return renderTemplate("port_out_mock.tmpl", domain)

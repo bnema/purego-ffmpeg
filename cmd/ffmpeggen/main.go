@@ -129,6 +129,13 @@ func run(cfg config) error {
 		return err
 	}
 
+	// internal/ports/out/capi_gen.go
+	if err := emitFile(cfg.outputDir, "internal/ports/out/capi_gen.go", func() (string, error) {
+		return emitter.EmitPortOutCAPI(domains)
+	}); err != nil {
+		return err
+	}
+
 	// ffmpeg/types_gen.go
 	typesData := emitter.BuildTypesData(headers, "ffmpeg", overrides.Enums, overrides.Structs)
 	if err := emitFile(cfg.outputDir, "ffmpeg/types_gen.go", func() (string, error) {
