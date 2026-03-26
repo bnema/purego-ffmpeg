@@ -101,3 +101,33 @@ func BufferUnref(buf *unsafe.Pointer) {
 	raw.AVBufferUnref(unsafe.Pointer(buf))
 	*buf = nil
 }
+
+// BufferRefData returns AVBufferRef.data.
+func BufferRefData(ref unsafe.Pointer) unsafe.Pointer {
+	return raw.BufferRefData(ref)
+}
+
+// HWFramesCtxSetInitialPoolSize sets AVHWFramesContext.initial_pool_size.
+func HWFramesCtxSetInitialPoolSize(ctx unsafe.Pointer, v int32) {
+	raw.HWFramesCtxSetInitialPoolSize(ctx, v)
+}
+
+// HWFramesCtxSetFormat sets AVHWFramesContext.format.
+func HWFramesCtxSetFormat(ctx unsafe.Pointer, v int32) {
+	raw.HWFramesCtxSetFormat(ctx, v)
+}
+
+// HWFramesCtxSetSWFormat sets AVHWFramesContext.sw_format.
+func HWFramesCtxSetSWFormat(ctx unsafe.Pointer, v int32) {
+	raw.HWFramesCtxSetSWFormat(ctx, v)
+}
+
+// HWFramesCtxSetWidth sets AVHWFramesContext.width.
+func HWFramesCtxSetWidth(ctx unsafe.Pointer, v int32) {
+	raw.HWFramesCtxSetWidth(ctx, v)
+}
+
+// HWFramesCtxSetHeight sets AVHWFramesContext.height.
+func HWFramesCtxSetHeight(ctx unsafe.Pointer, v int32) {
+	raw.HWFramesCtxSetHeight(ctx, v)
+}

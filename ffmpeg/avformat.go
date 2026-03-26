@@ -104,6 +104,14 @@ type Stream struct {
 	ptr *raw.AVStream
 }
 
+// WrapStream converts a raw AVStream* into the Go Stream wrapper.
+func WrapStream(ptr unsafe.Pointer) *Stream {
+	if ptr == nil {
+		return nil
+	}
+	return &Stream{ptr: (*raw.AVStream)(ptr)}
+}
+
 func (w *Stream) Raw() unsafe.Pointer {
 	if w == nil {
 		return nil
@@ -112,75 +120,75 @@ func (w *Stream) Raw() unsafe.Pointer {
 }
 
 func (w *Stream) AvClass() unsafe.Pointer {
-	return w.ptr.AvClass
+	return nil
 }
 
 func (w *Stream) Index() int32 {
-	return w.ptr.Index
+	return raw.StreamIndex(unsafe.Pointer(w.ptr))
 }
 
 func (w *Stream) ID() int32 {
-	return w.ptr.ID
+	return raw.StreamID(unsafe.Pointer(w.ptr))
 }
 
 func (w *Stream) Codecpar() unsafe.Pointer {
-	return w.ptr.Codecpar
+	return raw.StreamCodecpar(unsafe.Pointer(w.ptr))
 }
 
 func (w *Stream) PrivData() unsafe.Pointer {
-	return w.ptr.PrivData
+	return raw.StreamPrivData(unsafe.Pointer(w.ptr))
 }
 
 func (w *Stream) TimeBase() AVRational {
-	return w.ptr.TimeBase
+	return raw.StreamTimeBase(unsafe.Pointer(w.ptr))
 }
 
 func (w *Stream) StartTime() int64 {
-	return w.ptr.StartTime
+	return raw.StreamStartTime(unsafe.Pointer(w.ptr))
 }
 
 func (w *Stream) Duration() int64 {
-	return w.ptr.Duration
+	return raw.StreamDuration(unsafe.Pointer(w.ptr))
 }
 
 func (w *Stream) NbFrames() int64 {
-	return w.ptr.NbFrames
+	return raw.StreamNbFrames(unsafe.Pointer(w.ptr))
 }
 
 func (w *Stream) Disposition() int32 {
-	return w.ptr.Disposition
+	return raw.StreamDisposition(unsafe.Pointer(w.ptr))
 }
 
 func (w *Stream) Discard() int32 {
-	return w.ptr.Discard
+	return raw.StreamDiscard(unsafe.Pointer(w.ptr))
 }
 
 func (w *Stream) SampleAspectRatio() AVRational {
-	return w.ptr.SampleAspectRatio
+	return raw.StreamSampleAspectRatio(unsafe.Pointer(w.ptr))
 }
 
 func (w *Stream) Metadata() unsafe.Pointer {
-	return w.ptr.Metadata
+	return raw.StreamMetadata(unsafe.Pointer(w.ptr))
 }
 
 func (w *Stream) AvgFrameRate() AVRational {
-	return w.ptr.AvgFrameRate
+	return raw.StreamAvgFrameRate(unsafe.Pointer(w.ptr))
 }
 
 func (w *Stream) AttachedPic() [104]byte {
-	return w.ptr.AttachedPic
+	return raw.StreamAttachedPic(unsafe.Pointer(w.ptr))
 }
 
 func (w *Stream) EventFlags() int32 {
-	return w.ptr.EventFlags
+	return raw.StreamEventFlags(unsafe.Pointer(w.ptr))
 }
 
 func (w *Stream) RFrameRate() AVRational {
-	return w.ptr.RFrameRate
+	return raw.StreamRFrameRate(unsafe.Pointer(w.ptr))
 }
 
 func (w *Stream) PTSWrapBits() int32 {
-	return w.ptr.PTSWrapBits
+	return raw.StreamPTSWrapBits(unsafe.Pointer(w.ptr))
 }
 
 // ---------------------------------------------------------------------------

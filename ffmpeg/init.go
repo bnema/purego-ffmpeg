@@ -105,6 +105,7 @@ func doInit(cfg initConfig) error {
 		Avformat:   *libs[3].handleP,
 		Swscale:    *libs[4].handleP,
 	})
+	raw.RegisterFrameExtra(*libs[0].handleP)
 
 	return nil
 }

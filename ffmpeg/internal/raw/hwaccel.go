@@ -6,6 +6,15 @@ import (
 	"github.com/ebitengine/purego"
 )
 
+const (
+	OffsetAVBufferRefData           = 8
+	OffsetAVHWFramesInitialPoolSize = 56
+	OffsetAVHWFramesFormat          = 60
+	OffsetAVHWFramesSWFormat        = 64
+	OffsetAVHWFramesWidth           = 68
+	OffsetAVHWFramesHeight          = 72
+)
+
 // --- Device context ---
 
 // AVHwdeviceCtxCreate wraps av_hwdevice_ctx_create. The first argument is a
@@ -34,6 +43,33 @@ var AVBufferRef func(unsafe.Pointer) unsafe.Pointer
 // AVBufferUnref wraps av_buffer_unref. The argument is a double pointer
 // (AVBufferRef**); the C function frees the reference and sets *buf to NULL.
 var AVBufferUnref func(unsafe.Pointer)
+
+func BufferRefData(ref unsafe.Pointer) unsafe.Pointer {
+	if ref == nil {
+		return nil
+	}
+	return *(*unsafe.Pointer)(unsafe.Add(ref, OffsetAVBufferRefData))
+}
+
+func HWFramesCtxSetInitialPoolSize(ctx unsafe.Pointer, v int32) {
+	*(*int32)(unsafe.Add(ctx, OffsetAVHWFramesInitialPoolSize)) = v
+}
+
+func HWFramesCtxSetFormat(ctx unsafe.Pointer, v int32) {
+	*(*int32)(unsafe.Add(ctx, OffsetAVHWFramesFormat)) = v
+}
+
+func HWFramesCtxSetSWFormat(ctx unsafe.Pointer, v int32) {
+	*(*int32)(unsafe.Add(ctx, OffsetAVHWFramesSWFormat)) = v
+}
+
+func HWFramesCtxSetWidth(ctx unsafe.Pointer, v int32) {
+	*(*int32)(unsafe.Add(ctx, OffsetAVHWFramesWidth)) = v
+}
+
+func HWFramesCtxSetHeight(ctx unsafe.Pointer, v int32) {
+	*(*int32)(unsafe.Add(ctx, OffsetAVHWFramesHeight)) = v
+}
 
 func RegisterHwaccel(handle uintptr) {
 	purego.RegisterLibFunc(&AVHwdeviceCtxCreate, handle, "av_hwdevice_ctx_create")
