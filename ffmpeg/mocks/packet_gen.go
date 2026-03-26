@@ -8,50 +8,8 @@ var _ = unsafe.Pointer(nil) // ensure import
 
 // MockPacket is a test mock for Packet.
 type MockPacket struct {
-	AllocFunc     func() unsafe.Pointer
-	FreePtrFunc   func(unsafe.Pointer)
-	UnrefFunc     func(unsafe.Pointer)
-	RefFunc       func(unsafe.Pointer, unsafe.Pointer) int32
-	RescaleTsFunc func(unsafe.Pointer, AVRational, AVRational)
-	FreeFunc      func()
-	PtrFunc       func() unsafe.Pointer
-}
-
-func (mock *MockPacket) Alloc() unsafe.Pointer {
-	if mock.AllocFunc != nil {
-		return mock.AllocFunc()
-	}
-	var zero unsafe.Pointer
-	return zero
-}
-
-func (mock *MockPacket) FreePtr(pkt unsafe.Pointer) {
-	if mock.FreePtrFunc != nil {
-		mock.FreePtrFunc(pkt)
-		return
-	}
-}
-
-func (mock *MockPacket) Unref(pkt unsafe.Pointer) {
-	if mock.UnrefFunc != nil {
-		mock.UnrefFunc(pkt)
-		return
-	}
-}
-
-func (mock *MockPacket) Ref(dst unsafe.Pointer, src unsafe.Pointer) int32 {
-	if mock.RefFunc != nil {
-		return mock.RefFunc(dst, src)
-	}
-	var zero int32
-	return zero
-}
-
-func (mock *MockPacket) RescaleTs(pkt unsafe.Pointer, tbSrc AVRational, tbDst AVRational) {
-	if mock.RescaleTsFunc != nil {
-		mock.RescaleTsFunc(pkt, tbSrc, tbDst)
-		return
-	}
+	FreeFunc func()
+	PtrFunc  func() unsafe.Pointer
 }
 
 func (mock *MockPacket) Free() {

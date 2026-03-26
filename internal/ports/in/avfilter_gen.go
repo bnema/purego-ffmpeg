@@ -7,15 +7,10 @@ import "unsafe"
 var _ = unsafe.Pointer(nil) // ensure import
 
 // FilterGraph is the public interface for avfilter domain operations.
+// It exposes struct field accessors and lifecycle methods.
+// Low-level C API methods are available on the concrete wrapper type
+// but are not part of this interface contract.
 type FilterGraph interface {
-	GraphAlloc() unsafe.Pointer
-	GraphFree(graph unsafe.Pointer)
-	GraphCreateFilter(filtCtx unsafe.Pointer, filt unsafe.Pointer, name *byte, args *byte, opaque unsafe.Pointer, graphCtx unsafe.Pointer) int32
-	GraphParsePtr(graph unsafe.Pointer, filters *byte, inputs unsafe.Pointer, outputs unsafe.Pointer, logCtx unsafe.Pointer) int32
-	GraphConfig(graphctx unsafe.Pointer, logCtx unsafe.Pointer) int32
-	GetByName(name *byte) unsafe.Pointer
-	BuffersrcAddFrameFlags(bufferSrc unsafe.Pointer, frame unsafe.Pointer, flags int32) int32
-	BuffersinkGetFrame(ctx unsafe.Pointer, frame unsafe.Pointer) int32
 	Free()
 	Ptr() unsafe.Pointer
 }

@@ -7,12 +7,10 @@ import "unsafe"
 var _ = unsafe.Pointer(nil) // ensure import
 
 // Packet is the public interface for packet domain operations.
+// It exposes struct field accessors and lifecycle methods.
+// Low-level C API methods are available on the concrete wrapper type
+// but are not part of this interface contract.
 type Packet interface {
-	Alloc() unsafe.Pointer
-	FreePtr(pkt unsafe.Pointer)
-	Unref(pkt unsafe.Pointer)
-	Ref(dst unsafe.Pointer, src unsafe.Pointer) int32
-	RescaleTs(pkt unsafe.Pointer, tbSrc AVRational, tbDst AVRational)
 	Free()
 	Ptr() unsafe.Pointer
 }

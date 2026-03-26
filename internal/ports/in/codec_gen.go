@@ -7,20 +7,10 @@ import "unsafe"
 var _ = unsafe.Pointer(nil) // ensure import
 
 // CodecContext is the public interface for codec domain operations.
+// It exposes struct field accessors and lifecycle methods.
+// Low-level C API methods are available on the concrete wrapper type
+// but are not part of this interface contract.
 type CodecContext interface {
-	FindDecoder(id int32) unsafe.Pointer
-	FindEncoder(id int32) unsafe.Pointer
-	FindDecoderByName(name *byte) unsafe.Pointer
-	FindEncoderByName(name *byte) unsafe.Pointer
-	AllocContext3(codec unsafe.Pointer) unsafe.Pointer
-	FreeContext(avctx unsafe.Pointer)
-	Open2(avctx unsafe.Pointer, codec unsafe.Pointer, options unsafe.Pointer) int32
-	SendPacket(avctx unsafe.Pointer, avpkt unsafe.Pointer) int32
-	ReceiveFrame(avctx unsafe.Pointer, frame unsafe.Pointer) int32
-	SendFrame(avctx unsafe.Pointer, frame unsafe.Pointer) int32
-	ReceivePacket(avctx unsafe.Pointer, avpkt unsafe.Pointer) int32
-	ParametersToContext(codec unsafe.Pointer, par unsafe.Pointer) int32
-	ParametersFromContext(par unsafe.Pointer, codec unsafe.Pointer) int32
 	CodecType() int32
 	CodecID() int32
 	TimeBase() AVRational

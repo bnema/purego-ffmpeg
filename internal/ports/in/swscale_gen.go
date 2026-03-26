@@ -7,10 +7,10 @@ import "unsafe"
 var _ = unsafe.Pointer(nil) // ensure import
 
 // SwscaleContext is the public interface for swscale domain operations.
+// It exposes struct field accessors and lifecycle methods.
+// Low-level C API methods are available on the concrete wrapper type
+// but are not part of this interface contract.
 type SwscaleContext interface {
-	GetContext(srcw int32, srch int32, srcformat int32, dstw int32, dsth int32, dstformat int32, flags int32, srcfilter unsafe.Pointer, dstfilter unsafe.Pointer, param unsafe.Pointer) unsafe.Pointer
-	Scale(c unsafe.Pointer, srcslice unsafe.Pointer, srcstride int32, srcslicey int32, srcsliceh int32, dst unsafe.Pointer, dststride int32) int32
-	FreeContext(swscontext unsafe.Pointer)
 	Free()
 	Ptr() unsafe.Pointer
 }

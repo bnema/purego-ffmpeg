@@ -8,142 +8,26 @@ var _ = unsafe.Pointer(nil) // ensure import
 
 // MockCodecContext is a test mock for CodecContext.
 type MockCodecContext struct {
-	FindDecoderFunc           func(int32) unsafe.Pointer
-	FindEncoderFunc           func(int32) unsafe.Pointer
-	FindDecoderByNameFunc     func(*byte) unsafe.Pointer
-	FindEncoderByNameFunc     func(*byte) unsafe.Pointer
-	AllocContext3Func         func(unsafe.Pointer) unsafe.Pointer
-	FreeContextFunc           func(unsafe.Pointer)
-	Open2Func                 func(unsafe.Pointer, unsafe.Pointer, unsafe.Pointer) int32
-	SendPacketFunc            func(unsafe.Pointer, unsafe.Pointer) int32
-	ReceiveFrameFunc          func(unsafe.Pointer, unsafe.Pointer) int32
-	SendFrameFunc             func(unsafe.Pointer, unsafe.Pointer) int32
-	ReceivePacketFunc         func(unsafe.Pointer, unsafe.Pointer) int32
-	ParametersToContextFunc   func(unsafe.Pointer, unsafe.Pointer) int32
-	ParametersFromContextFunc func(unsafe.Pointer, unsafe.Pointer) int32
-	CodecTypeFunc             func() int32
-	CodecIDFunc               func() int32
-	TimeBaseFunc              func() AVRational
-	SetTimeBaseFunc           func(v AVRational)
-	WidthFunc                 func() int32
-	SetWidthFunc              func(v int32)
-	HeightFunc                func() int32
-	SetHeightFunc             func(v int32)
-	PixelFormatFunc           func() int32
-	SetPixelFormatFunc        func(v int32)
-	SampleRateFunc            func() int32
-	SetSampleRateFunc         func(v int32)
-	SampleFormatFunc          func() int32
-	SetSampleFormatFunc       func(v int32)
-	HWDeviceCtxFunc           func() unsafe.Pointer
-	SetHWDeviceCtxFunc        func(v unsafe.Pointer)
-	HWFramesCtxFunc           func() unsafe.Pointer
-	SetHWFramesCtxFunc        func(v unsafe.Pointer)
-	FreeFunc                  func()
-	PtrFunc                   func() unsafe.Pointer
-}
-
-func (mock *MockCodecContext) FindDecoder(id int32) unsafe.Pointer {
-	if mock.FindDecoderFunc != nil {
-		return mock.FindDecoderFunc(id)
-	}
-	var zero unsafe.Pointer
-	return zero
-}
-
-func (mock *MockCodecContext) FindEncoder(id int32) unsafe.Pointer {
-	if mock.FindEncoderFunc != nil {
-		return mock.FindEncoderFunc(id)
-	}
-	var zero unsafe.Pointer
-	return zero
-}
-
-func (mock *MockCodecContext) FindDecoderByName(name *byte) unsafe.Pointer {
-	if mock.FindDecoderByNameFunc != nil {
-		return mock.FindDecoderByNameFunc(name)
-	}
-	var zero unsafe.Pointer
-	return zero
-}
-
-func (mock *MockCodecContext) FindEncoderByName(name *byte) unsafe.Pointer {
-	if mock.FindEncoderByNameFunc != nil {
-		return mock.FindEncoderByNameFunc(name)
-	}
-	var zero unsafe.Pointer
-	return zero
-}
-
-func (mock *MockCodecContext) AllocContext3(codec unsafe.Pointer) unsafe.Pointer {
-	if mock.AllocContext3Func != nil {
-		return mock.AllocContext3Func(codec)
-	}
-	var zero unsafe.Pointer
-	return zero
-}
-
-func (mock *MockCodecContext) FreeContext(avctx unsafe.Pointer) {
-	if mock.FreeContextFunc != nil {
-		mock.FreeContextFunc(avctx)
-		return
-	}
-}
-
-func (mock *MockCodecContext) Open2(avctx unsafe.Pointer, codec unsafe.Pointer, options unsafe.Pointer) int32 {
-	if mock.Open2Func != nil {
-		return mock.Open2Func(avctx, codec, options)
-	}
-	var zero int32
-	return zero
-}
-
-func (mock *MockCodecContext) SendPacket(avctx unsafe.Pointer, avpkt unsafe.Pointer) int32 {
-	if mock.SendPacketFunc != nil {
-		return mock.SendPacketFunc(avctx, avpkt)
-	}
-	var zero int32
-	return zero
-}
-
-func (mock *MockCodecContext) ReceiveFrame(avctx unsafe.Pointer, frame unsafe.Pointer) int32 {
-	if mock.ReceiveFrameFunc != nil {
-		return mock.ReceiveFrameFunc(avctx, frame)
-	}
-	var zero int32
-	return zero
-}
-
-func (mock *MockCodecContext) SendFrame(avctx unsafe.Pointer, frame unsafe.Pointer) int32 {
-	if mock.SendFrameFunc != nil {
-		return mock.SendFrameFunc(avctx, frame)
-	}
-	var zero int32
-	return zero
-}
-
-func (mock *MockCodecContext) ReceivePacket(avctx unsafe.Pointer, avpkt unsafe.Pointer) int32 {
-	if mock.ReceivePacketFunc != nil {
-		return mock.ReceivePacketFunc(avctx, avpkt)
-	}
-	var zero int32
-	return zero
-}
-
-func (mock *MockCodecContext) ParametersToContext(codec unsafe.Pointer, par unsafe.Pointer) int32 {
-	if mock.ParametersToContextFunc != nil {
-		return mock.ParametersToContextFunc(codec, par)
-	}
-	var zero int32
-	return zero
-}
-
-func (mock *MockCodecContext) ParametersFromContext(par unsafe.Pointer, codec unsafe.Pointer) int32 {
-	if mock.ParametersFromContextFunc != nil {
-		return mock.ParametersFromContextFunc(par, codec)
-	}
-	var zero int32
-	return zero
+	CodecTypeFunc       func() int32
+	CodecIDFunc         func() int32
+	TimeBaseFunc        func() AVRational
+	SetTimeBaseFunc     func(v AVRational)
+	WidthFunc           func() int32
+	SetWidthFunc        func(v int32)
+	HeightFunc          func() int32
+	SetHeightFunc       func(v int32)
+	PixelFormatFunc     func() int32
+	SetPixelFormatFunc  func(v int32)
+	SampleRateFunc      func() int32
+	SetSampleRateFunc   func(v int32)
+	SampleFormatFunc    func() int32
+	SetSampleFormatFunc func(v int32)
+	HWDeviceCtxFunc     func() unsafe.Pointer
+	SetHWDeviceCtxFunc  func(v unsafe.Pointer)
+	HWFramesCtxFunc     func() unsafe.Pointer
+	SetHWFramesCtxFunc  func(v unsafe.Pointer)
+	FreeFunc            func()
+	PtrFunc             func() unsafe.Pointer
 }
 
 func (mock *MockCodecContext) CodecType() int32 {

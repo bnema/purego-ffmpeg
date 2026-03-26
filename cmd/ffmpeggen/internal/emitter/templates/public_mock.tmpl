@@ -11,9 +11,6 @@ var _ = unsafe.Pointer(nil) // ensure import
 
 // Mock{{.PublicType}} is a test mock for {{.PublicType}}.
 type Mock{{.PublicType}} struct {
-{{- range .Functions}}
-	{{.GoMethod}}Func func({{range $i, $p := .Params}}{{if $i}}, {{end}}{{$p.GoType}}{{end}}){{if not .Return.IsVoid}} {{.Return.GoType}}{{end}}
-{{- end}}
 {{- range .Accessors}}
 	{{.GoName}}Func func() {{.GoType}}
 {{- if .HasSetter}}
@@ -23,21 +20,6 @@ type Mock{{.PublicType}} struct {
 	FreeFunc func()
 	PtrFunc  func() unsafe.Pointer
 }
-
-{{range .Functions}}
-func (mock *Mock{{$.PublicType}}) {{.GoMethod}}({{range $i, $p := .Params}}{{if $i}}, {{end}}{{$p.Name}} {{$p.GoType}}{{end}}){{if not .Return.IsVoid}} {{.Return.GoType}}{{end}} {
-	if mock.{{.GoMethod}}Func != nil {
-		{{if not .Return.IsVoid}}return {{end}}mock.{{.GoMethod}}Func({{range $i, $p := .Params}}{{if $i}}, {{end}}{{$p.Name}}{{end}})
-{{- if .Return.IsVoid}}
-		return
-{{- end}}
-	}
-{{- if not .Return.IsVoid}}
-	var zero {{.Return.GoType}}
-	return zero
-{{- end}}
-}
-{{end}}
 
 {{- range .Accessors}}
 func (mock *Mock{{$.PublicType}}) {{.GoName}}() {{.GoType}} {

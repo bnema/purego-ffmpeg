@@ -8,109 +8,12 @@ var _ = unsafe.Pointer(nil) // ensure import
 
 // MockFormatContext is a test mock for FormatContext.
 type MockFormatContext struct {
-	AllocContextFunc          func() unsafe.Pointer
-	FreeContextFunc           func(unsafe.Pointer)
-	OpenInputFunc             func(unsafe.Pointer, *byte, unsafe.Pointer, unsafe.Pointer) int32
-	FindStreamInfoFunc        func(unsafe.Pointer, unsafe.Pointer) int32
-	ReadFrameFunc             func(unsafe.Pointer, unsafe.Pointer) int32
-	CloseInputFunc            func(unsafe.Pointer)
-	AllocOutputContext2Func   func(unsafe.Pointer, unsafe.Pointer, *byte, *byte) int32
-	NewStreamFunc             func(unsafe.Pointer, unsafe.Pointer) unsafe.Pointer
-	WriteHeaderFunc           func(unsafe.Pointer, unsafe.Pointer) int32
-	InterleavedWriteFrameFunc func(unsafe.Pointer, unsafe.Pointer) int32
-	WriteTrailerFunc          func(unsafe.Pointer) int32
-	NbStreamsFunc             func() uint32
-	StreamsPtrFunc            func() unsafe.Pointer
-	DurationFunc              func() int64
-	BitRateFunc               func() int64
-	FreeFunc                  func()
-	PtrFunc                   func() unsafe.Pointer
-}
-
-func (mock *MockFormatContext) AllocContext() unsafe.Pointer {
-	if mock.AllocContextFunc != nil {
-		return mock.AllocContextFunc()
-	}
-	var zero unsafe.Pointer
-	return zero
-}
-
-func (mock *MockFormatContext) FreeContext(s unsafe.Pointer) {
-	if mock.FreeContextFunc != nil {
-		mock.FreeContextFunc(s)
-		return
-	}
-}
-
-func (mock *MockFormatContext) OpenInput(ps unsafe.Pointer, url *byte, fmt unsafe.Pointer, options unsafe.Pointer) int32 {
-	if mock.OpenInputFunc != nil {
-		return mock.OpenInputFunc(ps, url, fmt, options)
-	}
-	var zero int32
-	return zero
-}
-
-func (mock *MockFormatContext) FindStreamInfo(ic unsafe.Pointer, options unsafe.Pointer) int32 {
-	if mock.FindStreamInfoFunc != nil {
-		return mock.FindStreamInfoFunc(ic, options)
-	}
-	var zero int32
-	return zero
-}
-
-func (mock *MockFormatContext) ReadFrame(s unsafe.Pointer, pkt unsafe.Pointer) int32 {
-	if mock.ReadFrameFunc != nil {
-		return mock.ReadFrameFunc(s, pkt)
-	}
-	var zero int32
-	return zero
-}
-
-func (mock *MockFormatContext) CloseInput(s unsafe.Pointer) {
-	if mock.CloseInputFunc != nil {
-		mock.CloseInputFunc(s)
-		return
-	}
-}
-
-func (mock *MockFormatContext) AllocOutputContext2(ctx unsafe.Pointer, oformat unsafe.Pointer, formatName *byte, filename *byte) int32 {
-	if mock.AllocOutputContext2Func != nil {
-		return mock.AllocOutputContext2Func(ctx, oformat, formatName, filename)
-	}
-	var zero int32
-	return zero
-}
-
-func (mock *MockFormatContext) NewStream(s unsafe.Pointer, c unsafe.Pointer) unsafe.Pointer {
-	if mock.NewStreamFunc != nil {
-		return mock.NewStreamFunc(s, c)
-	}
-	var zero unsafe.Pointer
-	return zero
-}
-
-func (mock *MockFormatContext) WriteHeader(s unsafe.Pointer, options unsafe.Pointer) int32 {
-	if mock.WriteHeaderFunc != nil {
-		return mock.WriteHeaderFunc(s, options)
-	}
-	var zero int32
-	return zero
-}
-
-func (mock *MockFormatContext) InterleavedWriteFrame(s unsafe.Pointer, pkt unsafe.Pointer) int32 {
-	if mock.InterleavedWriteFrameFunc != nil {
-		return mock.InterleavedWriteFrameFunc(s, pkt)
-	}
-	var zero int32
-	return zero
-}
-
-func (mock *MockFormatContext) WriteTrailer(s unsafe.Pointer) int32 {
-	if mock.WriteTrailerFunc != nil {
-		return mock.WriteTrailerFunc(s)
-	}
-	var zero int32
-	return zero
+	NbStreamsFunc  func() uint32
+	StreamsPtrFunc func() unsafe.Pointer
+	DurationFunc   func() int64
+	BitRateFunc    func() int64
+	FreeFunc       func()
+	PtrFunc        func() unsafe.Pointer
 }
 
 func (mock *MockFormatContext) NbStreams() uint32 {

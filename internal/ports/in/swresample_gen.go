@@ -7,11 +7,10 @@ import "unsafe"
 var _ = unsafe.Pointer(nil) // ensure import
 
 // SwresampleContext is the public interface for swresample domain operations.
+// It exposes struct field accessors and lifecycle methods.
+// Low-level C API methods are available on the concrete wrapper type
+// but are not part of this interface contract.
 type SwresampleContext interface {
-	Alloc() unsafe.Pointer
-	Init(s unsafe.Pointer) int32
-	Convert(s unsafe.Pointer, out unsafe.Pointer, outCount int32, in unsafe.Pointer, inCount int32) int32
-	FreePtr(s unsafe.Pointer)
 	Free()
 	Ptr() unsafe.Pointer
 }

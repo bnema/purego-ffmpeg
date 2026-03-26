@@ -8,14 +8,6 @@ var _ = unsafe.Pointer(nil) // ensure import
 
 // MockFrame is a test mock for Frame.
 type MockFrame struct {
-	AllocFunc          func() unsafe.Pointer
-	FreePtrFunc        func(unsafe.Pointer)
-	UnrefFunc          func(unsafe.Pointer)
-	RefFunc            func(unsafe.Pointer, unsafe.Pointer) int32
-	CloneFunc          func(unsafe.Pointer) unsafe.Pointer
-	GetBufferFunc      func(unsafe.Pointer, int32) int32
-	IsWritableFunc     func(unsafe.Pointer) int32
-	MakeWritableFunc   func(unsafe.Pointer) int32
 	DataPtrFunc        func() unsafe.Pointer
 	LinesizePtrFunc    func() unsafe.Pointer
 	WidthFunc          func() int32
@@ -36,68 +28,6 @@ type MockFrame struct {
 	SetHWFramesCtxFunc func(v unsafe.Pointer)
 	FreeFunc           func()
 	PtrFunc            func() unsafe.Pointer
-}
-
-func (mock *MockFrame) Alloc() unsafe.Pointer {
-	if mock.AllocFunc != nil {
-		return mock.AllocFunc()
-	}
-	var zero unsafe.Pointer
-	return zero
-}
-
-func (mock *MockFrame) FreePtr(frame unsafe.Pointer) {
-	if mock.FreePtrFunc != nil {
-		mock.FreePtrFunc(frame)
-		return
-	}
-}
-
-func (mock *MockFrame) Unref(frame unsafe.Pointer) {
-	if mock.UnrefFunc != nil {
-		mock.UnrefFunc(frame)
-		return
-	}
-}
-
-func (mock *MockFrame) Ref(dst unsafe.Pointer, src unsafe.Pointer) int32 {
-	if mock.RefFunc != nil {
-		return mock.RefFunc(dst, src)
-	}
-	var zero int32
-	return zero
-}
-
-func (mock *MockFrame) Clone(src unsafe.Pointer) unsafe.Pointer {
-	if mock.CloneFunc != nil {
-		return mock.CloneFunc(src)
-	}
-	var zero unsafe.Pointer
-	return zero
-}
-
-func (mock *MockFrame) GetBuffer(frame unsafe.Pointer, align int32) int32 {
-	if mock.GetBufferFunc != nil {
-		return mock.GetBufferFunc(frame, align)
-	}
-	var zero int32
-	return zero
-}
-
-func (mock *MockFrame) IsWritable(frame unsafe.Pointer) int32 {
-	if mock.IsWritableFunc != nil {
-		return mock.IsWritableFunc(frame)
-	}
-	var zero int32
-	return zero
-}
-
-func (mock *MockFrame) MakeWritable(frame unsafe.Pointer) int32 {
-	if mock.MakeWritableFunc != nil {
-		return mock.MakeWritableFunc(frame)
-	}
-	var zero int32
-	return zero
 }
 
 func (mock *MockFrame) DataPtr() unsafe.Pointer {

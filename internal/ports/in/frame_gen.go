@@ -7,15 +7,10 @@ import "unsafe"
 var _ = unsafe.Pointer(nil) // ensure import
 
 // Frame is the public interface for frame domain operations.
+// It exposes struct field accessors and lifecycle methods.
+// Low-level C API methods are available on the concrete wrapper type
+// but are not part of this interface contract.
 type Frame interface {
-	Alloc() unsafe.Pointer
-	FreePtr(frame unsafe.Pointer)
-	Unref(frame unsafe.Pointer)
-	Ref(dst unsafe.Pointer, src unsafe.Pointer) int32
-	Clone(src unsafe.Pointer) unsafe.Pointer
-	GetBuffer(frame unsafe.Pointer, align int32) int32
-	IsWritable(frame unsafe.Pointer) int32
-	MakeWritable(frame unsafe.Pointer) int32
 	DataPtr() unsafe.Pointer
 	LinesizePtr() unsafe.Pointer
 	Width() int32

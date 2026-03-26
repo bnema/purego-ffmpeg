@@ -8,79 +8,8 @@ var _ = unsafe.Pointer(nil) // ensure import
 
 // MockFilterGraph is a test mock for FilterGraph.
 type MockFilterGraph struct {
-	GraphAllocFunc             func() unsafe.Pointer
-	GraphFreeFunc              func(unsafe.Pointer)
-	GraphCreateFilterFunc      func(unsafe.Pointer, unsafe.Pointer, *byte, *byte, unsafe.Pointer, unsafe.Pointer) int32
-	GraphParsePtrFunc          func(unsafe.Pointer, *byte, unsafe.Pointer, unsafe.Pointer, unsafe.Pointer) int32
-	GraphConfigFunc            func(unsafe.Pointer, unsafe.Pointer) int32
-	GetByNameFunc              func(*byte) unsafe.Pointer
-	BuffersrcAddFrameFlagsFunc func(unsafe.Pointer, unsafe.Pointer, int32) int32
-	BuffersinkGetFrameFunc     func(unsafe.Pointer, unsafe.Pointer) int32
-	FreeFunc                   func()
-	PtrFunc                    func() unsafe.Pointer
-}
-
-func (mock *MockFilterGraph) GraphAlloc() unsafe.Pointer {
-	if mock.GraphAllocFunc != nil {
-		return mock.GraphAllocFunc()
-	}
-	var zero unsafe.Pointer
-	return zero
-}
-
-func (mock *MockFilterGraph) GraphFree(graph unsafe.Pointer) {
-	if mock.GraphFreeFunc != nil {
-		mock.GraphFreeFunc(graph)
-		return
-	}
-}
-
-func (mock *MockFilterGraph) GraphCreateFilter(filtCtx unsafe.Pointer, filt unsafe.Pointer, name *byte, args *byte, opaque unsafe.Pointer, graphCtx unsafe.Pointer) int32 {
-	if mock.GraphCreateFilterFunc != nil {
-		return mock.GraphCreateFilterFunc(filtCtx, filt, name, args, opaque, graphCtx)
-	}
-	var zero int32
-	return zero
-}
-
-func (mock *MockFilterGraph) GraphParsePtr(graph unsafe.Pointer, filters *byte, inputs unsafe.Pointer, outputs unsafe.Pointer, logCtx unsafe.Pointer) int32 {
-	if mock.GraphParsePtrFunc != nil {
-		return mock.GraphParsePtrFunc(graph, filters, inputs, outputs, logCtx)
-	}
-	var zero int32
-	return zero
-}
-
-func (mock *MockFilterGraph) GraphConfig(graphctx unsafe.Pointer, logCtx unsafe.Pointer) int32 {
-	if mock.GraphConfigFunc != nil {
-		return mock.GraphConfigFunc(graphctx, logCtx)
-	}
-	var zero int32
-	return zero
-}
-
-func (mock *MockFilterGraph) GetByName(name *byte) unsafe.Pointer {
-	if mock.GetByNameFunc != nil {
-		return mock.GetByNameFunc(name)
-	}
-	var zero unsafe.Pointer
-	return zero
-}
-
-func (mock *MockFilterGraph) BuffersrcAddFrameFlags(bufferSrc unsafe.Pointer, frame unsafe.Pointer, flags int32) int32 {
-	if mock.BuffersrcAddFrameFlagsFunc != nil {
-		return mock.BuffersrcAddFrameFlagsFunc(bufferSrc, frame, flags)
-	}
-	var zero int32
-	return zero
-}
-
-func (mock *MockFilterGraph) BuffersinkGetFrame(ctx unsafe.Pointer, frame unsafe.Pointer) int32 {
-	if mock.BuffersinkGetFrameFunc != nil {
-		return mock.BuffersinkGetFrameFunc(ctx, frame)
-	}
-	var zero int32
-	return zero
+	FreeFunc func()
+	PtrFunc  func() unsafe.Pointer
 }
 
 func (mock *MockFilterGraph) Free() {

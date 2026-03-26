@@ -7,18 +7,10 @@ import "unsafe"
 var _ = unsafe.Pointer(nil) // ensure import
 
 // FormatContext is the public interface for format domain operations.
+// It exposes struct field accessors and lifecycle methods.
+// Low-level C API methods are available on the concrete wrapper type
+// but are not part of this interface contract.
 type FormatContext interface {
-	AllocContext() unsafe.Pointer
-	FreeContext(s unsafe.Pointer)
-	OpenInput(ps unsafe.Pointer, url *byte, fmt unsafe.Pointer, options unsafe.Pointer) int32
-	FindStreamInfo(ic unsafe.Pointer, options unsafe.Pointer) int32
-	ReadFrame(s unsafe.Pointer, pkt unsafe.Pointer) int32
-	CloseInput(s unsafe.Pointer)
-	AllocOutputContext2(ctx unsafe.Pointer, oformat unsafe.Pointer, formatName *byte, filename *byte) int32
-	NewStream(s unsafe.Pointer, c unsafe.Pointer) unsafe.Pointer
-	WriteHeader(s unsafe.Pointer, options unsafe.Pointer) int32
-	InterleavedWriteFrame(s unsafe.Pointer, pkt unsafe.Pointer) int32
-	WriteTrailer(s unsafe.Pointer) int32
 	NbStreams() uint32
 	StreamsPtr() unsafe.Pointer
 	Duration() int64

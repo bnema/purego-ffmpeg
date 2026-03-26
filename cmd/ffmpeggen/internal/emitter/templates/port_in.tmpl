@@ -10,10 +10,10 @@ var _ = unsafe.Pointer(nil) // ensure import
 {{- if .PublicType}}
 
 // {{.PublicType}} is the public interface for {{.Name}} domain operations.
+// It exposes struct field accessors and lifecycle methods.
+// Low-level C API methods are available on the concrete wrapper type
+// but are not part of this interface contract.
 type {{.PublicType}} interface {
-{{- range .Functions}}
-	{{.GoMethod}}({{range $i, $p := .Params}}{{if $i}}, {{end}}{{$p.Name}} {{$p.GoType}}{{end}}){{if not .Return.IsVoid}} {{.Return.GoType}}{{end}}
-{{- end}}
 {{- range .Accessors}}
 	{{.GoName}}() {{.GoType}}
 {{- if .HasSetter}}

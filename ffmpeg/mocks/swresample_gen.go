@@ -8,43 +8,8 @@ var _ = unsafe.Pointer(nil) // ensure import
 
 // MockSwresampleContext is a test mock for SwresampleContext.
 type MockSwresampleContext struct {
-	AllocFunc   func() unsafe.Pointer
-	InitFunc    func(unsafe.Pointer) int32
-	ConvertFunc func(unsafe.Pointer, unsafe.Pointer, int32, unsafe.Pointer, int32) int32
-	FreePtrFunc func(unsafe.Pointer)
-	FreeFunc    func()
-	PtrFunc     func() unsafe.Pointer
-}
-
-func (mock *MockSwresampleContext) Alloc() unsafe.Pointer {
-	if mock.AllocFunc != nil {
-		return mock.AllocFunc()
-	}
-	var zero unsafe.Pointer
-	return zero
-}
-
-func (mock *MockSwresampleContext) Init(s unsafe.Pointer) int32 {
-	if mock.InitFunc != nil {
-		return mock.InitFunc(s)
-	}
-	var zero int32
-	return zero
-}
-
-func (mock *MockSwresampleContext) Convert(s unsafe.Pointer, out unsafe.Pointer, outCount int32, in unsafe.Pointer, inCount int32) int32 {
-	if mock.ConvertFunc != nil {
-		return mock.ConvertFunc(s, out, outCount, in, inCount)
-	}
-	var zero int32
-	return zero
-}
-
-func (mock *MockSwresampleContext) FreePtr(s unsafe.Pointer) {
-	if mock.FreePtrFunc != nil {
-		mock.FreePtrFunc(s)
-		return
-	}
+	FreeFunc func()
+	PtrFunc  func() unsafe.Pointer
 }
 
 func (mock *MockSwresampleContext) Free() {

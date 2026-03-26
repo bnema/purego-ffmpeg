@@ -7,11 +7,10 @@ import "unsafe"
 var _ = unsafe.Pointer(nil) // ensure import
 
 // Dictionary is the public interface for dict domain operations.
+// It exposes struct field accessors and lifecycle methods.
+// Low-level C API methods are available on the concrete wrapper type
+// but are not part of this interface contract.
 type Dictionary interface {
-	Get(m unsafe.Pointer, key *byte, prev unsafe.Pointer, flags int32) unsafe.Pointer
-	Set(pm unsafe.Pointer, key *byte, value *byte, flags int32) int32
-	FreePtr(m unsafe.Pointer)
-	Count(m unsafe.Pointer) int32
 	Free()
 	Ptr() unsafe.Pointer
 }

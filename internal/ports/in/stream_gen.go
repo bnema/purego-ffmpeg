@@ -7,6 +7,9 @@ import "unsafe"
 var _ = unsafe.Pointer(nil) // ensure import
 
 // Stream is the public interface for stream domain operations.
+// It exposes struct field accessors and lifecycle methods.
+// Low-level C API methods are available on the concrete wrapper type
+// but are not part of this interface contract.
 type Stream interface {
 	Index() int32
 	CodecParameters() unsafe.Pointer
