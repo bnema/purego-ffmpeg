@@ -77,32 +77,9 @@ func (w *formatWrapper) SetNbStreams(v uint32) {
 	*(*uint32)(unsafe.Add(w.ptr, capi.OffsetAVFormatContextNbStreams)) = v
 }
 
-func (w *formatWrapper) Index() int32 {
-	return *(*int32)(unsafe.Add(w.ptr, capi.OffsetAVStreamIndex))
-}
-
-func (w *formatWrapper) SetIndex(v int32) {
-	*(*int32)(unsafe.Add(w.ptr, capi.OffsetAVStreamIndex)) = v
-}
-
-func (w *formatWrapper) CodecParameters() unsafe.Pointer {
-	return *(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVStreamCodecParameters))
-}
-
-func (w *formatWrapper) SetCodecParameters(v unsafe.Pointer) {
-	*(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVStreamCodecParameters)) = v
-}
-
-func (w *formatWrapper) TimeBase() AVRational {
-	return *(*AVRational)(unsafe.Add(w.ptr, capi.OffsetAVStreamTimeBase))
-}
-
-func (w *formatWrapper) SetTimeBase(v AVRational) {
-	*(*AVRational)(unsafe.Add(w.ptr, capi.OffsetAVStreamTimeBase)) = v
-}
-
 func (w *formatWrapper) Free() {
 	if w.ptr != nil {
+		w.capi.FreeContext(w.ptr)
 		w.ptr = nil
 	}
 }

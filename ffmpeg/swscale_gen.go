@@ -39,6 +39,7 @@ func (w *swscaleWrapper) FreeContext(swscontext unsafe.Pointer) {
 
 func (w *swscaleWrapper) Free() {
 	if w.ptr != nil {
+		w.capi.FreeContext(w.ptr)
 		w.ptr = nil
 	}
 }

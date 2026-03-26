@@ -25,6 +25,7 @@ type DomainData struct {
 	Library       string // "libavformat"
 	Functions     []DomainFuncData
 	Accessors     []AccessorData
+	FreeMethod    string // CAPI method name to call in Free() — e.g., "FreeContext", "FreePtr"
 }
 
 // DomainFuncData represents one C→Go function mapping within a domain.

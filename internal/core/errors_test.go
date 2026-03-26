@@ -51,4 +51,7 @@ func TestSentinelErrors(t *testing.T) {
 	if ErrEAGAIN.Code() != -11 {
 		t.Errorf("ErrEAGAIN code = %d", ErrEAGAIN.Code())
 	}
+	if ErrInvalidData.Code() != -1094995529 {
+		t.Errorf("ErrInvalidData code = %d", ErrInvalidData.Code())
+	}
 }

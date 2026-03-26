@@ -57,9 +57,6 @@ var Domains = []Domain{
 		},
 		Accessors: []Accessor{
 			{Struct: "AVFormatContext", Field: "nb_streams", GoName: "NbStreams", Type: "uint32", Offset: 44},
-			{Struct: "AVStream", Field: "index", GoName: "Index", Type: "int32", Offset: 0},
-			{Struct: "AVStream", Field: "codecpar", GoName: "CodecParameters", Type: "unsafe.Pointer", Offset: 8},
-			{Struct: "AVStream", Field: "time_base", GoName: "TimeBase", Type: "AVRational", Offset: 16},
 		},
 	},
 	{

@@ -105,6 +105,14 @@ func BuildDomainData(headers []*model.Header, domain overrides.Domain) DomainDat
 		dd.Functions = append(dd.Functions, dfd)
 	}
 
+	// Find the free method for this domain.
+	for _, f := range dd.Functions {
+		if strings.HasPrefix(f.GoMethod, "Free") {
+			dd.FreeMethod = f.GoMethod
+			break
+		}
+	}
+
 	// Build accessors from overrides.
 	for _, acc := range domain.Accessors {
 		dd.Accessors = append(dd.Accessors, AccessorData{

@@ -119,6 +119,7 @@ func (w *codecWrapper) SetTimeBase(v AVRational) {
 
 func (w *codecWrapper) Free() {
 	if w.ptr != nil {
+		w.capi.FreeContext(w.ptr)
 		w.ptr = nil
 	}
 }

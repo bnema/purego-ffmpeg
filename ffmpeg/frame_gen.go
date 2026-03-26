@@ -59,6 +59,7 @@ func (w *frameWrapper) MakeWritable(frame unsafe.Pointer) int32 {
 
 func (w *frameWrapper) Free() {
 	if w.ptr != nil {
+		w.capi.FreePtr(w.ptr)
 		w.ptr = nil
 	}
 }

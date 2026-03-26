@@ -31,6 +31,8 @@ var (
 	funcRE = regexp.MustCompile(`^(\w[\w\s\*]+?)\s+(\*?\w+)\s*\(([^)]*)\)\s*;`)
 	// Match __attribute__((...)) patterns
 	attrRE = regexp.MustCompile(`__attribute__\s*\(\([^)]*\)\)`)
+	// Match av_alloc_size(...) patterns (FFmpeg allocation hints)
+	allocSizeRE = regexp.MustCompile(`av_alloc_size\s*\([^)]*\)`)
 )
 
 // ParseFile reads an FFmpeg header file and returns a parsed Header.
@@ -548,7 +550,6 @@ func stripComments(data []byte) []byte {
 	// Strip __attribute__((...)) patterns
 	data = attrRE.ReplaceAll(data, nil)
 	// Strip av_alloc_size(...) patterns (FFmpeg allocation hints)
-	allocSizeRE := regexp.MustCompile(`av_alloc_size\s*\([^)]*\)`)
 	data = allocSizeRE.ReplaceAll(data, nil)
 
 	lines := bytes.Split(data, []byte("\n"))

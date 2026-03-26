@@ -47,6 +47,7 @@ func (w *packetWrapper) RescaleTs(pkt unsafe.Pointer, tbSrc AVRational, tbDst AV
 
 func (w *packetWrapper) Free() {
 	if w.ptr != nil {
+		w.capi.FreePtr(w.ptr)
 		w.ptr = nil
 	}
 }

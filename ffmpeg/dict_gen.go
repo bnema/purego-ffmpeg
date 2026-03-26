@@ -43,6 +43,7 @@ func (w *dictWrapper) Count(m unsafe.Pointer) int32 {
 
 func (w *dictWrapper) Free() {
 	if w.ptr != nil {
+		w.capi.FreePtr(w.ptr)
 		w.ptr = nil
 	}
 }

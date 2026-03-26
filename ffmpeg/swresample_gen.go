@@ -43,6 +43,7 @@ func (w *swresampleWrapper) FreePtr(s unsafe.Pointer) {
 
 func (w *swresampleWrapper) Free() {
 	if w.ptr != nil {
+		w.capi.FreePtr(w.ptr)
 		w.ptr = nil
 	}
 }

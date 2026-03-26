@@ -52,6 +52,9 @@ func (w *{{$.Name}}Wrapper) Set{{.GoName}}(v {{.GoType}}) {
 
 func (w *{{.Name}}Wrapper) Free() {
 	if w.ptr != nil {
+{{- if .FreeMethod}}
+		w.capi.{{.FreeMethod}}(w.ptr)
+{{- end}}
 		w.ptr = nil
 	}
 }

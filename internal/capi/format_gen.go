@@ -26,9 +26,6 @@ var (
 // Offset constants for struct field accessors.
 const (
 	OffsetAVFormatContextNbStreams = 44
-	OffsetAVStreamIndex            = 0
-	OffsetAVStreamCodecParameters  = 8
-	OffsetAVStreamTimeBase         = 16
 )
 
 // RegisterFormat registers all format domain purego symbols.

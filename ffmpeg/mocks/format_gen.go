@@ -21,12 +21,6 @@ type MockFormatContext struct {
 	WriteTrailerFunc          func(unsafe.Pointer) int32
 	NbStreamsFunc             func() uint32
 	SetNbStreamsFunc          func(v uint32)
-	IndexFunc                 func() int32
-	SetIndexFunc              func(v int32)
-	CodecParametersFunc       func() unsafe.Pointer
-	SetCodecParametersFunc    func(v unsafe.Pointer)
-	TimeBaseFunc              func() AVRational
-	SetTimeBaseFunc           func(v AVRational)
 	FreeFunc                  func()
 	PtrFunc                   func() unsafe.Pointer
 }
@@ -128,45 +122,6 @@ func (mock *MockFormatContext) NbStreams() uint32 {
 func (mock *MockFormatContext) SetNbStreams(v uint32) {
 	if mock.SetNbStreamsFunc != nil {
 		mock.SetNbStreamsFunc(v)
-	}
-}
-func (mock *MockFormatContext) Index() int32 {
-	if mock.IndexFunc != nil {
-		return mock.IndexFunc()
-	}
-	var zero int32
-	return zero
-}
-
-func (mock *MockFormatContext) SetIndex(v int32) {
-	if mock.SetIndexFunc != nil {
-		mock.SetIndexFunc(v)
-	}
-}
-func (mock *MockFormatContext) CodecParameters() unsafe.Pointer {
-	if mock.CodecParametersFunc != nil {
-		return mock.CodecParametersFunc()
-	}
-	var zero unsafe.Pointer
-	return zero
-}
-
-func (mock *MockFormatContext) SetCodecParameters(v unsafe.Pointer) {
-	if mock.SetCodecParametersFunc != nil {
-		mock.SetCodecParametersFunc(v)
-	}
-}
-func (mock *MockFormatContext) TimeBase() AVRational {
-	if mock.TimeBaseFunc != nil {
-		return mock.TimeBaseFunc()
-	}
-	var zero AVRational
-	return zero
-}
-
-func (mock *MockFormatContext) SetTimeBase(v AVRational) {
-	if mock.SetTimeBaseFunc != nil {
-		mock.SetTimeBaseFunc(v)
 	}
 }
 

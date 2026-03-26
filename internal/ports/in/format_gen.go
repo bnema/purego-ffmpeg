@@ -21,12 +21,6 @@ type FormatContext interface {
 	WriteTrailer(s unsafe.Pointer) int32
 	NbStreams() uint32
 	SetNbStreams(v uint32)
-	Index() int32
-	SetIndex(v int32)
-	CodecParameters() unsafe.Pointer
-	SetCodecParameters(v unsafe.Pointer)
-	TimeBase() AVRational
-	SetTimeBase(v AVRational)
 	Free()
 	Ptr() unsafe.Pointer
 }
