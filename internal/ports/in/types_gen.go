@@ -867,6 +867,27 @@ const (
 	CodecIDAnull            CodecID = 135171
 )
 
+// HWDeviceType represents the HWDeviceType enum type.
+type HWDeviceType int32
+
+const (
+	HwdeviceTypeNone         HWDeviceType = 0
+	HwdeviceTypeVdpau        HWDeviceType = 1
+	HwdeviceTypeCuda         HWDeviceType = 2
+	HwdeviceTypeVaapi        HWDeviceType = 3
+	HwdeviceTypeDxva2        HWDeviceType = 4
+	HwdeviceTypeQsv          HWDeviceType = 5
+	HwdeviceTypeVideotoolbox HWDeviceType = 6
+	HwdeviceTypeD3d11va      HWDeviceType = 7
+	HwdeviceTypeDrm          HWDeviceType = 8
+	HwdeviceTypeOpencl       HWDeviceType = 9
+	HwdeviceTypeMediacodec   HWDeviceType = 10
+	HwdeviceTypeVulkan       HWDeviceType = 11
+	HwdeviceTypeD3d12va      HWDeviceType = 12
+	HwdeviceTypeAmf          HWDeviceType = 13
+	HwdeviceTypeOhcodec      HWDeviceType = 14
+)
+
 // DictionaryEntry is a value struct.
 type DictionaryEntry struct {
 	Key   *byte

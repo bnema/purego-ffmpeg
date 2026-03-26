@@ -17,6 +17,7 @@ type Handles struct {
 	Avformat   uintptr
 	Swscale    uintptr
 	Swresample uintptr
+	Avfilter   uintptr
 }
 
 // SOVersions specifies the SO major version numbers for each library.
@@ -26,6 +27,7 @@ type SOVersions struct {
 	Avformat   string
 	Swscale    string
 	Swresample string
+	Avfilter   string
 }
 
 // Option configures the Load call.
@@ -44,6 +46,7 @@ var defaultSOVersions = SOVersions{
 	Avformat:   "62",
 	Swscale:    "9",
 	Swresample: "6",
+	Avfilter:   "11",
 }
 
 // WithDir sets the directory to search for FFmpeg shared libraries.
@@ -75,9 +78,10 @@ func Load(opts ...Option) (Handles, error) {
 		{"libavcodec", cfg.soVersions.Avcodec},
 		{"libavformat", cfg.soVersions.Avformat},
 		{"libswscale", cfg.soVersions.Swscale},
+		{"libavfilter", cfg.soVersions.Avfilter},
 	}
 
-	var handles [5]uintptr
+	var handles [6]uintptr
 	for i, l := range libs {
 		soName := libFileName(l.name, l.soVer)
 		var fullPath string
@@ -103,6 +107,7 @@ func Load(opts ...Option) (Handles, error) {
 		Avcodec:    handles[2],
 		Avformat:   handles[3],
 		Swscale:    handles[4],
+		Avfilter:   handles[5],
 	}, nil
 }
 

@@ -105,3 +105,24 @@ func defaultUtil() out.UtilCAPI {
 	}
 	return adapters.Util
 }
+
+func defaultHWAccel() out.HWAccelCAPI {
+	if adapters.HWAccel == nil {
+		panic("ffmpeg: Init() must be called before using FFmpeg functions")
+	}
+	return adapters.HWAccel
+}
+
+func defaultStream() out.StreamCAPI {
+	if adapters.Stream == nil {
+		panic("ffmpeg: Init() must be called before using FFmpeg functions")
+	}
+	return adapters.Stream
+}
+
+func defaultFilter() out.FilterCAPI {
+	if adapters.Filter == nil {
+		panic("ffmpeg: Init() must be called before using FFmpeg functions")
+	}
+	return adapters.Filter
+}

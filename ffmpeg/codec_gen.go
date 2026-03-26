@@ -25,6 +25,11 @@ type codecWrapper struct {
 	capi out.CodecCAPI
 }
 
+// NewCodecContextWithPtr wraps an existing pointer with CodecContext methods.
+func NewCodecContextWithPtr(ptr unsafe.Pointer) *codecWrapper {
+	return &codecWrapper{ptr: ptr, capi: defaultCodec()}
+}
+
 func (w *codecWrapper) FindDecoder(id int32) unsafe.Pointer {
 	return w.capi.FindDecoder(id)
 }
@@ -77,6 +82,30 @@ func (w *codecWrapper) ParametersFromContext(par unsafe.Pointer, codec unsafe.Po
 	return w.capi.ParametersFromContext(par, codec)
 }
 
+func (w *codecWrapper) CodecType() int32 {
+	return *(*int32)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextCodecType))
+}
+
+func (w *codecWrapper) SetCodecType(v int32) {
+	*(*int32)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextCodecType)) = v
+}
+
+func (w *codecWrapper) CodecID() int32 {
+	return *(*int32)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextCodecID))
+}
+
+func (w *codecWrapper) SetCodecID(v int32) {
+	*(*int32)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextCodecID)) = v
+}
+
+func (w *codecWrapper) TimeBase() AVRational {
+	return *(*AVRational)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextTimeBase))
+}
+
+func (w *codecWrapper) SetTimeBase(v AVRational) {
+	*(*AVRational)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextTimeBase)) = v
+}
+
 func (w *codecWrapper) Width() int32 {
 	return *(*int32)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextWidth))
 }
@@ -109,12 +138,28 @@ func (w *codecWrapper) SetSampleRate(v int32) {
 	*(*int32)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextSampleRate)) = v
 }
 
-func (w *codecWrapper) TimeBase() AVRational {
-	return *(*AVRational)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextTimeBase))
+func (w *codecWrapper) SampleFormat() int32 {
+	return *(*int32)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextSampleFormat))
 }
 
-func (w *codecWrapper) SetTimeBase(v AVRational) {
-	*(*AVRational)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextTimeBase)) = v
+func (w *codecWrapper) SetSampleFormat(v int32) {
+	*(*int32)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextSampleFormat)) = v
+}
+
+func (w *codecWrapper) HWDeviceCtx() unsafe.Pointer {
+	return *(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextHWDeviceCtx))
+}
+
+func (w *codecWrapper) SetHWDeviceCtx(v unsafe.Pointer) {
+	*(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextHWDeviceCtx)) = v
+}
+
+func (w *codecWrapper) HWFramesCtx() unsafe.Pointer {
+	return *(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextHWFramesCtx))
+}
+
+func (w *codecWrapper) SetHWFramesCtx(v unsafe.Pointer) {
+	*(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextHWFramesCtx)) = v
 }
 
 func (w *codecWrapper) Free() {

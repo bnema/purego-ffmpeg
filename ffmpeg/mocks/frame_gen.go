@@ -8,16 +8,36 @@ var _ = unsafe.Pointer(nil) // ensure import
 
 // MockFrame is a test mock for Frame.
 type MockFrame struct {
-	AllocFunc        func() unsafe.Pointer
-	FreePtrFunc      func(unsafe.Pointer)
-	UnrefFunc        func(unsafe.Pointer)
-	RefFunc          func(unsafe.Pointer, unsafe.Pointer) int32
-	CloneFunc        func(unsafe.Pointer) unsafe.Pointer
-	GetBufferFunc    func(unsafe.Pointer, int32) int32
-	IsWritableFunc   func(unsafe.Pointer) int32
-	MakeWritableFunc func(unsafe.Pointer) int32
-	FreeFunc         func()
-	PtrFunc          func() unsafe.Pointer
+	AllocFunc          func() unsafe.Pointer
+	FreePtrFunc        func(unsafe.Pointer)
+	UnrefFunc          func(unsafe.Pointer)
+	RefFunc            func(unsafe.Pointer, unsafe.Pointer) int32
+	CloneFunc          func(unsafe.Pointer) unsafe.Pointer
+	GetBufferFunc      func(unsafe.Pointer, int32) int32
+	IsWritableFunc     func(unsafe.Pointer) int32
+	MakeWritableFunc   func(unsafe.Pointer) int32
+	DataPtrFunc        func() unsafe.Pointer
+	SetDataPtrFunc     func(v unsafe.Pointer)
+	LinesizePtrFunc    func() unsafe.Pointer
+	SetLinesizePtrFunc func(v unsafe.Pointer)
+	WidthFunc          func() int32
+	SetWidthFunc       func(v int32)
+	HeightFunc         func() int32
+	SetHeightFunc      func(v int32)
+	NbSamplesFunc      func() int32
+	SetNbSamplesFunc   func(v int32)
+	FormatFunc         func() int32
+	SetFormatFunc      func(v int32)
+	PtsFunc            func() int64
+	SetPtsFunc         func(v int64)
+	PktDtsFunc         func() int64
+	SetPktDtsFunc      func(v int64)
+	SampleRateFunc     func() int32
+	SetSampleRateFunc  func(v int32)
+	HWFramesCtxFunc    func() unsafe.Pointer
+	SetHWFramesCtxFunc func(v unsafe.Pointer)
+	FreeFunc           func()
+	PtrFunc            func() unsafe.Pointer
 }
 
 func (mock *MockFrame) Alloc() unsafe.Pointer {
@@ -80,6 +100,137 @@ func (mock *MockFrame) MakeWritable(frame unsafe.Pointer) int32 {
 	}
 	var zero int32
 	return zero
+}
+
+func (mock *MockFrame) DataPtr() unsafe.Pointer {
+	if mock.DataPtrFunc != nil {
+		return mock.DataPtrFunc()
+	}
+	var zero unsafe.Pointer
+	return zero
+}
+
+func (mock *MockFrame) SetDataPtr(v unsafe.Pointer) {
+	if mock.SetDataPtrFunc != nil {
+		mock.SetDataPtrFunc(v)
+	}
+}
+func (mock *MockFrame) LinesizePtr() unsafe.Pointer {
+	if mock.LinesizePtrFunc != nil {
+		return mock.LinesizePtrFunc()
+	}
+	var zero unsafe.Pointer
+	return zero
+}
+
+func (mock *MockFrame) SetLinesizePtr(v unsafe.Pointer) {
+	if mock.SetLinesizePtrFunc != nil {
+		mock.SetLinesizePtrFunc(v)
+	}
+}
+func (mock *MockFrame) Width() int32 {
+	if mock.WidthFunc != nil {
+		return mock.WidthFunc()
+	}
+	var zero int32
+	return zero
+}
+
+func (mock *MockFrame) SetWidth(v int32) {
+	if mock.SetWidthFunc != nil {
+		mock.SetWidthFunc(v)
+	}
+}
+func (mock *MockFrame) Height() int32 {
+	if mock.HeightFunc != nil {
+		return mock.HeightFunc()
+	}
+	var zero int32
+	return zero
+}
+
+func (mock *MockFrame) SetHeight(v int32) {
+	if mock.SetHeightFunc != nil {
+		mock.SetHeightFunc(v)
+	}
+}
+func (mock *MockFrame) NbSamples() int32 {
+	if mock.NbSamplesFunc != nil {
+		return mock.NbSamplesFunc()
+	}
+	var zero int32
+	return zero
+}
+
+func (mock *MockFrame) SetNbSamples(v int32) {
+	if mock.SetNbSamplesFunc != nil {
+		mock.SetNbSamplesFunc(v)
+	}
+}
+func (mock *MockFrame) Format() int32 {
+	if mock.FormatFunc != nil {
+		return mock.FormatFunc()
+	}
+	var zero int32
+	return zero
+}
+
+func (mock *MockFrame) SetFormat(v int32) {
+	if mock.SetFormatFunc != nil {
+		mock.SetFormatFunc(v)
+	}
+}
+func (mock *MockFrame) Pts() int64 {
+	if mock.PtsFunc != nil {
+		return mock.PtsFunc()
+	}
+	var zero int64
+	return zero
+}
+
+func (mock *MockFrame) SetPts(v int64) {
+	if mock.SetPtsFunc != nil {
+		mock.SetPtsFunc(v)
+	}
+}
+func (mock *MockFrame) PktDts() int64 {
+	if mock.PktDtsFunc != nil {
+		return mock.PktDtsFunc()
+	}
+	var zero int64
+	return zero
+}
+
+func (mock *MockFrame) SetPktDts(v int64) {
+	if mock.SetPktDtsFunc != nil {
+		mock.SetPktDtsFunc(v)
+	}
+}
+func (mock *MockFrame) SampleRate() int32 {
+	if mock.SampleRateFunc != nil {
+		return mock.SampleRateFunc()
+	}
+	var zero int32
+	return zero
+}
+
+func (mock *MockFrame) SetSampleRate(v int32) {
+	if mock.SetSampleRateFunc != nil {
+		mock.SetSampleRateFunc(v)
+	}
+}
+func (mock *MockFrame) HWFramesCtx() unsafe.Pointer {
+	if mock.HWFramesCtxFunc != nil {
+		return mock.HWFramesCtxFunc()
+	}
+	var zero unsafe.Pointer
+	return zero
+}
+
+func (mock *MockFrame) SetHWFramesCtx(v unsafe.Pointer) {
+	if mock.SetHWFramesCtxFunc != nil {
+		mock.SetHWFramesCtxFunc(v)
+	}
 }
 
 func (mock *MockFrame) Free() {

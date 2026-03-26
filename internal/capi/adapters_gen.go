@@ -254,6 +254,60 @@ func (utilCAPIAdapter) Strerror(errnum int32, errbuf *byte, errbufSize uintptr) 
 	return av_strerror(errnum, errbuf, errbufSize)
 }
 
+type hwaccelCAPIAdapter struct{}
+
+func (hwaccelCAPIAdapter) DeviceCtxCreate(deviceCtx unsafe.Pointer, type_ int32, device *byte, opts unsafe.Pointer, flags int32) int32 {
+	return av_hwdevice_ctx_create(deviceCtx, type_, device, opts, flags)
+}
+
+func (hwaccelCAPIAdapter) FindTypeByName(name *byte) int32 {
+	return av_hwdevice_find_type_by_name(name)
+}
+
+func (hwaccelCAPIAdapter) FrameTransferData(dst unsafe.Pointer, src unsafe.Pointer, flags int32) int32 {
+	return av_hwframe_transfer_data(dst, src, flags)
+}
+
+func (hwaccelCAPIAdapter) IterateTypes(prev int32) int32 {
+	return av_hwdevice_iterate_types(prev)
+}
+
+type streamCAPIAdapter struct{}
+
+type avfilterCAPIAdapter struct{}
+
+func (avfilterCAPIAdapter) GraphAlloc() unsafe.Pointer {
+	return avfilter_graph_alloc()
+}
+
+func (avfilterCAPIAdapter) GraphFree(graph unsafe.Pointer) {
+	avfilter_graph_free(graph)
+}
+
+func (avfilterCAPIAdapter) GraphCreateFilter(filtCtx unsafe.Pointer, filt unsafe.Pointer, name *byte, args *byte, opaque unsafe.Pointer, graphCtx unsafe.Pointer) int32 {
+	return avfilter_graph_create_filter(filtCtx, filt, name, args, opaque, graphCtx)
+}
+
+func (avfilterCAPIAdapter) GraphParsePtr(graph unsafe.Pointer, filters *byte, inputs unsafe.Pointer, outputs unsafe.Pointer, logCtx unsafe.Pointer) int32 {
+	return avfilter_graph_parse_ptr(graph, filters, inputs, outputs, logCtx)
+}
+
+func (avfilterCAPIAdapter) GraphConfig(graphctx unsafe.Pointer, logCtx unsafe.Pointer) int32 {
+	return avfilter_graph_config(graphctx, logCtx)
+}
+
+func (avfilterCAPIAdapter) GetByName(name *byte) unsafe.Pointer {
+	return avfilter_get_by_name(name)
+}
+
+func (avfilterCAPIAdapter) BuffersrcAddFrameFlags(bufferSrc unsafe.Pointer, frame unsafe.Pointer, flags int32) int32 {
+	return av_buffersrc_add_frame_flags(bufferSrc, frame, flags)
+}
+
+func (avfilterCAPIAdapter) BuffersinkGetFrame(ctx unsafe.Pointer, frame unsafe.Pointer) int32 {
+	return av_buffersink_get_frame(ctx, frame)
+}
+
 // Adapters provides the real CAPI implementations.
 type Adapters struct {
 	Format     out.FormatCAPI
@@ -264,6 +318,9 @@ type Adapters struct {
 	Swresample out.SwresampleCAPI
 	Dict       out.DictCAPI
 	Util       out.UtilCAPI
+	HWAccel    out.HWAccelCAPI
+	Stream     out.StreamCAPI
+	Filter     out.FilterCAPI
 }
 
 // NewAdapters returns Adapters wired to real purego bindings.
@@ -277,5 +334,8 @@ func NewAdapters() Adapters {
 		Swresample: swresampleCAPIAdapter{},
 		Dict:       dictCAPIAdapter{},
 		Util:       utilCAPIAdapter{},
+		HWAccel:    hwaccelCAPIAdapter{},
+		Stream:     streamCAPIAdapter{},
+		Filter:     avfilterCAPIAdapter{},
 	}
 }

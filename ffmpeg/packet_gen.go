@@ -25,6 +25,18 @@ type packetWrapper struct {
 	capi out.PacketCAPI
 }
 
+// NewPacketWithPtr wraps an existing pointer with Packet methods.
+func NewPacketWithPtr(ptr unsafe.Pointer) *packetWrapper {
+	return &packetWrapper{ptr: ptr, capi: defaultPacket()}
+}
+
+// AllocPacket allocates a new Packet.
+func AllocPacket() *packetWrapper {
+	w := &packetWrapper{capi: defaultPacket()}
+	w.ptr = w.capi.Alloc()
+	return w
+}
+
 func (w *packetWrapper) Alloc() unsafe.Pointer {
 	return w.capi.Alloc()
 }

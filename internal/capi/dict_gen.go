@@ -16,6 +16,8 @@ var (
 	av_dict_count func(unsafe.Pointer) int32
 )
 
+var _ = unsafe.Pointer(nil) // ensure import
+
 // RegisterDict registers all dict domain purego symbols.
 func RegisterDict(handle uintptr) {
 	purego.RegisterLibFunc(&av_dict_get, handle, "av_dict_get")

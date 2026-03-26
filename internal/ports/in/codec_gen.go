@@ -21,6 +21,12 @@ type CodecContext interface {
 	ReceivePacket(avctx unsafe.Pointer, avpkt unsafe.Pointer) int32
 	ParametersToContext(codec unsafe.Pointer, par unsafe.Pointer) int32
 	ParametersFromContext(par unsafe.Pointer, codec unsafe.Pointer) int32
+	CodecType() int32
+	SetCodecType(v int32)
+	CodecID() int32
+	SetCodecID(v int32)
+	TimeBase() AVRational
+	SetTimeBase(v AVRational)
 	Width() int32
 	SetWidth(v int32)
 	Height() int32
@@ -29,8 +35,12 @@ type CodecContext interface {
 	SetPixelFormat(v int32)
 	SampleRate() int32
 	SetSampleRate(v int32)
-	TimeBase() AVRational
-	SetTimeBase(v AVRational)
+	SampleFormat() int32
+	SetSampleFormat(v int32)
+	HWDeviceCtx() unsafe.Pointer
+	SetHWDeviceCtx(v unsafe.Pointer)
+	HWFramesCtx() unsafe.Pointer
+	SetHWFramesCtx(v unsafe.Pointer)
 	Free()
 	Ptr() unsafe.Pointer
 }

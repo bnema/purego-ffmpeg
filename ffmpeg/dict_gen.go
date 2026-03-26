@@ -25,6 +25,11 @@ type dictWrapper struct {
 	capi out.DictCAPI
 }
 
+// NewDictionaryWithPtr wraps an existing pointer with Dictionary methods.
+func NewDictionaryWithPtr(ptr unsafe.Pointer) *dictWrapper {
+	return &dictWrapper{ptr: ptr, capi: defaultDict()}
+}
+
 func (w *dictWrapper) Get(m unsafe.Pointer, key *byte, prev unsafe.Pointer, flags int32) unsafe.Pointer {
 	return w.capi.Get(m, key, prev, flags)
 }

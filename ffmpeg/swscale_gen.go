@@ -25,6 +25,11 @@ type swscaleWrapper struct {
 	capi out.SwscaleCAPI
 }
 
+// NewSwscaleContextWithPtr wraps an existing pointer with SwscaleContext methods.
+func NewSwscaleContextWithPtr(ptr unsafe.Pointer) *swscaleWrapper {
+	return &swscaleWrapper{ptr: ptr, capi: defaultSwscale()}
+}
+
 func (w *swscaleWrapper) GetContext(srcw int32, srch int32, srcformat int32, dstw int32, dsth int32, dstformat int32, flags int32, srcfilter unsafe.Pointer, dstfilter unsafe.Pointer, param unsafe.Pointer) unsafe.Pointer {
 	return w.capi.GetContext(srcw, srch, srcformat, dstw, dsth, dstformat, flags, srcfilter, dstfilter, param)
 }

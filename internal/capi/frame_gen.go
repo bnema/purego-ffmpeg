@@ -20,6 +20,22 @@ var (
 	av_frame_make_writable func(unsafe.Pointer) int32
 )
 
+var _ = unsafe.Pointer(nil) // ensure import
+
+// Offset constants for struct field accessors.
+const (
+	OffsetAVFrameDataPtr     = 0
+	OffsetAVFrameLinesizePtr = 64
+	OffsetAVFrameWidth       = 104
+	OffsetAVFrameHeight      = 108
+	OffsetAVFrameNbSamples   = 112
+	OffsetAVFrameFormat      = 116
+	OffsetAVFramePts         = 136
+	OffsetAVFramePktDts      = 144
+	OffsetAVFrameSampleRate  = 180
+	OffsetAVFrameHWFramesCtx = 328
+)
+
 // RegisterFrame registers all frame domain purego symbols.
 func RegisterFrame(handle uintptr) {
 	purego.RegisterLibFunc(&av_frame_alloc, handle, "av_frame_alloc")

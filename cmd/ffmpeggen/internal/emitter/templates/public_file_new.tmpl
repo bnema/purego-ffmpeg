@@ -30,6 +30,21 @@ type {{.Name}}Wrapper struct {
 	capi out.{{.PortInterface}}
 }
 
+// New{{.PublicType}}WithPtr wraps an existing pointer with {{.PublicType}} methods.
+func New{{.PublicType}}WithPtr(ptr unsafe.Pointer) *{{.Name}}Wrapper {
+	return &{{.Name}}Wrapper{ptr: ptr, capi: default{{.PortInterface | trimSuffix "CAPI"}}()}
+}
+
+{{- if .AllocMethod}}
+
+// Alloc{{.PublicType}} allocates a new {{.PublicType}}.
+func Alloc{{.PublicType}}() *{{.Name}}Wrapper {
+	w := &{{.Name}}Wrapper{capi: default{{.PortInterface | trimSuffix "CAPI"}}()}
+	w.ptr = w.capi.{{.AllocMethod}}()
+	return w
+}
+{{- end}}
+
 {{- range .Functions}}
 
 func (w *{{$.Name}}Wrapper) {{.GoMethod}}({{range $i, $p := .Params}}{{if $i}}, {{end}}{{$p.Name}} {{$p.GoType}}{{end}}){{if not .Return.IsVoid}} {{.Return.GoType}}{{end}} {

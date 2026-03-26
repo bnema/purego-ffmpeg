@@ -26,6 +26,7 @@ type DomainData struct {
 	Functions     []DomainFuncData
 	Accessors     []AccessorData
 	FreeMethod    string // CAPI method name to call in Free() — e.g., "FreeContext", "FreePtr"
+	AllocMethod   string // CAPI method name for zero-arg allocation — e.g., "Alloc", "AllocContext"
 }
 
 // DomainFuncData represents one C→Go function mapping within a domain.

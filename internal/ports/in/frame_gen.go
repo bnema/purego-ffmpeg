@@ -16,6 +16,26 @@ type Frame interface {
 	GetBuffer(frame unsafe.Pointer, align int32) int32
 	IsWritable(frame unsafe.Pointer) int32
 	MakeWritable(frame unsafe.Pointer) int32
+	DataPtr() unsafe.Pointer
+	SetDataPtr(v unsafe.Pointer)
+	LinesizePtr() unsafe.Pointer
+	SetLinesizePtr(v unsafe.Pointer)
+	Width() int32
+	SetWidth(v int32)
+	Height() int32
+	SetHeight(v int32)
+	NbSamples() int32
+	SetNbSamples(v int32)
+	Format() int32
+	SetFormat(v int32)
+	Pts() int64
+	SetPts(v int64)
+	PktDts() int64
+	SetPktDts(v int64)
+	SampleRate() int32
+	SetSampleRate(v int32)
+	HWFramesCtx() unsafe.Pointer
+	SetHWFramesCtx(v unsafe.Pointer)
 	Free()
 	Ptr() unsafe.Pointer
 }

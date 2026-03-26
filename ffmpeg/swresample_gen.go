@@ -25,6 +25,18 @@ type swresampleWrapper struct {
 	capi out.SwresampleCAPI
 }
 
+// NewSwresampleContextWithPtr wraps an existing pointer with SwresampleContext methods.
+func NewSwresampleContextWithPtr(ptr unsafe.Pointer) *swresampleWrapper {
+	return &swresampleWrapper{ptr: ptr, capi: defaultSwresample()}
+}
+
+// AllocSwresampleContext allocates a new SwresampleContext.
+func AllocSwresampleContext() *swresampleWrapper {
+	w := &swresampleWrapper{capi: defaultSwresample()}
+	w.ptr = w.capi.Alloc()
+	return w
+}
+
 func (w *swresampleWrapper) Alloc() unsafe.Pointer {
 	return w.capi.Alloc()
 }

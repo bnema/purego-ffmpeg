@@ -23,9 +23,14 @@ var (
 	av_write_trailer               func(unsafe.Pointer) int32
 )
 
+var _ = unsafe.Pointer(nil) // ensure import
+
 // Offset constants for struct field accessors.
 const (
-	OffsetAVFormatContextNbStreams = 44
+	OffsetAVFormatContextNbStreams  = 44
+	OffsetAVFormatContextStreamsPtr = 48
+	OffsetAVFormatContextDuration   = 104
+	OffsetAVFormatContextBitRate    = 112
 )
 
 // RegisterFormat registers all format domain purego symbols.

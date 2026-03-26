@@ -25,13 +25,20 @@ var (
 	avcodec_parameters_from_context func(unsafe.Pointer, unsafe.Pointer) int32
 )
 
+var _ = unsafe.Pointer(nil) // ensure import
+
 // Offset constants for struct field accessors.
 const (
-	OffsetAVCodecContextWidth       = 112
-	OffsetAVCodecContextHeight      = 116
-	OffsetAVCodecContextPixelFormat = 80
-	OffsetAVCodecContextSampleRate  = 156
-	OffsetAVCodecContextTimeBase    = 40
+	OffsetAVCodecContextCodecType    = 12
+	OffsetAVCodecContextCodecID      = 24
+	OffsetAVCodecContextTimeBase     = 84
+	OffsetAVCodecContextWidth        = 112
+	OffsetAVCodecContextHeight       = 116
+	OffsetAVCodecContextPixelFormat  = 136
+	OffsetAVCodecContextSampleRate   = 344
+	OffsetAVCodecContextSampleFormat = 348
+	OffsetAVCodecContextHWDeviceCtx  = 560
+	OffsetAVCodecContextHWFramesCtx  = 552
 )
 
 // RegisterCodec registers all codec domain purego symbols.

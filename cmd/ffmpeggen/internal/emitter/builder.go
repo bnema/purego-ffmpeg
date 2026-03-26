@@ -114,6 +114,14 @@ func BuildDomainData(headers []*model.Header, domain overrides.Domain) DomainDat
 		}
 	}
 
+	// Find the alloc method: a zero-param function starting with "Alloc" that returns unsafe.Pointer.
+	for _, f := range dd.Functions {
+		if strings.HasPrefix(f.GoMethod, "Alloc") && !f.Return.IsVoid && f.Return.GoType == "unsafe.Pointer" && len(f.Params) == 0 {
+			dd.AllocMethod = f.GoMethod
+			break
+		}
+	}
+
 	// Build accessors from overrides.
 	for _, acc := range domain.Accessors {
 		dd.Accessors = append(dd.Accessors, AccessorData{
@@ -185,6 +193,10 @@ func BuildCAPIRegisterData(domains []DomainData) CAPIRegisterData {
 	libMap := make(map[string]*libEntry)
 
 	for _, d := range domains {
+		// Skip accessor-only domains (no Register function generated)
+		if len(d.Functions) == 0 {
+			continue
+		}
 		handleField := libraryToHandleField(d.Library)
 		if _, ok := libMap[handleField]; !ok {
 			libMap[handleField] = &libEntry{handleField: handleField}
@@ -218,6 +230,8 @@ func libraryToHandleField(lib string) string {
 		return "Swscale"
 	case "libswresample":
 		return "Swresample"
+	case "libavfilter":
+		return "Avfilter"
 	default:
 		return lib
 	}

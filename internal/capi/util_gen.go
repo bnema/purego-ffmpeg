@@ -21,6 +21,8 @@ var (
 	av_strerror              func(int32, *byte, uintptr) int32
 )
 
+var _ = unsafe.Pointer(nil) // ensure import
+
 // RegisterUtil registers all util domain purego symbols.
 func RegisterUtil(handle uintptr) {
 	purego.RegisterLibFunc(&av_malloc, handle, "av_malloc")

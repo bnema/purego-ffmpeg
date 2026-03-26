@@ -54,8 +54,8 @@ func run(cfg config) error {
 	var domains []emitter.DomainData
 	for _, domain := range overrides.Domains {
 		dd := emitter.BuildDomainData(headers, domain)
-		if len(dd.Functions) == 0 {
-			fmt.Printf("  SKIP %s (no functions matched)\n", domain.Name)
+		if len(dd.Functions) == 0 && len(dd.Accessors) == 0 {
+			fmt.Printf("  SKIP %s (no functions or accessors matched)\n", domain.Name)
 			continue
 		}
 		domains = append(domains, dd)
@@ -219,10 +219,16 @@ func parseAllHeaders(headersDir string) ([]*model.Header, error) {
 		// libavformat
 		{"libavformat/avformat.h", "avformat"},
 		{"libavformat/avio.h", "avformat"},
+		// libavutil (hwcontext)
+		{"libavutil/hwcontext.h", "avutil"},
 		// libswscale
 		{"libswscale/swscale.h", "swscale"},
 		// libswresample
 		{"libswresample/swresample.h", "swresample"},
+		// libavfilter
+		{"libavfilter/avfilter.h", "avfilter"},
+		{"libavfilter/buffersrc.h", "avfilter"},
+		{"libavfilter/buffersink.h", "avfilter"},
 	}
 
 	// Build a combined scope

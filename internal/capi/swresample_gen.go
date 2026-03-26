@@ -16,6 +16,8 @@ var (
 	swr_free    func(unsafe.Pointer)
 )
 
+var _ = unsafe.Pointer(nil) // ensure import
+
 // RegisterSwresample registers all swresample domain purego symbols.
 func RegisterSwresample(handle uintptr) {
 	purego.RegisterLibFunc(&swr_alloc, handle, "swr_alloc")

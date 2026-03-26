@@ -9,6 +9,7 @@ type Handles struct {
 	Avformat   uintptr
 	Swscale    uintptr
 	Swresample uintptr
+	Avfilter   uintptr
 }
 
 // Register loads all FFmpeg C API symbols from the shared library handles.
@@ -19,6 +20,8 @@ func Register(h Handles) {
 	RegisterFrame(h.Avutil)
 	RegisterDict(h.Avutil)
 	RegisterUtil(h.Avutil)
+	RegisterHwaccel(h.Avutil)
 	RegisterSwscale(h.Swscale)
 	RegisterSwresample(h.Swresample)
+	RegisterAvfilter(h.Avfilter)
 }

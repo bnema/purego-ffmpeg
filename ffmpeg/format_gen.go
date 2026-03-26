@@ -25,6 +25,18 @@ type formatWrapper struct {
 	capi out.FormatCAPI
 }
 
+// NewFormatContextWithPtr wraps an existing pointer with FormatContext methods.
+func NewFormatContextWithPtr(ptr unsafe.Pointer) *formatWrapper {
+	return &formatWrapper{ptr: ptr, capi: defaultFormat()}
+}
+
+// AllocFormatContext allocates a new FormatContext.
+func AllocFormatContext() *formatWrapper {
+	w := &formatWrapper{capi: defaultFormat()}
+	w.ptr = w.capi.AllocContext()
+	return w
+}
+
 func (w *formatWrapper) AllocContext() unsafe.Pointer {
 	return w.capi.AllocContext()
 }
@@ -75,6 +87,30 @@ func (w *formatWrapper) NbStreams() uint32 {
 
 func (w *formatWrapper) SetNbStreams(v uint32) {
 	*(*uint32)(unsafe.Add(w.ptr, capi.OffsetAVFormatContextNbStreams)) = v
+}
+
+func (w *formatWrapper) StreamsPtr() unsafe.Pointer {
+	return *(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVFormatContextStreamsPtr))
+}
+
+func (w *formatWrapper) SetStreamsPtr(v unsafe.Pointer) {
+	*(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVFormatContextStreamsPtr)) = v
+}
+
+func (w *formatWrapper) Duration() int64 {
+	return *(*int64)(unsafe.Add(w.ptr, capi.OffsetAVFormatContextDuration))
+}
+
+func (w *formatWrapper) SetDuration(v int64) {
+	*(*int64)(unsafe.Add(w.ptr, capi.OffsetAVFormatContextDuration)) = v
+}
+
+func (w *formatWrapper) BitRate() int64 {
+	return *(*int64)(unsafe.Add(w.ptr, capi.OffsetAVFormatContextBitRate))
+}
+
+func (w *formatWrapper) SetBitRate(v int64) {
+	*(*int64)(unsafe.Add(w.ptr, capi.OffsetAVFormatContextBitRate)) = v
 }
 
 func (w *formatWrapper) Free() {

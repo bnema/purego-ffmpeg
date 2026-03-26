@@ -25,6 +25,18 @@ type frameWrapper struct {
 	capi out.FrameCAPI
 }
 
+// NewFrameWithPtr wraps an existing pointer with Frame methods.
+func NewFrameWithPtr(ptr unsafe.Pointer) *frameWrapper {
+	return &frameWrapper{ptr: ptr, capi: defaultFrame()}
+}
+
+// AllocFrame allocates a new Frame.
+func AllocFrame() *frameWrapper {
+	w := &frameWrapper{capi: defaultFrame()}
+	w.ptr = w.capi.Alloc()
+	return w
+}
+
 func (w *frameWrapper) Alloc() unsafe.Pointer {
 	return w.capi.Alloc()
 }
@@ -55,6 +67,86 @@ func (w *frameWrapper) IsWritable(frame unsafe.Pointer) int32 {
 
 func (w *frameWrapper) MakeWritable(frame unsafe.Pointer) int32 {
 	return w.capi.MakeWritable(frame)
+}
+
+func (w *frameWrapper) DataPtr() unsafe.Pointer {
+	return *(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVFrameDataPtr))
+}
+
+func (w *frameWrapper) SetDataPtr(v unsafe.Pointer) {
+	*(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVFrameDataPtr)) = v
+}
+
+func (w *frameWrapper) LinesizePtr() unsafe.Pointer {
+	return *(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVFrameLinesizePtr))
+}
+
+func (w *frameWrapper) SetLinesizePtr(v unsafe.Pointer) {
+	*(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVFrameLinesizePtr)) = v
+}
+
+func (w *frameWrapper) Width() int32 {
+	return *(*int32)(unsafe.Add(w.ptr, capi.OffsetAVFrameWidth))
+}
+
+func (w *frameWrapper) SetWidth(v int32) {
+	*(*int32)(unsafe.Add(w.ptr, capi.OffsetAVFrameWidth)) = v
+}
+
+func (w *frameWrapper) Height() int32 {
+	return *(*int32)(unsafe.Add(w.ptr, capi.OffsetAVFrameHeight))
+}
+
+func (w *frameWrapper) SetHeight(v int32) {
+	*(*int32)(unsafe.Add(w.ptr, capi.OffsetAVFrameHeight)) = v
+}
+
+func (w *frameWrapper) NbSamples() int32 {
+	return *(*int32)(unsafe.Add(w.ptr, capi.OffsetAVFrameNbSamples))
+}
+
+func (w *frameWrapper) SetNbSamples(v int32) {
+	*(*int32)(unsafe.Add(w.ptr, capi.OffsetAVFrameNbSamples)) = v
+}
+
+func (w *frameWrapper) Format() int32 {
+	return *(*int32)(unsafe.Add(w.ptr, capi.OffsetAVFrameFormat))
+}
+
+func (w *frameWrapper) SetFormat(v int32) {
+	*(*int32)(unsafe.Add(w.ptr, capi.OffsetAVFrameFormat)) = v
+}
+
+func (w *frameWrapper) Pts() int64 {
+	return *(*int64)(unsafe.Add(w.ptr, capi.OffsetAVFramePts))
+}
+
+func (w *frameWrapper) SetPts(v int64) {
+	*(*int64)(unsafe.Add(w.ptr, capi.OffsetAVFramePts)) = v
+}
+
+func (w *frameWrapper) PktDts() int64 {
+	return *(*int64)(unsafe.Add(w.ptr, capi.OffsetAVFramePktDts))
+}
+
+func (w *frameWrapper) SetPktDts(v int64) {
+	*(*int64)(unsafe.Add(w.ptr, capi.OffsetAVFramePktDts)) = v
+}
+
+func (w *frameWrapper) SampleRate() int32 {
+	return *(*int32)(unsafe.Add(w.ptr, capi.OffsetAVFrameSampleRate))
+}
+
+func (w *frameWrapper) SetSampleRate(v int32) {
+	*(*int32)(unsafe.Add(w.ptr, capi.OffsetAVFrameSampleRate)) = v
+}
+
+func (w *frameWrapper) HWFramesCtx() unsafe.Pointer {
+	return *(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVFrameHWFramesCtx))
+}
+
+func (w *frameWrapper) SetHWFramesCtx(v unsafe.Pointer) {
+	*(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVFrameHWFramesCtx)) = v
 }
 
 func (w *frameWrapper) Free() {

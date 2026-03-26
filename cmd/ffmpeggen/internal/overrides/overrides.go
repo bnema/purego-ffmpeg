@@ -57,6 +57,9 @@ var Domains = []Domain{
 		},
 		Accessors: []Accessor{
 			{Struct: "AVFormatContext", Field: "nb_streams", GoName: "NbStreams", Type: "uint32", Offset: 44},
+			{Struct: "AVFormatContext", Field: "streams", GoName: "StreamsPtr", Type: "unsafe.Pointer", Offset: 48},
+			{Struct: "AVFormatContext", Field: "duration", GoName: "Duration", Type: "int64", Offset: 104},
+			{Struct: "AVFormatContext", Field: "bit_rate", GoName: "BitRate", Type: "int64", Offset: 112},
 		},
 	},
 	{
@@ -78,11 +81,16 @@ var Domains = []Domain{
 			{C: "avcodec_parameters_from_context", Go: "ParametersFromContext"},
 		},
 		Accessors: []Accessor{
+			{Struct: "AVCodecContext", Field: "codec_type", GoName: "CodecType", Type: "int32", Offset: 12},
+			{Struct: "AVCodecContext", Field: "codec_id", GoName: "CodecID", Type: "int32", Offset: 24},
+			{Struct: "AVCodecContext", Field: "time_base", GoName: "TimeBase", Type: "AVRational", Offset: 84},
 			{Struct: "AVCodecContext", Field: "width", GoName: "Width", Type: "int32", Offset: 112},
 			{Struct: "AVCodecContext", Field: "height", GoName: "Height", Type: "int32", Offset: 116},
-			{Struct: "AVCodecContext", Field: "pix_fmt", GoName: "PixelFormat", Type: "int32", Offset: 80},
-			{Struct: "AVCodecContext", Field: "sample_rate", GoName: "SampleRate", Type: "int32", Offset: 156},
-			{Struct: "AVCodecContext", Field: "time_base", GoName: "TimeBase", Type: "AVRational", Offset: 40},
+			{Struct: "AVCodecContext", Field: "pix_fmt", GoName: "PixelFormat", Type: "int32", Offset: 136},
+			{Struct: "AVCodecContext", Field: "sample_rate", GoName: "SampleRate", Type: "int32", Offset: 344},
+			{Struct: "AVCodecContext", Field: "sample_fmt", GoName: "SampleFormat", Type: "int32", Offset: 348},
+			{Struct: "AVCodecContext", Field: "hw_device_ctx", GoName: "HWDeviceCtx", Type: "unsafe.Pointer", Offset: 560},
+			{Struct: "AVCodecContext", Field: "hw_frames_ctx", GoName: "HWFramesCtx", Type: "unsafe.Pointer", Offset: 552},
 		},
 		Enums: []string{"AVCodecID"},
 	},
@@ -109,6 +117,18 @@ var Domains = []Domain{
 			{C: "av_frame_get_buffer", Go: "GetBuffer"},
 			{C: "av_frame_is_writable", Go: "IsWritable"},
 			{C: "av_frame_make_writable", Go: "MakeWritable"},
+		},
+		Accessors: []Accessor{
+			{Struct: "AVFrame", Field: "data", GoName: "DataPtr", Type: "unsafe.Pointer", Offset: 0},
+			{Struct: "AVFrame", Field: "linesize", GoName: "LinesizePtr", Type: "unsafe.Pointer", Offset: 64},
+			{Struct: "AVFrame", Field: "width", GoName: "Width", Type: "int32", Offset: 104},
+			{Struct: "AVFrame", Field: "height", GoName: "Height", Type: "int32", Offset: 108},
+			{Struct: "AVFrame", Field: "nb_samples", GoName: "NbSamples", Type: "int32", Offset: 112},
+			{Struct: "AVFrame", Field: "format", GoName: "Format", Type: "int32", Offset: 116},
+			{Struct: "AVFrame", Field: "pts", GoName: "Pts", Type: "int64", Offset: 136},
+			{Struct: "AVFrame", Field: "pkt_dts", GoName: "PktDts", Type: "int64", Offset: 144},
+			{Struct: "AVFrame", Field: "sample_rate", GoName: "SampleRate", Type: "int32", Offset: 180},
+			{Struct: "AVFrame", Field: "hw_frames_ctx", GoName: "HWFramesCtx", Type: "unsafe.Pointer", Offset: 328},
 		},
 	},
 	{
@@ -155,6 +175,42 @@ var Domains = []Domain{
 			{C: "av_strerror", Go: "Strerror"},
 		},
 	},
+	{
+		Name: "hwaccel", Library: "libavutil",
+		PortInterface: "HWAccelCAPI", PublicType: "",
+		Functions: []FuncMap{
+			{C: "av_hwdevice_ctx_create", Go: "DeviceCtxCreate"},
+			{C: "av_hwdevice_find_type_by_name", Go: "FindTypeByName"},
+			{C: "av_hwframe_transfer_data", Go: "FrameTransferData"},
+			{C: "av_hwdevice_iterate_types", Go: "IterateTypes"},
+		},
+	},
+	{
+		Name: "stream", Library: "libavformat",
+		PortInterface: "StreamCAPI", PublicType: "Stream",
+		Functions: []FuncMap{}, // no functions — accessors only
+		Accessors: []Accessor{
+			{Struct: "AVStream", Field: "index", GoName: "Index", Type: "int32", Offset: 8},
+			{Struct: "AVStream", Field: "codecpar", GoName: "CodecParameters", Type: "unsafe.Pointer", Offset: 16},
+			{Struct: "AVStream", Field: "time_base", GoName: "TimeBase", Type: "AVRational", Offset: 32},
+			{Struct: "AVStream", Field: "duration", GoName: "Duration", Type: "int64", Offset: 48},
+			{Struct: "AVStream", Field: "nb_frames", GoName: "NbFrames", Type: "int64", Offset: 56},
+		},
+	},
+	{
+		Name: "avfilter", Library: "libavfilter",
+		PortInterface: "FilterCAPI", PublicType: "FilterGraph",
+		Functions: []FuncMap{
+			{C: "avfilter_graph_alloc", Go: "GraphAlloc"},
+			{C: "avfilter_graph_free", Go: "GraphFree"},
+			{C: "avfilter_graph_create_filter", Go: "GraphCreateFilter"},
+			{C: "avfilter_graph_parse_ptr", Go: "GraphParsePtr"},
+			{C: "avfilter_graph_config", Go: "GraphConfig"},
+			{C: "avfilter_get_by_name", Go: "GetByName"},
+			{C: "av_buffersrc_add_frame_flags", Go: "BuffersrcAddFrameFlags"},
+			{C: "av_buffersink_get_frame", Go: "BuffersinkGetFrame"},
+		},
+	},
 }
 
 // TypeMap defines value types and enums shared across domains.
@@ -163,6 +219,7 @@ var Enums = []EnumDef{
 	{C: "AVSampleFormat", Go: "SampleFormat"},
 	{C: "AVMediaType", Go: "MediaType"},
 	{C: "AVCodecID", Go: "CodecID"},
+	{C: "AVHWDeviceType", Go: "HWDeviceType"},
 }
 
 type EnumDef struct {

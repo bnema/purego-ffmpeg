@@ -15,6 +15,8 @@ var (
 	sws_freeContext func(unsafe.Pointer)
 )
 
+var _ = unsafe.Pointer(nil) // ensure import
+
 // RegisterSwscale registers all swscale domain purego symbols.
 func RegisterSwscale(handle uintptr) {
 	purego.RegisterLibFunc(&sws_getContext, handle, "sws_getContext")

@@ -17,6 +17,8 @@ var (
 	av_packet_rescale_ts func(unsafe.Pointer, AVRational, AVRational)
 )
 
+var _ = unsafe.Pointer(nil) // ensure import
+
 // RegisterPacket registers all packet domain purego symbols.
 func RegisterPacket(handle uintptr) {
 	purego.RegisterLibFunc(&av_packet_alloc, handle, "av_packet_alloc")
