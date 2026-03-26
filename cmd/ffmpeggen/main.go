@@ -243,7 +243,7 @@ func parseAllHeaders(headersDir string) ([]*model.Header, error) {
 		fullPath := filepath.Join(headersDir, hf.path)
 		// Skip headers that don't exist on this system
 		if _, err := os.Stat(fullPath); os.IsNotExist(err) {
-			fmt.Printf("  WARN: %s not found, skipping\n", hf.path)
+			fmt.Fprintf(os.Stderr, "  WARN: %s not found, skipping\n", hf.path)
 			continue
 		}
 		header, err := parser.ParseFile(fullPath, hf.lib, scope)

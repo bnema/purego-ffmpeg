@@ -32,9 +32,13 @@ func NewSwresampleContextWithPtr(ptr unsafe.Pointer) *swresampleWrapper {
 
 // AllocSwresampleContext allocates and returns a new SwresampleContext.
 // Unlike the raw Alloc() method, this stores the pointer internally.
+// Returns nil if the C allocation fails.
 func AllocSwresampleContext() *swresampleWrapper {
 	w := &swresampleWrapper{capi: defaultSwresample()}
 	w.ptr = w.capi.Alloc()
+	if w.ptr == nil {
+		return nil
+	}
 	return w
 }
 

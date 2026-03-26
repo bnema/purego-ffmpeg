@@ -32,9 +32,13 @@ func NewFrameWithPtr(ptr unsafe.Pointer) *frameWrapper {
 
 // AllocFrame allocates and returns a new Frame.
 // Unlike the raw Alloc() method, this stores the pointer internally.
+// Returns nil if the C allocation fails.
 func AllocFrame() *frameWrapper {
 	w := &frameWrapper{capi: defaultFrame()}
 	w.ptr = w.capi.Alloc()
+	if w.ptr == nil {
+		return nil
+	}
 	return w
 }
 

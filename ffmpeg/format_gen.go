@@ -32,9 +32,13 @@ func NewFormatContextWithPtr(ptr unsafe.Pointer) *formatWrapper {
 
 // AllocFormatContext allocates and returns a new FormatContext.
 // Unlike the raw AllocContext() method, this stores the pointer internally.
+// Returns nil if the C allocation fails.
 func AllocFormatContext() *formatWrapper {
 	w := &formatWrapper{capi: defaultFormat()}
 	w.ptr = w.capi.AllocContext()
+	if w.ptr == nil {
+		return nil
+	}
 	return w
 }
 

@@ -32,9 +32,13 @@ func NewPacketWithPtr(ptr unsafe.Pointer) *packetWrapper {
 
 // AllocPacket allocates and returns a new Packet.
 // Unlike the raw Alloc() method, this stores the pointer internally.
+// Returns nil if the C allocation fails.
 func AllocPacket() *packetWrapper {
 	w := &packetWrapper{capi: defaultPacket()}
 	w.ptr = w.capi.Alloc()
+	if w.ptr == nil {
+		return nil
+	}
 	return w
 }
 

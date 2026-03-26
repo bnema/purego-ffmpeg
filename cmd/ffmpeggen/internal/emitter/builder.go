@@ -108,7 +108,7 @@ func BuildDomainData(headers []*model.Header, domain overrides.Domain) DomainDat
 
 	// Find the free method for this domain.
 	for _, f := range dd.Functions {
-		if strings.HasPrefix(f.GoMethod, "Free") {
+		if strings.HasPrefix(f.GoMethod, "Free") || strings.HasSuffix(f.GoMethod, "Free") {
 			dd.FreeMethod = f.GoMethod
 			break
 		}

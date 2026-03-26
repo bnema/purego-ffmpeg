@@ -39,9 +39,13 @@ func New{{.PublicType}}WithPtr(ptr unsafe.Pointer) *{{.Name}}Wrapper {
 
 // Alloc{{.PublicType}} allocates and returns a new {{.PublicType}}.
 // Unlike the raw {{.AllocMethod}}() method, this stores the pointer internally.
+// Returns nil if the C allocation fails.
 func Alloc{{.PublicType}}() *{{.Name}}Wrapper {
 	w := &{{.Name}}Wrapper{capi: default{{.PortInterface | trimSuffix "CAPI"}}()}
 	w.ptr = w.capi.{{.AllocMethod}}()
+	if w.ptr == nil {
+		return nil
+	}
 	return w
 }
 {{- end}}
