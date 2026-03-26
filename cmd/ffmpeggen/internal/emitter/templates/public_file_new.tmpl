@@ -6,9 +6,12 @@ package ffmpeg
 import (
 	"unsafe"
 
-	"github.com/bnema/purego-ffmpeg/internal/core"
-	out "github.com/bnema/purego-ffmpeg/internal/ports/out"
 	"github.com/bnema/purego-ffmpeg/internal/capi"
+	"github.com/bnema/purego-ffmpeg/internal/core"
+{{- if .PublicType}}
+	in "github.com/bnema/purego-ffmpeg/internal/ports/in"
+{{- end}}
+	out "github.com/bnema/purego-ffmpeg/internal/ports/out"
 )
 
 var _ = unsafe.Pointer(nil) // ensure import

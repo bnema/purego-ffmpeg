@@ -25,9 +25,9 @@ type Mock{{.PublicType}} struct {
 }
 
 {{range .Functions}}
-func (m *Mock{{$.PublicType}}) {{.GoMethod}}({{range $i, $p := .Params}}{{if $i}}, {{end}}{{$p.Name}} {{$p.GoType}}{{end}}){{if not .Return.IsVoid}} {{.Return.GoType}}{{end}} {
-	if m.{{.GoMethod}}Func != nil {
-		{{if not .Return.IsVoid}}return {{end}}m.{{.GoMethod}}Func({{range $i, $p := .Params}}{{if $i}}, {{end}}{{$p.Name}}{{end}})
+func (mock *Mock{{$.PublicType}}) {{.GoMethod}}({{range $i, $p := .Params}}{{if $i}}, {{end}}{{$p.Name}} {{$p.GoType}}{{end}}){{if not .Return.IsVoid}} {{.Return.GoType}}{{end}} {
+	if mock.{{.GoMethod}}Func != nil {
+		{{if not .Return.IsVoid}}return {{end}}mock.{{.GoMethod}}Func({{range $i, $p := .Params}}{{if $i}}, {{end}}{{$p.Name}}{{end}})
 {{- if .Return.IsVoid}}
 		return
 {{- end}}
@@ -40,32 +40,32 @@ func (m *Mock{{$.PublicType}}) {{.GoMethod}}({{range $i, $p := .Params}}{{if $i}
 {{end}}
 
 {{- range .Accessors}}
-func (m *Mock{{$.PublicType}}) {{.GoName}}() {{.GoType}} {
-	if m.{{.GoName}}Func != nil {
-		return m.{{.GoName}}Func()
+func (mock *Mock{{$.PublicType}}) {{.GoName}}() {{.GoType}} {
+	if mock.{{.GoName}}Func != nil {
+		return mock.{{.GoName}}Func()
 	}
 	var zero {{.GoType}}
 	return zero
 }
 {{- if .HasSetter}}
 
-func (m *Mock{{$.PublicType}}) Set{{.GoName}}(v {{.GoType}}) {
-	if m.Set{{.GoName}}Func != nil {
-		m.Set{{.GoName}}Func(v)
+func (mock *Mock{{$.PublicType}}) Set{{.GoName}}(v {{.GoType}}) {
+	if mock.Set{{.GoName}}Func != nil {
+		mock.Set{{.GoName}}Func(v)
 	}
 }
 {{- end}}
 {{- end}}
 
-func (m *Mock{{.PublicType}}) Free() {
-	if m.FreeFunc != nil {
-		m.FreeFunc()
+func (mock *Mock{{.PublicType}}) Free() {
+	if mock.FreeFunc != nil {
+		mock.FreeFunc()
 	}
 }
 
-func (m *Mock{{.PublicType}}) Ptr() unsafe.Pointer {
-	if m.PtrFunc != nil {
-		return m.PtrFunc()
+func (mock *Mock{{.PublicType}}) Ptr() unsafe.Pointer {
+	if mock.PtrFunc != nil {
+		return mock.PtrFunc()
 	}
 	return nil
 }

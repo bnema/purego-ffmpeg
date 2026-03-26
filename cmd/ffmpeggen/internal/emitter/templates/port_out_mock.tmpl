@@ -15,9 +15,9 @@ type Mock{{.PortInterface}} struct {
 }
 
 {{range .Functions}}
-func (m *Mock{{$.PortInterface}}) {{.GoMethod}}({{range $i, $p := .Params}}{{if $i}}, {{end}}{{$p.Name}} {{$p.GoType}}{{end}}){{if not .Return.IsVoid}} {{.Return.GoType}}{{end}} {
-	if m.{{.GoMethod}}Func != nil {
-		{{if not .Return.IsVoid}}return {{end}}m.{{.GoMethod}}Func({{range $i, $p := .Params}}{{if $i}}, {{end}}{{$p.Name}}{{end}})
+func (mock *Mock{{$.PortInterface}}) {{.GoMethod}}({{range $i, $p := .Params}}{{if $i}}, {{end}}{{$p.Name}} {{$p.GoType}}{{end}}){{if not .Return.IsVoid}} {{.Return.GoType}}{{end}} {
+	if mock.{{.GoMethod}}Func != nil {
+		{{if not .Return.IsVoid}}return {{end}}mock.{{.GoMethod}}Func({{range $i, $p := .Params}}{{if $i}}, {{end}}{{$p.Name}}{{end}})
 {{- if .Return.IsVoid}}
 		return
 {{- end}}

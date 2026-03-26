@@ -540,12 +540,16 @@ func stripComments(data []byte) []byte {
 		"av_const",
 		"av_cold",
 		"av_noreturn",
+		"av_malloc_attrib",
 	}
 	for _, macro := range ffmpegMacros {
 		data = bytes.ReplaceAll(data, []byte(macro), nil)
 	}
 	// Strip __attribute__((...)) patterns
 	data = attrRE.ReplaceAll(data, nil)
+	// Strip av_alloc_size(...) patterns (FFmpeg allocation hints)
+	allocSizeRE := regexp.MustCompile(`av_alloc_size\s*\([^)]*\)`)
+	data = allocSizeRE.ReplaceAll(data, nil)
 
 	lines := bytes.Split(data, []byte("\n"))
 	out := make([][]byte, 0, len(lines))

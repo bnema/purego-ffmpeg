@@ -94,7 +94,7 @@ var Domains = []Domain{
 		PortInterface: "PacketCAPI", PublicType: "Packet",
 		Functions: []FuncMap{
 			{C: "av_packet_alloc", Go: "Alloc"},
-			{C: "av_packet_free", Go: "Free"},
+			{C: "av_packet_free", Go: "FreePtr"},
 			{C: "av_packet_unref", Go: "Unref"},
 			{C: "av_packet_ref", Go: "Ref"},
 			{C: "av_packet_rescale_ts", Go: "RescaleTs"},
@@ -105,7 +105,7 @@ var Domains = []Domain{
 		PortInterface: "FrameCAPI", PublicType: "Frame",
 		Functions: []FuncMap{
 			{C: "av_frame_alloc", Go: "Alloc"},
-			{C: "av_frame_free", Go: "Free"},
+			{C: "av_frame_free", Go: "FreePtr"},
 			{C: "av_frame_unref", Go: "Unref"},
 			{C: "av_frame_ref", Go: "Ref"},
 			{C: "av_frame_clone", Go: "Clone"},
@@ -130,7 +130,7 @@ var Domains = []Domain{
 			{C: "swr_alloc", Go: "Alloc"},
 			{C: "swr_init", Go: "Init"},
 			{C: "swr_convert", Go: "Convert"},
-			{C: "swr_free", Go: "Free"},
+			{C: "swr_free", Go: "FreePtr"},
 		},
 	},
 	{
@@ -139,7 +139,7 @@ var Domains = []Domain{
 		Functions: []FuncMap{
 			{C: "av_dict_get", Go: "Get"},
 			{C: "av_dict_set", Go: "Set"},
-			{C: "av_dict_free", Go: "Free"},
+			{C: "av_dict_free", Go: "FreePtr"},
 			{C: "av_dict_count", Go: "Count"},
 		},
 	},
@@ -174,9 +174,9 @@ type EnumDef struct {
 }
 
 var Structs = []StructDef{
-	{C: "AVRational", Go: "AVRational", Fields: []StructField{
-		{Name: "Num", Type: "int32"}, {Name: "Den", Type: "int32"},
-	}},
+	// AVRational is NOT listed here because it appears in function signatures
+	// across multiple packages (capi, out, in, ffmpeg). Each package defines it
+	// via a type alias chain rooted at out.AVRational (see types.go files).
 	{C: "AVDictionaryEntry", Go: "DictionaryEntry", Fields: []StructField{
 		{Name: "Key", Type: "*byte"}, {Name: "Value", Type: "*byte"},
 	}},
