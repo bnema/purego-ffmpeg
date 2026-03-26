@@ -44,6 +44,11 @@ func (w *swscaleWrapper) FreeContext(swscontext unsafe.Pointer) {
 
 func (w *swscaleWrapper) Free() {
 	if w.ptr != nil {
+		// NOTE: Some FFmpeg free functions (avcodec_free_context, av_packet_free,
+		// av_frame_free, swr_free) take double pointers (Type**) in C. The purego
+		// binding passes a single pointer. The C function may attempt to NULL the
+		// caller's pointer, but since we nil w.ptr on the Go side, this is safe
+		// for single-call usage. Do not call Free() concurrently.
 		w.capi.FreeContext(w.ptr)
 		w.ptr = nil
 	}

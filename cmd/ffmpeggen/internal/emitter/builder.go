@@ -130,7 +130,7 @@ func BuildDomainData(headers []*model.Header, domain overrides.Domain) DomainDat
 			GoName:    acc.GoName,
 			GoType:    acc.Type,
 			Offset:    acc.Offset,
-			HasSetter: true, // all overrides-defined accessors are mutable for now
+			HasSetter: !acc.ReadOnly,
 		})
 	}
 

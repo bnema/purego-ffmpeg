@@ -8,18 +8,14 @@ var _ = unsafe.Pointer(nil) // ensure import
 
 // MockStream is a test mock for Stream.
 type MockStream struct {
-	IndexFunc              func() int32
-	SetIndexFunc           func(v int32)
-	CodecParametersFunc    func() unsafe.Pointer
-	SetCodecParametersFunc func(v unsafe.Pointer)
-	TimeBaseFunc           func() AVRational
-	SetTimeBaseFunc        func(v AVRational)
-	DurationFunc           func() int64
-	SetDurationFunc        func(v int64)
-	NbFramesFunc           func() int64
-	SetNbFramesFunc        func(v int64)
-	FreeFunc               func()
-	PtrFunc                func() unsafe.Pointer
+	IndexFunc           func() int32
+	CodecParametersFunc func() unsafe.Pointer
+	TimeBaseFunc        func() AVRational
+	SetTimeBaseFunc     func(v AVRational)
+	DurationFunc        func() int64
+	NbFramesFunc        func() int64
+	FreeFunc            func()
+	PtrFunc             func() unsafe.Pointer
 }
 
 func (mock *MockStream) Index() int32 {
@@ -29,24 +25,12 @@ func (mock *MockStream) Index() int32 {
 	var zero int32
 	return zero
 }
-
-func (mock *MockStream) SetIndex(v int32) {
-	if mock.SetIndexFunc != nil {
-		mock.SetIndexFunc(v)
-	}
-}
 func (mock *MockStream) CodecParameters() unsafe.Pointer {
 	if mock.CodecParametersFunc != nil {
 		return mock.CodecParametersFunc()
 	}
 	var zero unsafe.Pointer
 	return zero
-}
-
-func (mock *MockStream) SetCodecParameters(v unsafe.Pointer) {
-	if mock.SetCodecParametersFunc != nil {
-		mock.SetCodecParametersFunc(v)
-	}
 }
 func (mock *MockStream) TimeBase() AVRational {
 	if mock.TimeBaseFunc != nil {
@@ -68,24 +52,12 @@ func (mock *MockStream) Duration() int64 {
 	var zero int64
 	return zero
 }
-
-func (mock *MockStream) SetDuration(v int64) {
-	if mock.SetDurationFunc != nil {
-		mock.SetDurationFunc(v)
-	}
-}
 func (mock *MockStream) NbFrames() int64 {
 	if mock.NbFramesFunc != nil {
 		return mock.NbFramesFunc()
 	}
 	var zero int64
 	return zero
-}
-
-func (mock *MockStream) SetNbFrames(v int64) {
-	if mock.SetNbFramesFunc != nil {
-		mock.SetNbFramesFunc(v)
-	}
 }
 
 func (mock *MockStream) Free() {

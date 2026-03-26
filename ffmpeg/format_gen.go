@@ -30,7 +30,8 @@ func NewFormatContextWithPtr(ptr unsafe.Pointer) *formatWrapper {
 	return &formatWrapper{ptr: ptr, capi: defaultFormat()}
 }
 
-// AllocFormatContext allocates a new FormatContext.
+// AllocFormatContext allocates and returns a new FormatContext.
+// Unlike the raw AllocContext() method, this stores the pointer internally.
 func AllocFormatContext() *formatWrapper {
 	w := &formatWrapper{capi: defaultFormat()}
 	w.ptr = w.capi.AllocContext()
@@ -82,39 +83,44 @@ func (w *formatWrapper) WriteTrailer(s unsafe.Pointer) int32 {
 }
 
 func (w *formatWrapper) NbStreams() uint32 {
+	if w.ptr == nil {
+		var zero uint32
+		return zero
+	}
 	return *(*uint32)(unsafe.Add(w.ptr, capi.OffsetAVFormatContextNbStreams))
 }
 
-func (w *formatWrapper) SetNbStreams(v uint32) {
-	*(*uint32)(unsafe.Add(w.ptr, capi.OffsetAVFormatContextNbStreams)) = v
-}
-
 func (w *formatWrapper) StreamsPtr() unsafe.Pointer {
+	if w.ptr == nil {
+		var zero unsafe.Pointer
+		return zero
+	}
 	return *(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVFormatContextStreamsPtr))
 }
 
-func (w *formatWrapper) SetStreamsPtr(v unsafe.Pointer) {
-	*(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVFormatContextStreamsPtr)) = v
-}
-
 func (w *formatWrapper) Duration() int64 {
+	if w.ptr == nil {
+		var zero int64
+		return zero
+	}
 	return *(*int64)(unsafe.Add(w.ptr, capi.OffsetAVFormatContextDuration))
 }
 
-func (w *formatWrapper) SetDuration(v int64) {
-	*(*int64)(unsafe.Add(w.ptr, capi.OffsetAVFormatContextDuration)) = v
-}
-
 func (w *formatWrapper) BitRate() int64 {
+	if w.ptr == nil {
+		var zero int64
+		return zero
+	}
 	return *(*int64)(unsafe.Add(w.ptr, capi.OffsetAVFormatContextBitRate))
-}
-
-func (w *formatWrapper) SetBitRate(v int64) {
-	*(*int64)(unsafe.Add(w.ptr, capi.OffsetAVFormatContextBitRate)) = v
 }
 
 func (w *formatWrapper) Free() {
 	if w.ptr != nil {
+		// NOTE: Some FFmpeg free functions (avcodec_free_context, av_packet_free,
+		// av_frame_free, swr_free) take double pointers (Type**) in C. The purego
+		// binding passes a single pointer. The C function may attempt to NULL the
+		// caller's pointer, but since we nil w.ptr on the Go side, this is safe
+		// for single-call usage. Do not call Free() concurrently.
 		w.capi.FreeContext(w.ptr)
 		w.ptr = nil
 	}

@@ -20,13 +20,9 @@ type MockFormatContext struct {
 	InterleavedWriteFrameFunc func(unsafe.Pointer, unsafe.Pointer) int32
 	WriteTrailerFunc          func(unsafe.Pointer) int32
 	NbStreamsFunc             func() uint32
-	SetNbStreamsFunc          func(v uint32)
 	StreamsPtrFunc            func() unsafe.Pointer
-	SetStreamsPtrFunc         func(v unsafe.Pointer)
 	DurationFunc              func() int64
-	SetDurationFunc           func(v int64)
 	BitRateFunc               func() int64
-	SetBitRateFunc            func(v int64)
 	FreeFunc                  func()
 	PtrFunc                   func() unsafe.Pointer
 }
@@ -124,24 +120,12 @@ func (mock *MockFormatContext) NbStreams() uint32 {
 	var zero uint32
 	return zero
 }
-
-func (mock *MockFormatContext) SetNbStreams(v uint32) {
-	if mock.SetNbStreamsFunc != nil {
-		mock.SetNbStreamsFunc(v)
-	}
-}
 func (mock *MockFormatContext) StreamsPtr() unsafe.Pointer {
 	if mock.StreamsPtrFunc != nil {
 		return mock.StreamsPtrFunc()
 	}
 	var zero unsafe.Pointer
 	return zero
-}
-
-func (mock *MockFormatContext) SetStreamsPtr(v unsafe.Pointer) {
-	if mock.SetStreamsPtrFunc != nil {
-		mock.SetStreamsPtrFunc(v)
-	}
 }
 func (mock *MockFormatContext) Duration() int64 {
 	if mock.DurationFunc != nil {
@@ -150,24 +134,12 @@ func (mock *MockFormatContext) Duration() int64 {
 	var zero int64
 	return zero
 }
-
-func (mock *MockFormatContext) SetDuration(v int64) {
-	if mock.SetDurationFunc != nil {
-		mock.SetDurationFunc(v)
-	}
-}
 func (mock *MockFormatContext) BitRate() int64 {
 	if mock.BitRateFunc != nil {
 		return mock.BitRateFunc()
 	}
 	var zero int64
 	return zero
-}
-
-func (mock *MockFormatContext) SetBitRate(v int64) {
-	if mock.SetBitRateFunc != nil {
-		mock.SetBitRateFunc(v)
-	}
 }
 
 func (mock *MockFormatContext) Free() {

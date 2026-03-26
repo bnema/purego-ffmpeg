@@ -22,9 +22,7 @@ type CodecContext interface {
 	ParametersToContext(codec unsafe.Pointer, par unsafe.Pointer) int32
 	ParametersFromContext(par unsafe.Pointer, codec unsafe.Pointer) int32
 	CodecType() int32
-	SetCodecType(v int32)
 	CodecID() int32
-	SetCodecID(v int32)
 	TimeBase() AVRational
 	SetTimeBase(v AVRational)
 	Width() int32

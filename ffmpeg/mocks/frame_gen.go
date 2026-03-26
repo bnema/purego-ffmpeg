@@ -17,9 +17,7 @@ type MockFrame struct {
 	IsWritableFunc     func(unsafe.Pointer) int32
 	MakeWritableFunc   func(unsafe.Pointer) int32
 	DataPtrFunc        func() unsafe.Pointer
-	SetDataPtrFunc     func(v unsafe.Pointer)
 	LinesizePtrFunc    func() unsafe.Pointer
-	SetLinesizePtrFunc func(v unsafe.Pointer)
 	WidthFunc          func() int32
 	SetWidthFunc       func(v int32)
 	HeightFunc         func() int32
@@ -109,24 +107,12 @@ func (mock *MockFrame) DataPtr() unsafe.Pointer {
 	var zero unsafe.Pointer
 	return zero
 }
-
-func (mock *MockFrame) SetDataPtr(v unsafe.Pointer) {
-	if mock.SetDataPtrFunc != nil {
-		mock.SetDataPtrFunc(v)
-	}
-}
 func (mock *MockFrame) LinesizePtr() unsafe.Pointer {
 	if mock.LinesizePtrFunc != nil {
 		return mock.LinesizePtrFunc()
 	}
 	var zero unsafe.Pointer
 	return zero
-}
-
-func (mock *MockFrame) SetLinesizePtr(v unsafe.Pointer) {
-	if mock.SetLinesizePtrFunc != nil {
-		mock.SetLinesizePtrFunc(v)
-	}
 }
 func (mock *MockFrame) Width() int32 {
 	if mock.WidthFunc != nil {

@@ -1,7 +1,14 @@
 // cmd/ffmpeggen/offsetgen/main.c
-// Compile: cc -o offsetgen main.c $(pkg-config --cflags --libs libavformat libavcodec libavutil)
-// Run: ./offsetgen
-// Output: Go-parseable offset constants for overrides.go
+// Offset generator for FFmpeg struct fields.
+// Platform: Linux amd64 (offsets are architecture and version specific)
+// Target: FFmpeg 7.x (libavcodec 62, libavformat 62, libavutil 60)
+//
+// Usage:
+//   cc -o offsetgen main.c $(pkg-config --cflags --libs libavformat libavcodec libavutil)
+//   ./offsetgen
+//
+// Update the values in cmd/ffmpeggen/internal/overrides/overrides.go
+// whenever you target a different FFmpeg version or architecture.
 
 #include <stdio.h>
 #include <stddef.h>

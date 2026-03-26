@@ -83,87 +83,148 @@ func (w *codecWrapper) ParametersFromContext(par unsafe.Pointer, codec unsafe.Po
 }
 
 func (w *codecWrapper) CodecType() int32 {
+	if w.ptr == nil {
+		var zero int32
+		return zero
+	}
 	return *(*int32)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextCodecType))
 }
 
-func (w *codecWrapper) SetCodecType(v int32) {
-	*(*int32)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextCodecType)) = v
-}
-
 func (w *codecWrapper) CodecID() int32 {
+	if w.ptr == nil {
+		var zero int32
+		return zero
+	}
 	return *(*int32)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextCodecID))
 }
 
-func (w *codecWrapper) SetCodecID(v int32) {
-	*(*int32)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextCodecID)) = v
-}
-
 func (w *codecWrapper) TimeBase() AVRational {
+	if w.ptr == nil {
+		var zero AVRational
+		return zero
+	}
 	return *(*AVRational)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextTimeBase))
 }
 
 func (w *codecWrapper) SetTimeBase(v AVRational) {
+	if w.ptr == nil {
+		return
+	}
 	*(*AVRational)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextTimeBase)) = v
 }
 
 func (w *codecWrapper) Width() int32 {
+	if w.ptr == nil {
+		var zero int32
+		return zero
+	}
 	return *(*int32)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextWidth))
 }
 
 func (w *codecWrapper) SetWidth(v int32) {
+	if w.ptr == nil {
+		return
+	}
 	*(*int32)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextWidth)) = v
 }
 
 func (w *codecWrapper) Height() int32 {
+	if w.ptr == nil {
+		var zero int32
+		return zero
+	}
 	return *(*int32)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextHeight))
 }
 
 func (w *codecWrapper) SetHeight(v int32) {
+	if w.ptr == nil {
+		return
+	}
 	*(*int32)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextHeight)) = v
 }
 
 func (w *codecWrapper) PixelFormat() int32 {
+	if w.ptr == nil {
+		var zero int32
+		return zero
+	}
 	return *(*int32)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextPixelFormat))
 }
 
 func (w *codecWrapper) SetPixelFormat(v int32) {
+	if w.ptr == nil {
+		return
+	}
 	*(*int32)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextPixelFormat)) = v
 }
 
 func (w *codecWrapper) SampleRate() int32 {
+	if w.ptr == nil {
+		var zero int32
+		return zero
+	}
 	return *(*int32)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextSampleRate))
 }
 
 func (w *codecWrapper) SetSampleRate(v int32) {
+	if w.ptr == nil {
+		return
+	}
 	*(*int32)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextSampleRate)) = v
 }
 
 func (w *codecWrapper) SampleFormat() int32 {
+	if w.ptr == nil {
+		var zero int32
+		return zero
+	}
 	return *(*int32)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextSampleFormat))
 }
 
 func (w *codecWrapper) SetSampleFormat(v int32) {
+	if w.ptr == nil {
+		return
+	}
 	*(*int32)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextSampleFormat)) = v
 }
 
 func (w *codecWrapper) HWDeviceCtx() unsafe.Pointer {
+	if w.ptr == nil {
+		var zero unsafe.Pointer
+		return zero
+	}
 	return *(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextHWDeviceCtx))
 }
 
 func (w *codecWrapper) SetHWDeviceCtx(v unsafe.Pointer) {
+	if w.ptr == nil {
+		return
+	}
 	*(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextHWDeviceCtx)) = v
 }
 
 func (w *codecWrapper) HWFramesCtx() unsafe.Pointer {
+	if w.ptr == nil {
+		var zero unsafe.Pointer
+		return zero
+	}
 	return *(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextHWFramesCtx))
 }
 
 func (w *codecWrapper) SetHWFramesCtx(v unsafe.Pointer) {
+	if w.ptr == nil {
+		return
+	}
 	*(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVCodecContextHWFramesCtx)) = v
 }
 
 func (w *codecWrapper) Free() {
 	if w.ptr != nil {
+		// NOTE: Some FFmpeg free functions (avcodec_free_context, av_packet_free,
+		// av_frame_free, swr_free) take double pointers (Type**) in C. The purego
+		// binding passes a single pointer. The C function may attempt to NULL the
+		// caller's pointer, but since we nil w.ptr on the Go side, this is safe
+		// for single-call usage. Do not call Free() concurrently.
 		w.capi.FreeContext(w.ptr)
 		w.ptr = nil
 	}

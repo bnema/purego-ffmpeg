@@ -30,7 +30,8 @@ func NewFrameWithPtr(ptr unsafe.Pointer) *frameWrapper {
 	return &frameWrapper{ptr: ptr, capi: defaultFrame()}
 }
 
-// AllocFrame allocates a new Frame.
+// AllocFrame allocates and returns a new Frame.
+// Unlike the raw Alloc() method, this stores the pointer internally.
 func AllocFrame() *frameWrapper {
 	w := &frameWrapper{capi: defaultFrame()}
 	w.ptr = w.capi.Alloc()
@@ -70,87 +71,148 @@ func (w *frameWrapper) MakeWritable(frame unsafe.Pointer) int32 {
 }
 
 func (w *frameWrapper) DataPtr() unsafe.Pointer {
+	if w.ptr == nil {
+		var zero unsafe.Pointer
+		return zero
+	}
 	return *(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVFrameDataPtr))
 }
 
-func (w *frameWrapper) SetDataPtr(v unsafe.Pointer) {
-	*(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVFrameDataPtr)) = v
-}
-
 func (w *frameWrapper) LinesizePtr() unsafe.Pointer {
+	if w.ptr == nil {
+		var zero unsafe.Pointer
+		return zero
+	}
 	return *(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVFrameLinesizePtr))
 }
 
-func (w *frameWrapper) SetLinesizePtr(v unsafe.Pointer) {
-	*(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVFrameLinesizePtr)) = v
-}
-
 func (w *frameWrapper) Width() int32 {
+	if w.ptr == nil {
+		var zero int32
+		return zero
+	}
 	return *(*int32)(unsafe.Add(w.ptr, capi.OffsetAVFrameWidth))
 }
 
 func (w *frameWrapper) SetWidth(v int32) {
+	if w.ptr == nil {
+		return
+	}
 	*(*int32)(unsafe.Add(w.ptr, capi.OffsetAVFrameWidth)) = v
 }
 
 func (w *frameWrapper) Height() int32 {
+	if w.ptr == nil {
+		var zero int32
+		return zero
+	}
 	return *(*int32)(unsafe.Add(w.ptr, capi.OffsetAVFrameHeight))
 }
 
 func (w *frameWrapper) SetHeight(v int32) {
+	if w.ptr == nil {
+		return
+	}
 	*(*int32)(unsafe.Add(w.ptr, capi.OffsetAVFrameHeight)) = v
 }
 
 func (w *frameWrapper) NbSamples() int32 {
+	if w.ptr == nil {
+		var zero int32
+		return zero
+	}
 	return *(*int32)(unsafe.Add(w.ptr, capi.OffsetAVFrameNbSamples))
 }
 
 func (w *frameWrapper) SetNbSamples(v int32) {
+	if w.ptr == nil {
+		return
+	}
 	*(*int32)(unsafe.Add(w.ptr, capi.OffsetAVFrameNbSamples)) = v
 }
 
 func (w *frameWrapper) Format() int32 {
+	if w.ptr == nil {
+		var zero int32
+		return zero
+	}
 	return *(*int32)(unsafe.Add(w.ptr, capi.OffsetAVFrameFormat))
 }
 
 func (w *frameWrapper) SetFormat(v int32) {
+	if w.ptr == nil {
+		return
+	}
 	*(*int32)(unsafe.Add(w.ptr, capi.OffsetAVFrameFormat)) = v
 }
 
 func (w *frameWrapper) Pts() int64 {
+	if w.ptr == nil {
+		var zero int64
+		return zero
+	}
 	return *(*int64)(unsafe.Add(w.ptr, capi.OffsetAVFramePts))
 }
 
 func (w *frameWrapper) SetPts(v int64) {
+	if w.ptr == nil {
+		return
+	}
 	*(*int64)(unsafe.Add(w.ptr, capi.OffsetAVFramePts)) = v
 }
 
 func (w *frameWrapper) PktDts() int64 {
+	if w.ptr == nil {
+		var zero int64
+		return zero
+	}
 	return *(*int64)(unsafe.Add(w.ptr, capi.OffsetAVFramePktDts))
 }
 
 func (w *frameWrapper) SetPktDts(v int64) {
+	if w.ptr == nil {
+		return
+	}
 	*(*int64)(unsafe.Add(w.ptr, capi.OffsetAVFramePktDts)) = v
 }
 
 func (w *frameWrapper) SampleRate() int32 {
+	if w.ptr == nil {
+		var zero int32
+		return zero
+	}
 	return *(*int32)(unsafe.Add(w.ptr, capi.OffsetAVFrameSampleRate))
 }
 
 func (w *frameWrapper) SetSampleRate(v int32) {
+	if w.ptr == nil {
+		return
+	}
 	*(*int32)(unsafe.Add(w.ptr, capi.OffsetAVFrameSampleRate)) = v
 }
 
 func (w *frameWrapper) HWFramesCtx() unsafe.Pointer {
+	if w.ptr == nil {
+		var zero unsafe.Pointer
+		return zero
+	}
 	return *(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVFrameHWFramesCtx))
 }
 
 func (w *frameWrapper) SetHWFramesCtx(v unsafe.Pointer) {
+	if w.ptr == nil {
+		return
+	}
 	*(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVFrameHWFramesCtx)) = v
 }
 
 func (w *frameWrapper) Free() {
 	if w.ptr != nil {
+		// NOTE: Some FFmpeg free functions (avcodec_free_context, av_packet_free,
+		// av_frame_free, swr_free) take double pointers (Type**) in C. The purego
+		// binding passes a single pointer. The C function may attempt to NULL the
+		// caller's pointer, but since we nil w.ptr on the Go side, this is safe
+		// for single-call usage. Do not call Free() concurrently.
 		w.capi.FreePtr(w.ptr)
 		w.ptr = nil
 	}

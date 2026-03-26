@@ -2,18 +2,25 @@
 package core
 
 import (
+	"sync"
 	"unsafe"
 )
 
+var pinnedStrings sync.Map // *byte → []byte — prevents GC collection
+
 // CString converts a Go string to a null-terminated C string.
-// The caller must call FreeCString when done.
+// The caller must call FreeCString when done to allow GC collection.
 func CString(s string) *byte {
 	b := make([]byte, len(s)+1)
 	copy(b, s)
-	return &b[0]
+	ptr := &b[0]
+	pinnedStrings.Store(ptr, b) // prevent GC from collecting b
+	return ptr
 }
 
 // GoString converts a null-terminated C string to a Go string.
+// The input must be a valid null-terminated byte sequence.
+// Passing a non-null-terminated pointer will cause an unbounded read.
 func GoString(p *byte) string {
 	if p == nil {
 		return ""
@@ -29,6 +36,10 @@ func GoString(p *byte) string {
 	return string(unsafe.Slice(p, length))
 }
 
-// FreeCString is a no-op — the Go GC handles the memory.
-// Provided for API symmetry and future compatibility.
-func FreeCString(_ *byte) {}
+// FreeCString releases the reference to the backing array,
+// allowing the GC to collect it.
+func FreeCString(p *byte) {
+	if p != nil {
+		pinnedStrings.Delete(p)
+	}
+}

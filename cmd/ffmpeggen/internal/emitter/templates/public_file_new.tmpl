@@ -37,7 +37,8 @@ func New{{.PublicType}}WithPtr(ptr unsafe.Pointer) *{{.Name}}Wrapper {
 
 {{- if .AllocMethod}}
 
-// Alloc{{.PublicType}} allocates a new {{.PublicType}}.
+// Alloc{{.PublicType}} allocates and returns a new {{.PublicType}}.
+// Unlike the raw {{.AllocMethod}}() method, this stores the pointer internally.
 func Alloc{{.PublicType}}() *{{.Name}}Wrapper {
 	w := &{{.Name}}Wrapper{capi: default{{.PortInterface | trimSuffix "CAPI"}}()}
 	w.ptr = w.capi.{{.AllocMethod}}()
@@ -55,11 +56,18 @@ func (w *{{$.Name}}Wrapper) {{.GoMethod}}({{range $i, $p := .Params}}{{if $i}}, 
 {{- range .Accessors}}
 
 func (w *{{$.Name}}Wrapper) {{.GoName}}() {{.GoType}} {
+	if w.ptr == nil {
+		var zero {{.GoType}}
+		return zero
+	}
 	return *(*{{.GoType}})(unsafe.Add(w.ptr, capi.Offset{{.Struct}}{{.GoName}}))
 }
 {{- if .HasSetter}}
 
 func (w *{{$.Name}}Wrapper) Set{{.GoName}}(v {{.GoType}}) {
+	if w.ptr == nil {
+		return
+	}
 	*(*{{.GoType}})(unsafe.Add(w.ptr, capi.Offset{{.Struct}}{{.GoName}})) = v
 }
 {{- end}}
@@ -68,6 +76,11 @@ func (w *{{$.Name}}Wrapper) Set{{.GoName}}(v {{.GoType}}) {
 func (w *{{.Name}}Wrapper) Free() {
 	if w.ptr != nil {
 {{- if .FreeMethod}}
+		// NOTE: Some FFmpeg free functions (avcodec_free_context, av_packet_free,
+		// av_frame_free, swr_free) take double pointers (Type**) in C. The purego
+		// binding passes a single pointer. The C function may attempt to NULL the
+		// caller's pointer, but since we nil w.ptr on the Go side, this is safe
+		// for single-call usage. Do not call Free() concurrently.
 		w.capi.{{.FreeMethod}}(w.ptr)
 {{- end}}
 		w.ptr = nil

@@ -20,13 +20,9 @@ type FormatContext interface {
 	InterleavedWriteFrame(s unsafe.Pointer, pkt unsafe.Pointer) int32
 	WriteTrailer(s unsafe.Pointer) int32
 	NbStreams() uint32
-	SetNbStreams(v uint32)
 	StreamsPtr() unsafe.Pointer
-	SetStreamsPtr(v unsafe.Pointer)
 	Duration() int64
-	SetDuration(v int64)
 	BitRate() int64
-	SetBitRate(v int64)
 	Free()
 	Ptr() unsafe.Pointer
 }

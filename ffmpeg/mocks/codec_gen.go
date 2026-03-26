@@ -22,9 +22,7 @@ type MockCodecContext struct {
 	ParametersToContextFunc   func(unsafe.Pointer, unsafe.Pointer) int32
 	ParametersFromContextFunc func(unsafe.Pointer, unsafe.Pointer) int32
 	CodecTypeFunc             func() int32
-	SetCodecTypeFunc          func(v int32)
 	CodecIDFunc               func() int32
-	SetCodecIDFunc            func(v int32)
 	TimeBaseFunc              func() AVRational
 	SetTimeBaseFunc           func(v AVRational)
 	WidthFunc                 func() int32
@@ -155,24 +153,12 @@ func (mock *MockCodecContext) CodecType() int32 {
 	var zero int32
 	return zero
 }
-
-func (mock *MockCodecContext) SetCodecType(v int32) {
-	if mock.SetCodecTypeFunc != nil {
-		mock.SetCodecTypeFunc(v)
-	}
-}
 func (mock *MockCodecContext) CodecID() int32 {
 	if mock.CodecIDFunc != nil {
 		return mock.CodecIDFunc()
 	}
 	var zero int32
 	return zero
-}
-
-func (mock *MockCodecContext) SetCodecID(v int32) {
-	if mock.SetCodecIDFunc != nil {
-		mock.SetCodecIDFunc(v)
-	}
 }
 func (mock *MockCodecContext) TimeBase() AVRational {
 	if mock.TimeBaseFunc != nil {

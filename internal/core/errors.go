@@ -14,8 +14,10 @@ var Strerror func(errnum int32, buf *byte, bufSize uintptr) int32
 func (e AvError) Error() string {
 	if Strerror != nil {
 		buf := make([]byte, 256)
-		Strerror(int32(e), &buf[0], uintptr(len(buf)))
-		return GoString(&buf[0])
+		ret := Strerror(int32(e), &buf[0], uintptr(len(buf)))
+		if ret == 0 {
+			return GoString(&buf[0])
+		}
 	}
 	return fmt.Sprintf("avError(%d)", int32(e))
 }

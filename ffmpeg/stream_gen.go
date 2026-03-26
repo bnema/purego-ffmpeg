@@ -31,43 +31,50 @@ func NewStreamWithPtr(ptr unsafe.Pointer) *streamWrapper {
 }
 
 func (w *streamWrapper) Index() int32 {
+	if w.ptr == nil {
+		var zero int32
+		return zero
+	}
 	return *(*int32)(unsafe.Add(w.ptr, capi.OffsetAVStreamIndex))
 }
 
-func (w *streamWrapper) SetIndex(v int32) {
-	*(*int32)(unsafe.Add(w.ptr, capi.OffsetAVStreamIndex)) = v
-}
-
 func (w *streamWrapper) CodecParameters() unsafe.Pointer {
+	if w.ptr == nil {
+		var zero unsafe.Pointer
+		return zero
+	}
 	return *(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVStreamCodecParameters))
 }
 
-func (w *streamWrapper) SetCodecParameters(v unsafe.Pointer) {
-	*(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVStreamCodecParameters)) = v
-}
-
 func (w *streamWrapper) TimeBase() AVRational {
+	if w.ptr == nil {
+		var zero AVRational
+		return zero
+	}
 	return *(*AVRational)(unsafe.Add(w.ptr, capi.OffsetAVStreamTimeBase))
 }
 
 func (w *streamWrapper) SetTimeBase(v AVRational) {
+	if w.ptr == nil {
+		return
+	}
 	*(*AVRational)(unsafe.Add(w.ptr, capi.OffsetAVStreamTimeBase)) = v
 }
 
 func (w *streamWrapper) Duration() int64 {
+	if w.ptr == nil {
+		var zero int64
+		return zero
+	}
 	return *(*int64)(unsafe.Add(w.ptr, capi.OffsetAVStreamDuration))
 }
 
-func (w *streamWrapper) SetDuration(v int64) {
-	*(*int64)(unsafe.Add(w.ptr, capi.OffsetAVStreamDuration)) = v
-}
-
 func (w *streamWrapper) NbFrames() int64 {
+	if w.ptr == nil {
+		var zero int64
+		return zero
+	}
 	return *(*int64)(unsafe.Add(w.ptr, capi.OffsetAVStreamNbFrames))
-}
-
-func (w *streamWrapper) SetNbFrames(v int64) {
-	*(*int64)(unsafe.Add(w.ptr, capi.OffsetAVStreamNbFrames)) = v
 }
 
 func (w *streamWrapper) Free() {

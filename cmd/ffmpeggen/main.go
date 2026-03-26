@@ -253,5 +253,9 @@ func parseAllHeaders(headersDir string) ([]*model.Header, error) {
 		headers = append(headers, header)
 	}
 
+	if len(headers) == 0 {
+		return nil, fmt.Errorf("no FFmpeg headers found in %s; install FFmpeg development headers", headersDir)
+	}
+
 	return headers, nil
 }

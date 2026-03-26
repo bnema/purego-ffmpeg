@@ -18,11 +18,12 @@ type FuncMap struct {
 }
 
 type Accessor struct {
-	Struct string // C struct name: "AVCodecContext"
-	Field  string // C field name: "width"
-	GoName string // Go accessor name: "Width"
-	Type   string // Go type: "int32"
-	Offset int    // byte offset in struct
+	Struct   string // C struct name: "AVCodecContext"
+	Field    string // C field name: "width"
+	GoName   string // Go accessor name: "Width"
+	Type     string // Go type: "int32"
+	Offset   int    // byte offset in struct
+	ReadOnly bool   // if true, no setter is generated (field is managed by FFmpeg internally)
 }
 
 // Override controls per-function generation behavior.
@@ -56,10 +57,10 @@ var Domains = []Domain{
 			{C: "av_write_trailer", Go: "WriteTrailer"},
 		},
 		Accessors: []Accessor{
-			{Struct: "AVFormatContext", Field: "nb_streams", GoName: "NbStreams", Type: "uint32", Offset: 44},
-			{Struct: "AVFormatContext", Field: "streams", GoName: "StreamsPtr", Type: "unsafe.Pointer", Offset: 48},
-			{Struct: "AVFormatContext", Field: "duration", GoName: "Duration", Type: "int64", Offset: 104},
-			{Struct: "AVFormatContext", Field: "bit_rate", GoName: "BitRate", Type: "int64", Offset: 112},
+			{Struct: "AVFormatContext", Field: "nb_streams", GoName: "NbStreams", Type: "uint32", Offset: 44, ReadOnly: true},       // managed by avformat_new_stream
+			{Struct: "AVFormatContext", Field: "streams", GoName: "StreamsPtr", Type: "unsafe.Pointer", Offset: 48, ReadOnly: true}, // internal streams array
+			{Struct: "AVFormatContext", Field: "duration", GoName: "Duration", Type: "int64", Offset: 104, ReadOnly: true},          // set by avformat_find_stream_info
+			{Struct: "AVFormatContext", Field: "bit_rate", GoName: "BitRate", Type: "int64", Offset: 112, ReadOnly: true},           // set by avformat_find_stream_info
 		},
 	},
 	{
@@ -81,8 +82,8 @@ var Domains = []Domain{
 			{C: "avcodec_parameters_from_context", Go: "ParametersFromContext"},
 		},
 		Accessors: []Accessor{
-			{Struct: "AVCodecContext", Field: "codec_type", GoName: "CodecType", Type: "int32", Offset: 12},
-			{Struct: "AVCodecContext", Field: "codec_id", GoName: "CodecID", Type: "int32", Offset: 24},
+			{Struct: "AVCodecContext", Field: "codec_type", GoName: "CodecType", Type: "int32", Offset: 12, ReadOnly: true}, // set by codec open
+			{Struct: "AVCodecContext", Field: "codec_id", GoName: "CodecID", Type: "int32", Offset: 24, ReadOnly: true},     // set by codec open
 			{Struct: "AVCodecContext", Field: "time_base", GoName: "TimeBase", Type: "AVRational", Offset: 84},
 			{Struct: "AVCodecContext", Field: "width", GoName: "Width", Type: "int32", Offset: 112},
 			{Struct: "AVCodecContext", Field: "height", GoName: "Height", Type: "int32", Offset: 116},
@@ -119,8 +120,8 @@ var Domains = []Domain{
 			{C: "av_frame_make_writable", Go: "MakeWritable"},
 		},
 		Accessors: []Accessor{
-			{Struct: "AVFrame", Field: "data", GoName: "DataPtr", Type: "unsafe.Pointer", Offset: 0},
-			{Struct: "AVFrame", Field: "linesize", GoName: "LinesizePtr", Type: "unsafe.Pointer", Offset: 64},
+			{Struct: "AVFrame", Field: "data", GoName: "DataPtr", Type: "unsafe.Pointer", Offset: 0, ReadOnly: true},          // managed by av_frame_get_buffer
+			{Struct: "AVFrame", Field: "linesize", GoName: "LinesizePtr", Type: "unsafe.Pointer", Offset: 64, ReadOnly: true}, // managed by av_frame_get_buffer
 			{Struct: "AVFrame", Field: "width", GoName: "Width", Type: "int32", Offset: 104},
 			{Struct: "AVFrame", Field: "height", GoName: "Height", Type: "int32", Offset: 108},
 			{Struct: "AVFrame", Field: "nb_samples", GoName: "NbSamples", Type: "int32", Offset: 112},
@@ -132,6 +133,11 @@ var Domains = []Domain{
 		},
 	},
 	{
+		// TODO(sws_scale): FFmpeg's sws_scale takes `const int srcStride[]` and
+		// `int dstStride[]` — C arrays that decay to pointers. The header parser
+		// currently maps these as scalar int32 parameters instead of unsafe.Pointer.
+		// Callers must cast their stride slice pointers manually until the parser
+		// handles array-type parameters or an override mechanism is added.
 		Name: "swscale", Library: "libswscale",
 		PortInterface: "SwscaleCAPI", PublicType: "SwscaleContext",
 		Functions: []FuncMap{
@@ -190,11 +196,11 @@ var Domains = []Domain{
 		PortInterface: "StreamCAPI", PublicType: "Stream",
 		Functions: []FuncMap{}, // no functions — accessors only
 		Accessors: []Accessor{
-			{Struct: "AVStream", Field: "index", GoName: "Index", Type: "int32", Offset: 8},
-			{Struct: "AVStream", Field: "codecpar", GoName: "CodecParameters", Type: "unsafe.Pointer", Offset: 16},
+			{Struct: "AVStream", Field: "index", GoName: "Index", Type: "int32", Offset: 8, ReadOnly: true},                        // set by avformat
+			{Struct: "AVStream", Field: "codecpar", GoName: "CodecParameters", Type: "unsafe.Pointer", Offset: 16, ReadOnly: true}, // set by avformat
 			{Struct: "AVStream", Field: "time_base", GoName: "TimeBase", Type: "AVRational", Offset: 32},
-			{Struct: "AVStream", Field: "duration", GoName: "Duration", Type: "int64", Offset: 48},
-			{Struct: "AVStream", Field: "nb_frames", GoName: "NbFrames", Type: "int64", Offset: 56},
+			{Struct: "AVStream", Field: "duration", GoName: "Duration", Type: "int64", Offset: 48, ReadOnly: true},  // set by avformat
+			{Struct: "AVStream", Field: "nb_frames", GoName: "NbFrames", Type: "int64", Offset: 56, ReadOnly: true}, // set by avformat
 		},
 	},
 	{
