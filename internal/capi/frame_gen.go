@@ -2,11 +2,7 @@
 
 package capi
 
-import (
-	"unsafe"
-
-	"github.com/ebitengine/purego"
-)
+import "unsafe"
 
 // purego function pointer variables for frame domain.
 var (
@@ -38,12 +34,12 @@ const (
 
 // RegisterFrame registers all frame domain purego symbols.
 func RegisterFrame(handle uintptr) {
-	purego.RegisterLibFunc(&av_frame_alloc, handle, "av_frame_alloc")
-	purego.RegisterLibFunc(&av_frame_free, handle, "av_frame_free")
-	purego.RegisterLibFunc(&av_frame_unref, handle, "av_frame_unref")
-	purego.RegisterLibFunc(&av_frame_ref, handle, "av_frame_ref")
-	purego.RegisterLibFunc(&av_frame_clone, handle, "av_frame_clone")
-	purego.RegisterLibFunc(&av_frame_get_buffer, handle, "av_frame_get_buffer")
-	purego.RegisterLibFunc(&av_frame_is_writable, handle, "av_frame_is_writable")
-	purego.RegisterLibFunc(&av_frame_make_writable, handle, "av_frame_make_writable")
+	tryRegisterLibFunc(&av_frame_alloc, handle, "av_frame_alloc")
+	tryRegisterLibFunc(&av_frame_free, handle, "av_frame_free")
+	tryRegisterLibFunc(&av_frame_unref, handle, "av_frame_unref")
+	tryRegisterLibFunc(&av_frame_ref, handle, "av_frame_ref")
+	tryRegisterLibFunc(&av_frame_clone, handle, "av_frame_clone")
+	tryRegisterLibFunc(&av_frame_get_buffer, handle, "av_frame_get_buffer")
+	tryRegisterLibFunc(&av_frame_is_writable, handle, "av_frame_is_writable")
+	tryRegisterLibFunc(&av_frame_make_writable, handle, "av_frame_make_writable")
 }

@@ -2,11 +2,7 @@
 
 package capi
 
-import (
-	"unsafe"
-
-	"github.com/ebitengine/purego"
-)
+import "unsafe"
 
 // purego function pointer variables for packet domain.
 var (
@@ -21,9 +17,9 @@ var _ = unsafe.Pointer(nil) // ensure import
 
 // RegisterPacket registers all packet domain purego symbols.
 func RegisterPacket(handle uintptr) {
-	purego.RegisterLibFunc(&av_packet_alloc, handle, "av_packet_alloc")
-	purego.RegisterLibFunc(&av_packet_free, handle, "av_packet_free")
-	purego.RegisterLibFunc(&av_packet_unref, handle, "av_packet_unref")
-	purego.RegisterLibFunc(&av_packet_ref, handle, "av_packet_ref")
-	purego.RegisterLibFunc(&av_packet_rescale_ts, handle, "av_packet_rescale_ts")
+	tryRegisterLibFunc(&av_packet_alloc, handle, "av_packet_alloc")
+	tryRegisterLibFunc(&av_packet_free, handle, "av_packet_free")
+	tryRegisterLibFunc(&av_packet_unref, handle, "av_packet_unref")
+	tryRegisterLibFunc(&av_packet_ref, handle, "av_packet_ref")
+	tryRegisterLibFunc(&av_packet_rescale_ts, handle, "av_packet_rescale_ts")
 }

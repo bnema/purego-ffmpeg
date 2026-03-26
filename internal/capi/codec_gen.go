@@ -2,11 +2,7 @@
 
 package capi
 
-import (
-	"unsafe"
-
-	"github.com/ebitengine/purego"
-)
+import "unsafe"
 
 // purego function pointer variables for codec domain.
 var (
@@ -43,17 +39,17 @@ const (
 
 // RegisterCodec registers all codec domain purego symbols.
 func RegisterCodec(handle uintptr) {
-	purego.RegisterLibFunc(&avcodec_find_decoder, handle, "avcodec_find_decoder")
-	purego.RegisterLibFunc(&avcodec_find_encoder, handle, "avcodec_find_encoder")
-	purego.RegisterLibFunc(&avcodec_find_decoder_by_name, handle, "avcodec_find_decoder_by_name")
-	purego.RegisterLibFunc(&avcodec_find_encoder_by_name, handle, "avcodec_find_encoder_by_name")
-	purego.RegisterLibFunc(&avcodec_alloc_context3, handle, "avcodec_alloc_context3")
-	purego.RegisterLibFunc(&avcodec_free_context, handle, "avcodec_free_context")
-	purego.RegisterLibFunc(&avcodec_open2, handle, "avcodec_open2")
-	purego.RegisterLibFunc(&avcodec_send_packet, handle, "avcodec_send_packet")
-	purego.RegisterLibFunc(&avcodec_receive_frame, handle, "avcodec_receive_frame")
-	purego.RegisterLibFunc(&avcodec_send_frame, handle, "avcodec_send_frame")
-	purego.RegisterLibFunc(&avcodec_receive_packet, handle, "avcodec_receive_packet")
-	purego.RegisterLibFunc(&avcodec_parameters_to_context, handle, "avcodec_parameters_to_context")
-	purego.RegisterLibFunc(&avcodec_parameters_from_context, handle, "avcodec_parameters_from_context")
+	tryRegisterLibFunc(&avcodec_find_decoder, handle, "avcodec_find_decoder")
+	tryRegisterLibFunc(&avcodec_find_encoder, handle, "avcodec_find_encoder")
+	tryRegisterLibFunc(&avcodec_find_decoder_by_name, handle, "avcodec_find_decoder_by_name")
+	tryRegisterLibFunc(&avcodec_find_encoder_by_name, handle, "avcodec_find_encoder_by_name")
+	tryRegisterLibFunc(&avcodec_alloc_context3, handle, "avcodec_alloc_context3")
+	tryRegisterLibFunc(&avcodec_free_context, handle, "avcodec_free_context")
+	tryRegisterLibFunc(&avcodec_open2, handle, "avcodec_open2")
+	tryRegisterLibFunc(&avcodec_send_packet, handle, "avcodec_send_packet")
+	tryRegisterLibFunc(&avcodec_receive_frame, handle, "avcodec_receive_frame")
+	tryRegisterLibFunc(&avcodec_send_frame, handle, "avcodec_send_frame")
+	tryRegisterLibFunc(&avcodec_receive_packet, handle, "avcodec_receive_packet")
+	tryRegisterLibFunc(&avcodec_parameters_to_context, handle, "avcodec_parameters_to_context")
+	tryRegisterLibFunc(&avcodec_parameters_from_context, handle, "avcodec_parameters_from_context")
 }

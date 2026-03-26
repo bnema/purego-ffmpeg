@@ -2,11 +2,7 @@
 
 package capi
 
-import (
-	"unsafe"
-
-	"github.com/ebitengine/purego"
-)
+import "unsafe"
 
 // purego function pointer variables for swresample domain.
 var (
@@ -20,8 +16,8 @@ var _ = unsafe.Pointer(nil) // ensure import
 
 // RegisterSwresample registers all swresample domain purego symbols.
 func RegisterSwresample(handle uintptr) {
-	purego.RegisterLibFunc(&swr_alloc, handle, "swr_alloc")
-	purego.RegisterLibFunc(&swr_init, handle, "swr_init")
-	purego.RegisterLibFunc(&swr_convert, handle, "swr_convert")
-	purego.RegisterLibFunc(&swr_free, handle, "swr_free")
+	tryRegisterLibFunc(&swr_alloc, handle, "swr_alloc")
+	tryRegisterLibFunc(&swr_init, handle, "swr_init")
+	tryRegisterLibFunc(&swr_convert, handle, "swr_convert")
+	tryRegisterLibFunc(&swr_free, handle, "swr_free")
 }

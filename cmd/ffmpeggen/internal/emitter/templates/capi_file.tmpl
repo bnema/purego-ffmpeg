@@ -3,15 +3,7 @@
 
 package capi
 
-{{- if .Functions}}
-import (
-	"unsafe"
-
-	"github.com/ebitengine/purego"
-)
-{{- else}}
 import "unsafe"
-{{- end}}
 
 {{- if .Functions}}
 
@@ -40,7 +32,7 @@ const (
 // Register{{.Name | title}} registers all {{.Name}} domain purego symbols.
 func Register{{.Name | title}}(handle uintptr) {
 {{- range .Functions}}
-	purego.RegisterLibFunc(&{{.RawVarName}}, handle, "{{.CName}}")
+	tryRegisterLibFunc(&{{.RawVarName}}, handle, "{{.CName}}")
 {{- end}}
 }
 {{- end}}

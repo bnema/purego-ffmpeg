@@ -2,11 +2,7 @@
 
 package capi
 
-import (
-	"unsafe"
-
-	"github.com/ebitengine/purego"
-)
+import "unsafe"
 
 // purego function pointer variables for dict domain.
 var (
@@ -20,8 +16,8 @@ var _ = unsafe.Pointer(nil) // ensure import
 
 // RegisterDict registers all dict domain purego symbols.
 func RegisterDict(handle uintptr) {
-	purego.RegisterLibFunc(&av_dict_get, handle, "av_dict_get")
-	purego.RegisterLibFunc(&av_dict_set, handle, "av_dict_set")
-	purego.RegisterLibFunc(&av_dict_free, handle, "av_dict_free")
-	purego.RegisterLibFunc(&av_dict_count, handle, "av_dict_count")
+	tryRegisterLibFunc(&av_dict_get, handle, "av_dict_get")
+	tryRegisterLibFunc(&av_dict_set, handle, "av_dict_set")
+	tryRegisterLibFunc(&av_dict_free, handle, "av_dict_free")
+	tryRegisterLibFunc(&av_dict_count, handle, "av_dict_count")
 }

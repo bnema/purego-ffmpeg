@@ -2,11 +2,7 @@
 
 package capi
 
-import (
-	"unsafe"
-
-	"github.com/ebitengine/purego"
-)
+import "unsafe"
 
 // purego function pointer variables for avfilter domain.
 var (
@@ -24,12 +20,12 @@ var _ = unsafe.Pointer(nil) // ensure import
 
 // RegisterAvfilter registers all avfilter domain purego symbols.
 func RegisterAvfilter(handle uintptr) {
-	purego.RegisterLibFunc(&avfilter_graph_alloc, handle, "avfilter_graph_alloc")
-	purego.RegisterLibFunc(&avfilter_graph_free, handle, "avfilter_graph_free")
-	purego.RegisterLibFunc(&avfilter_graph_create_filter, handle, "avfilter_graph_create_filter")
-	purego.RegisterLibFunc(&avfilter_graph_parse_ptr, handle, "avfilter_graph_parse_ptr")
-	purego.RegisterLibFunc(&avfilter_graph_config, handle, "avfilter_graph_config")
-	purego.RegisterLibFunc(&avfilter_get_by_name, handle, "avfilter_get_by_name")
-	purego.RegisterLibFunc(&av_buffersrc_add_frame_flags, handle, "av_buffersrc_add_frame_flags")
-	purego.RegisterLibFunc(&av_buffersink_get_frame, handle, "av_buffersink_get_frame")
+	tryRegisterLibFunc(&avfilter_graph_alloc, handle, "avfilter_graph_alloc")
+	tryRegisterLibFunc(&avfilter_graph_free, handle, "avfilter_graph_free")
+	tryRegisterLibFunc(&avfilter_graph_create_filter, handle, "avfilter_graph_create_filter")
+	tryRegisterLibFunc(&avfilter_graph_parse_ptr, handle, "avfilter_graph_parse_ptr")
+	tryRegisterLibFunc(&avfilter_graph_config, handle, "avfilter_graph_config")
+	tryRegisterLibFunc(&avfilter_get_by_name, handle, "avfilter_get_by_name")
+	tryRegisterLibFunc(&av_buffersrc_add_frame_flags, handle, "av_buffersrc_add_frame_flags")
+	tryRegisterLibFunc(&av_buffersink_get_frame, handle, "av_buffersink_get_frame")
 }

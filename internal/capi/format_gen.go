@@ -2,11 +2,7 @@
 
 package capi
 
-import (
-	"unsafe"
-
-	"github.com/ebitengine/purego"
-)
+import "unsafe"
 
 // purego function pointer variables for format domain.
 var (
@@ -35,15 +31,15 @@ const (
 
 // RegisterFormat registers all format domain purego symbols.
 func RegisterFormat(handle uintptr) {
-	purego.RegisterLibFunc(&avformat_alloc_context, handle, "avformat_alloc_context")
-	purego.RegisterLibFunc(&avformat_free_context, handle, "avformat_free_context")
-	purego.RegisterLibFunc(&avformat_open_input, handle, "avformat_open_input")
-	purego.RegisterLibFunc(&avformat_find_stream_info, handle, "avformat_find_stream_info")
-	purego.RegisterLibFunc(&av_read_frame, handle, "av_read_frame")
-	purego.RegisterLibFunc(&avformat_close_input, handle, "avformat_close_input")
-	purego.RegisterLibFunc(&avformat_alloc_output_context2, handle, "avformat_alloc_output_context2")
-	purego.RegisterLibFunc(&avformat_new_stream, handle, "avformat_new_stream")
-	purego.RegisterLibFunc(&avformat_write_header, handle, "avformat_write_header")
-	purego.RegisterLibFunc(&av_interleaved_write_frame, handle, "av_interleaved_write_frame")
-	purego.RegisterLibFunc(&av_write_trailer, handle, "av_write_trailer")
+	tryRegisterLibFunc(&avformat_alloc_context, handle, "avformat_alloc_context")
+	tryRegisterLibFunc(&avformat_free_context, handle, "avformat_free_context")
+	tryRegisterLibFunc(&avformat_open_input, handle, "avformat_open_input")
+	tryRegisterLibFunc(&avformat_find_stream_info, handle, "avformat_find_stream_info")
+	tryRegisterLibFunc(&av_read_frame, handle, "av_read_frame")
+	tryRegisterLibFunc(&avformat_close_input, handle, "avformat_close_input")
+	tryRegisterLibFunc(&avformat_alloc_output_context2, handle, "avformat_alloc_output_context2")
+	tryRegisterLibFunc(&avformat_new_stream, handle, "avformat_new_stream")
+	tryRegisterLibFunc(&avformat_write_header, handle, "avformat_write_header")
+	tryRegisterLibFunc(&av_interleaved_write_frame, handle, "av_interleaved_write_frame")
+	tryRegisterLibFunc(&av_write_trailer, handle, "av_write_trailer")
 }

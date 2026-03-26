@@ -2,11 +2,7 @@
 
 package capi
 
-import (
-	"unsafe"
-
-	"github.com/ebitengine/purego"
-)
+import "unsafe"
 
 // purego function pointer variables for hwaccel domain.
 var (
@@ -20,8 +16,8 @@ var _ = unsafe.Pointer(nil) // ensure import
 
 // RegisterHwaccel registers all hwaccel domain purego symbols.
 func RegisterHwaccel(handle uintptr) {
-	purego.RegisterLibFunc(&av_hwdevice_ctx_create, handle, "av_hwdevice_ctx_create")
-	purego.RegisterLibFunc(&av_hwdevice_find_type_by_name, handle, "av_hwdevice_find_type_by_name")
-	purego.RegisterLibFunc(&av_hwframe_transfer_data, handle, "av_hwframe_transfer_data")
-	purego.RegisterLibFunc(&av_hwdevice_iterate_types, handle, "av_hwdevice_iterate_types")
+	tryRegisterLibFunc(&av_hwdevice_ctx_create, handle, "av_hwdevice_ctx_create")
+	tryRegisterLibFunc(&av_hwdevice_find_type_by_name, handle, "av_hwdevice_find_type_by_name")
+	tryRegisterLibFunc(&av_hwframe_transfer_data, handle, "av_hwframe_transfer_data")
+	tryRegisterLibFunc(&av_hwdevice_iterate_types, handle, "av_hwdevice_iterate_types")
 }

@@ -2,11 +2,7 @@
 
 package capi
 
-import (
-	"unsafe"
-
-	"github.com/ebitengine/purego"
-)
+import "unsafe"
 
 // purego function pointer variables for util domain.
 var (
@@ -25,13 +21,13 @@ var _ = unsafe.Pointer(nil) // ensure import
 
 // RegisterUtil registers all util domain purego symbols.
 func RegisterUtil(handle uintptr) {
-	purego.RegisterLibFunc(&av_malloc, handle, "av_malloc")
-	purego.RegisterLibFunc(&av_free, handle, "av_free")
-	purego.RegisterLibFunc(&av_opt_set, handle, "av_opt_set")
-	purego.RegisterLibFunc(&av_opt_set_int, handle, "av_opt_set_int")
-	purego.RegisterLibFunc(&av_log_set_level, handle, "av_log_set_level")
-	purego.RegisterLibFunc(&av_log_get_level, handle, "av_log_get_level")
-	purego.RegisterLibFunc(&av_rescale_q, handle, "av_rescale_q")
-	purego.RegisterLibFunc(&av_image_get_buffer_size, handle, "av_image_get_buffer_size")
-	purego.RegisterLibFunc(&av_strerror, handle, "av_strerror")
+	tryRegisterLibFunc(&av_malloc, handle, "av_malloc")
+	tryRegisterLibFunc(&av_free, handle, "av_free")
+	tryRegisterLibFunc(&av_opt_set, handle, "av_opt_set")
+	tryRegisterLibFunc(&av_opt_set_int, handle, "av_opt_set_int")
+	tryRegisterLibFunc(&av_log_set_level, handle, "av_log_set_level")
+	tryRegisterLibFunc(&av_log_get_level, handle, "av_log_get_level")
+	tryRegisterLibFunc(&av_rescale_q, handle, "av_rescale_q")
+	tryRegisterLibFunc(&av_image_get_buffer_size, handle, "av_image_get_buffer_size")
+	tryRegisterLibFunc(&av_strerror, handle, "av_strerror")
 }

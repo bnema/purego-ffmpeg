@@ -2,11 +2,7 @@
 
 package capi
 
-import (
-	"unsafe"
-
-	"github.com/ebitengine/purego"
-)
+import "unsafe"
 
 // purego function pointer variables for swscale domain.
 var (
@@ -19,7 +15,7 @@ var _ = unsafe.Pointer(nil) // ensure import
 
 // RegisterSwscale registers all swscale domain purego symbols.
 func RegisterSwscale(handle uintptr) {
-	purego.RegisterLibFunc(&sws_getContext, handle, "sws_getContext")
-	purego.RegisterLibFunc(&sws_scale, handle, "sws_scale")
-	purego.RegisterLibFunc(&sws_freeContext, handle, "sws_freeContext")
+	tryRegisterLibFunc(&sws_getContext, handle, "sws_getContext")
+	tryRegisterLibFunc(&sws_scale, handle, "sws_scale")
+	tryRegisterLibFunc(&sws_freeContext, handle, "sws_freeContext")
 }
