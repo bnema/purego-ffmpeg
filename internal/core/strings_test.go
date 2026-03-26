@@ -29,3 +29,8 @@ func TestGoString_Nil(t *testing.T) {
 		t.Errorf("got %q, want empty string", got)
 	}
 }
+
+func TestFreeCString_Nil(t *testing.T) {
+	// Should not panic on nil input
+	FreeCString(nil)
+}

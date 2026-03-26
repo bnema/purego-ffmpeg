@@ -14,13 +14,13 @@ type Handles struct {
 
 // Register loads all FFmpeg C API symbols from the shared library handles.
 func Register(h Handles) {
-	RegisterFormat(h.Avformat)
-	RegisterCodec(h.Avcodec)
-	RegisterPacket(h.Avcodec)
 	RegisterFrame(h.Avutil)
 	RegisterDict(h.Avutil)
 	RegisterUtil(h.Avutil)
 	RegisterHwaccel(h.Avutil)
+	RegisterCodec(h.Avcodec)
+	RegisterPacket(h.Avcodec)
+	RegisterFormat(h.Avformat)
 	RegisterSwscale(h.Swscale)
 	RegisterSwresample(h.Swresample)
 	RegisterAvfilter(h.Avfilter)

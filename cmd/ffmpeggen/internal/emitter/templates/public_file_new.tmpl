@@ -25,14 +25,23 @@ var _ = capi.Register       // ensure import
 // Re-exported from internal/ports/in for consumer convenience.
 type {{.PublicType}} = portin.{{.PublicType}}
 
+// Compile-time interface satisfaction check.
+var _ {{.PublicType}} = (*{{.Name}}Wrapper)(nil)
+
 type {{.Name}}Wrapper struct {
 	ptr  unsafe.Pointer
+{{- if .Functions}}
 	capi portout.{{.PortInterface}}
+{{- end}}
 }
 
 // New{{.PublicType}}WithPtr wraps an existing pointer with {{.PublicType}} methods.
 func New{{.PublicType}}WithPtr(ptr unsafe.Pointer) *{{.Name}}Wrapper {
+{{- if .Functions}}
 	return &{{.Name}}Wrapper{ptr: ptr, capi: default{{.PortInterface | trimSuffix "CAPI"}}()}
+{{- else}}
+	return &{{.Name}}Wrapper{ptr: ptr}
+{{- end}}
 }
 
 {{- if .AllocMethod}}
@@ -41,8 +50,12 @@ func New{{.PublicType}}WithPtr(ptr unsafe.Pointer) *{{.Name}}Wrapper {
 // Unlike the raw {{.AllocMethod}}() method, this stores the pointer internally.
 // Returns nil if the C allocation fails.
 func Alloc{{.PublicType}}() *{{.Name}}Wrapper {
+{{- if .Functions}}
 	w := &{{.Name}}Wrapper{capi: default{{.PortInterface | trimSuffix "CAPI"}}()}
 	w.ptr = w.capi.{{.AllocMethod}}()
+{{- else}}
+	w := &{{.Name}}Wrapper{}
+{{- end}}
 	if w.ptr == nil {
 		return nil
 	}
@@ -86,11 +99,17 @@ func (w *{{.Name}}Wrapper) Free() {
 		// caller's pointer, but since we nil w.ptr on the Go side, this is safe
 		// for single-call usage. Do not call Free() concurrently.
 		w.capi.{{.FreeMethod}}(w.ptr)
+{{- else}}
+		// No C free function for this domain. Memory is typically owned
+		// by a parent context (e.g., AVStream is freed by AVFormatContext).
+		// Free() only detaches this wrapper from the native pointer.
 {{- end}}
 		w.ptr = nil
 	}
 }
 
+// Ptr returns the raw C pointer. The returned pointer becomes invalid
+// after Free() is called. Do not retain it across Free() calls.
 func (w *{{.Name}}Wrapper) Ptr() unsafe.Pointer {
 	return w.ptr
 }

@@ -20,6 +20,9 @@ var _ = capi.Register       // ensure import
 // Re-exported from internal/ports/in for consumer convenience.
 type Frame = portin.Frame
 
+// Compile-time interface satisfaction check.
+var _ Frame = (*frameWrapper)(nil)
+
 type frameWrapper struct {
 	ptr  unsafe.Pointer
 	capi portout.FrameCAPI
@@ -222,6 +225,8 @@ func (w *frameWrapper) Free() {
 	}
 }
 
+// Ptr returns the raw C pointer. The returned pointer becomes invalid
+// after Free() is called. Do not retain it across Free() calls.
 func (w *frameWrapper) Ptr() unsafe.Pointer {
 	return w.ptr
 }

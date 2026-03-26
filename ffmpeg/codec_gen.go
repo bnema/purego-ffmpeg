@@ -20,6 +20,9 @@ var _ = capi.Register       // ensure import
 // Re-exported from internal/ports/in for consumer convenience.
 type CodecContext = portin.CodecContext
 
+// Compile-time interface satisfaction check.
+var _ CodecContext = (*codecWrapper)(nil)
+
 type codecWrapper struct {
 	ptr  unsafe.Pointer
 	capi portout.CodecCAPI
@@ -230,6 +233,8 @@ func (w *codecWrapper) Free() {
 	}
 }
 
+// Ptr returns the raw C pointer. The returned pointer becomes invalid
+// after Free() is called. Do not retain it across Free() calls.
 func (w *codecWrapper) Ptr() unsafe.Pointer {
 	return w.ptr
 }

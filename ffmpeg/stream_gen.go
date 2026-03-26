@@ -20,14 +20,16 @@ var _ = capi.Register       // ensure import
 // Re-exported from internal/ports/in for consumer convenience.
 type Stream = portin.Stream
 
+// Compile-time interface satisfaction check.
+var _ Stream = (*streamWrapper)(nil)
+
 type streamWrapper struct {
-	ptr  unsafe.Pointer
-	capi portout.StreamCAPI
+	ptr unsafe.Pointer
 }
 
 // NewStreamWithPtr wraps an existing pointer with Stream methods.
 func NewStreamWithPtr(ptr unsafe.Pointer) *streamWrapper {
-	return &streamWrapper{ptr: ptr, capi: defaultStream()}
+	return &streamWrapper{ptr: ptr}
 }
 
 func (w *streamWrapper) Index() int32 {
@@ -79,10 +81,15 @@ func (w *streamWrapper) NbFrames() int64 {
 
 func (w *streamWrapper) Free() {
 	if w.ptr != nil {
+		// No C free function for this domain. Memory is typically owned
+		// by a parent context (e.g., AVStream is freed by AVFormatContext).
+		// Free() only detaches this wrapper from the native pointer.
 		w.ptr = nil
 	}
 }
 
+// Ptr returns the raw C pointer. The returned pointer becomes invalid
+// after Free() is called. Do not retain it across Free() calls.
 func (w *streamWrapper) Ptr() unsafe.Pointer {
 	return w.ptr
 }

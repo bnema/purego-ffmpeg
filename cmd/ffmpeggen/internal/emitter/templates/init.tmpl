@@ -31,8 +31,10 @@ var (
 )
 
 // Init loads FFmpeg libraries and wires all adapters.
-// Init runs only once; subsequent calls return the cached result,
-// even with different options.
+// Init is safe for concurrent use — it runs only once via sync.Once.
+// Subsequent calls return the cached result, even with different options.
+// Callers must ensure Init() has returned before calling any FFmpeg
+// functions from other goroutines.
 func Init(opts ...Option) error {
 	initOnce.Do(func() {
 		handles, err := loader.Load(opts...)

@@ -20,6 +20,9 @@ var _ = capi.Register       // ensure import
 // Re-exported from internal/ports/in for consumer convenience.
 type Packet = portin.Packet
 
+// Compile-time interface satisfaction check.
+var _ Packet = (*packetWrapper)(nil)
+
 type packetWrapper struct {
 	ptr  unsafe.Pointer
 	capi portout.PacketCAPI
@@ -74,6 +77,8 @@ func (w *packetWrapper) Free() {
 	}
 }
 
+// Ptr returns the raw C pointer. The returned pointer becomes invalid
+// after Free() is called. Do not retain it across Free() calls.
 func (w *packetWrapper) Ptr() unsafe.Pointer {
 	return w.ptr
 }

@@ -20,6 +20,9 @@ var _ = capi.Register       // ensure import
 // Re-exported from internal/ports/in for consumer convenience.
 type SwscaleContext = portin.SwscaleContext
 
+// Compile-time interface satisfaction check.
+var _ SwscaleContext = (*swscaleWrapper)(nil)
+
 type swscaleWrapper struct {
 	ptr  unsafe.Pointer
 	capi portout.SwscaleCAPI
@@ -54,6 +57,8 @@ func (w *swscaleWrapper) Free() {
 	}
 }
 
+// Ptr returns the raw C pointer. The returned pointer becomes invalid
+// after Free() is called. Do not retain it across Free() calls.
 func (w *swscaleWrapper) Ptr() unsafe.Pointer {
 	return w.ptr
 }

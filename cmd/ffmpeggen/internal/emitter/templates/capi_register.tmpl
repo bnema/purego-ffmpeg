@@ -5,12 +5,9 @@ package capi
 
 // Handles holds all FFmpeg shared library handles.
 type Handles struct {
-	Avutil     uintptr
-	Avcodec    uintptr
-	Avformat   uintptr
-	Swscale    uintptr
-	Swresample uintptr
-	Avfilter   uintptr
+{{- range .Libraries}}
+	{{.HandleField}}	uintptr
+{{- end}}
 }
 
 // Register loads all FFmpeg C API symbols from the shared library handles.

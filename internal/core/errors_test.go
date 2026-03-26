@@ -6,6 +6,10 @@ import (
 )
 
 func TestAvError_Error_WithoutStrerror(t *testing.T) {
+	orig := Strerror
+	Strerror = nil
+	defer func() { Strerror = orig }()
+
 	e := AvError(-11)
 	got := e.Error()
 	if got != "avError(-11)" {

@@ -20,6 +20,9 @@ var _ = capi.Register       // ensure import
 // Re-exported from internal/ports/in for consumer convenience.
 type Dictionary = portin.Dictionary
 
+// Compile-time interface satisfaction check.
+var _ Dictionary = (*dictWrapper)(nil)
+
 type dictWrapper struct {
 	ptr  unsafe.Pointer
 	capi portout.DictCAPI
@@ -58,6 +61,8 @@ func (w *dictWrapper) Free() {
 	}
 }
 
+// Ptr returns the raw C pointer. The returned pointer becomes invalid
+// after Free() is called. Do not retain it across Free() calls.
 func (w *dictWrapper) Ptr() unsafe.Pointer {
 	return w.ptr
 }

@@ -20,6 +20,9 @@ var _ = capi.Register       // ensure import
 // Re-exported from internal/ports/in for consumer convenience.
 type FilterGraph = portin.FilterGraph
 
+// Compile-time interface satisfaction check.
+var _ FilterGraph = (*avfilterWrapper)(nil)
+
 type avfilterWrapper struct {
 	ptr  unsafe.Pointer
 	capi portout.FilterCAPI
@@ -74,6 +77,8 @@ func (w *avfilterWrapper) Free() {
 	}
 }
 
+// Ptr returns the raw C pointer. The returned pointer becomes invalid
+// after Free() is called. Do not retain it across Free() calls.
 func (w *avfilterWrapper) Ptr() unsafe.Pointer {
 	return w.ptr
 }

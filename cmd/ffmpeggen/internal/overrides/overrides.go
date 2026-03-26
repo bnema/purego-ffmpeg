@@ -39,6 +39,10 @@ var Overrides = []Override{
 	{Name: "av_fourcc2str", Skip: true},
 }
 
+// Accessor offsets were measured against FFmpeg 7.x (libavcodec 62, libavformat 62,
+// libavutil 60) on x86_64 Linux. These offsets are ABI-dependent and MUST be
+// regenerated when targeting different FFmpeg major versions or architectures.
+// Use cmd/ffmpeggen/offsetgen/main.c to regenerate offset values.
 var Domains = []Domain{
 	{
 		Name: "format", Library: "libavformat",

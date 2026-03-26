@@ -36,7 +36,10 @@ func isErrorReturn(retType string, funcName string) bool {
 		return false
 	}
 	// Most FFmpeg functions returning int use AVERROR convention.
-	// Exceptions: functions that return counts, booleans, etc.
+	// Exceptions: functions that return counts, booleans, indices, etc.
+	// To identify exceptions, check FFmpeg documentation for functions where
+	// the return value is not an error code (e.g., boolean predicates,
+	// element counts). Add new exceptions here as more functions are wrapped.
 	noErrorFuncs := map[string]bool{
 		"avcodec_is_open":      true,
 		"av_frame_is_writable": true,
@@ -183,13 +186,17 @@ func BuildInitData(domains []DomainData) InitData {
 }
 
 // BuildCAPIRegisterData groups domains by library and creates registration entries.
+// The canonical field order must match loader.Handles so that
+// capi.Handles(loaderHandles) is a valid Go type conversion.
 func BuildCAPIRegisterData(domains []DomainData) CAPIRegisterData {
+	// Canonical order — must match loader.Handles field order.
+	canonicalOrder := []string{"Avutil", "Avcodec", "Avformat", "Swscale", "Swresample", "Avfilter"}
+
 	type libEntry struct {
 		handleField   string
 		registerFuncs []string
 	}
 
-	libOrder := []string{} // preserve order
 	libMap := make(map[string]*libEntry)
 
 	for _, d := range domains {
@@ -200,15 +207,22 @@ func BuildCAPIRegisterData(domains []DomainData) CAPIRegisterData {
 		handleField := libraryToHandleField(d.Library)
 		if _, ok := libMap[handleField]; !ok {
 			libMap[handleField] = &libEntry{handleField: handleField}
-			libOrder = append(libOrder, handleField)
 		}
 		registerFunc := "Register" + titleCase(d.Name)
 		libMap[handleField].registerFuncs = append(libMap[handleField].registerFuncs, registerFunc)
 	}
 
 	var data CAPIRegisterData
-	for _, hf := range libOrder {
-		le := libMap[hf]
+	for _, hf := range canonicalOrder {
+		le, ok := libMap[hf]
+		if !ok {
+			// Library has no domains with functions; still emit it for
+			// Handles struct field generation.
+			data.Libraries = append(data.Libraries, CAPILibraryData{
+				HandleField: hf,
+			})
+			continue
+		}
 		data.Libraries = append(data.Libraries, CAPILibraryData{
 			HandleField:   le.handleField,
 			RegisterFuncs: le.registerFuncs,

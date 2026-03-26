@@ -14,6 +14,10 @@ var _ = unsafe.Pointer(nil) // ensure import is used
 {{range .Domains -}}
 {{$domainName := .Name -}}
 type {{$domainName}}CAPIAdapter struct{}
+{{- if not .Functions}}
+// {{$domainName}}CAPIAdapter has no methods; this domain is accessor-only
+// (field reads/writes via struct offsets, not function calls).
+{{- end}}
 
 {{range .Functions -}}
 func ({{$domainName}}CAPIAdapter) {{.GoMethod}}({{range $i, $p := .Params}}{{if $i}}, {{end}}{{$p.Name}} {{$p.GoType}}{{end}}){{if not .Return.IsVoid}} {{.Return.GoType}}{{end}} {

@@ -274,6 +274,9 @@ func (hwaccelCAPIAdapter) IterateTypes(prev int32) int32 {
 
 type streamCAPIAdapter struct{}
 
+// streamCAPIAdapter has no methods; this domain is accessor-only
+// (field reads/writes via struct offsets, not function calls).
+
 type avfilterCAPIAdapter struct{}
 
 func (avfilterCAPIAdapter) GraphAlloc() unsafe.Pointer {

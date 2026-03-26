@@ -53,7 +53,7 @@ func run(cfg config) error {
 	for _, domain := range overrides.Domains {
 		dd := emitter.BuildDomainData(headers, domain)
 		if len(dd.Functions) == 0 && len(dd.Accessors) == 0 {
-			fmt.Printf("  SKIP %s (no functions or accessors matched)\n", domain.Name)
+			fmt.Fprintf(os.Stderr, "  SKIP %s (no functions or accessors matched)\n", domain.Name)
 			continue
 		}
 		domains = append(domains, dd)
@@ -91,7 +91,7 @@ func run(cfg config) error {
 			return err
 		}
 
-		fmt.Printf("  %s: %d funcs, %d accessors\n", dd.Name, len(dd.Functions), len(dd.Accessors))
+		fmt.Fprintf(os.Stderr, "  %s: %d funcs, %d accessors\n", dd.Name, len(dd.Functions), len(dd.Accessors))
 	}
 
 	// Step 4: Emit cross-domain files
@@ -142,7 +142,7 @@ func run(cfg config) error {
 		return err
 	}
 
-	fmt.Printf("\nGenerated %d domains, cross-domain files done.\n", len(domains))
+	fmt.Fprintf(os.Stderr, "\nGenerated %d domains, cross-domain files done.\n", len(domains))
 	return nil
 }
 
