@@ -6,7 +6,7 @@ package capi
 import (
 	"unsafe"
 
-	out "github.com/bnema/purego-ffmpeg/internal/ports/out"
+	portout "github.com/bnema/purego-ffmpeg/internal/ports/out"
 )
 
 var _ = unsafe.Pointer(nil) // ensure import is used
@@ -26,7 +26,7 @@ func ({{$domainName}}CAPIAdapter) {{.GoMethod}}({{range $i, $p := .Params}}{{if 
 // Adapters provides the real CAPI implementations.
 type Adapters struct {
 {{- range .Domains}}
-	{{.PortInterface | trimSuffix "CAPI"}}	out.{{.PortInterface}}
+	{{.PortInterface | trimSuffix "CAPI"}}	portout.{{.PortInterface}}
 {{- end}}
 }
 

@@ -5,7 +5,7 @@ package capi
 import (
 	"unsafe"
 
-	out "github.com/bnema/purego-ffmpeg/internal/ports/out"
+	portout "github.com/bnema/purego-ffmpeg/internal/ports/out"
 )
 
 var _ = unsafe.Pointer(nil) // ensure import is used
@@ -310,17 +310,17 @@ func (avfilterCAPIAdapter) BuffersinkGetFrame(ctx unsafe.Pointer, frame unsafe.P
 
 // Adapters provides the real CAPI implementations.
 type Adapters struct {
-	Format     out.FormatCAPI
-	Codec      out.CodecCAPI
-	Packet     out.PacketCAPI
-	Frame      out.FrameCAPI
-	Swscale    out.SwscaleCAPI
-	Swresample out.SwresampleCAPI
-	Dict       out.DictCAPI
-	Util       out.UtilCAPI
-	HWAccel    out.HWAccelCAPI
-	Stream     out.StreamCAPI
-	Filter     out.FilterCAPI
+	Format     portout.FormatCAPI
+	Codec      portout.CodecCAPI
+	Packet     portout.PacketCAPI
+	Frame      portout.FrameCAPI
+	Swscale    portout.SwscaleCAPI
+	Swresample portout.SwresampleCAPI
+	Dict       portout.DictCAPI
+	Util       portout.UtilCAPI
+	HWAccel    portout.HWAccelCAPI
+	Stream     portout.StreamCAPI
+	Filter     portout.FilterCAPI
 }
 
 // NewAdapters returns Adapters wired to real purego bindings.

@@ -8,7 +8,7 @@ import (
 	"github.com/bnema/purego-ffmpeg/internal/capi"
 	"github.com/bnema/purego-ffmpeg/internal/core"
 	"github.com/bnema/purego-ffmpeg/internal/loader"
-	out "github.com/bnema/purego-ffmpeg/internal/ports/out"
+	portout "github.com/bnema/purego-ffmpeg/internal/ports/out"
 )
 
 // Option configures Init.
@@ -50,77 +50,77 @@ func Init(opts ...Option) error {
 // handles are released when the process exits. Reserved for future use.
 func Shutdown() {}
 
-func defaultFormat() out.FormatCAPI {
+func defaultFormat() portout.FormatCAPI {
 	if adapters.Format == nil {
 		panic("ffmpeg: Init() must be called before using FFmpeg functions")
 	}
 	return adapters.Format
 }
 
-func defaultCodec() out.CodecCAPI {
+func defaultCodec() portout.CodecCAPI {
 	if adapters.Codec == nil {
 		panic("ffmpeg: Init() must be called before using FFmpeg functions")
 	}
 	return adapters.Codec
 }
 
-func defaultPacket() out.PacketCAPI {
+func defaultPacket() portout.PacketCAPI {
 	if adapters.Packet == nil {
 		panic("ffmpeg: Init() must be called before using FFmpeg functions")
 	}
 	return adapters.Packet
 }
 
-func defaultFrame() out.FrameCAPI {
+func defaultFrame() portout.FrameCAPI {
 	if adapters.Frame == nil {
 		panic("ffmpeg: Init() must be called before using FFmpeg functions")
 	}
 	return adapters.Frame
 }
 
-func defaultSwscale() out.SwscaleCAPI {
+func defaultSwscale() portout.SwscaleCAPI {
 	if adapters.Swscale == nil {
 		panic("ffmpeg: Init() must be called before using FFmpeg functions")
 	}
 	return adapters.Swscale
 }
 
-func defaultSwresample() out.SwresampleCAPI {
+func defaultSwresample() portout.SwresampleCAPI {
 	if adapters.Swresample == nil {
 		panic("ffmpeg: Init() must be called before using FFmpeg functions")
 	}
 	return adapters.Swresample
 }
 
-func defaultDict() out.DictCAPI {
+func defaultDict() portout.DictCAPI {
 	if adapters.Dict == nil {
 		panic("ffmpeg: Init() must be called before using FFmpeg functions")
 	}
 	return adapters.Dict
 }
 
-func defaultUtil() out.UtilCAPI {
+func defaultUtil() portout.UtilCAPI {
 	if adapters.Util == nil {
 		panic("ffmpeg: Init() must be called before using FFmpeg functions")
 	}
 	return adapters.Util
 }
 
-func defaultHWAccel() out.HWAccelCAPI {
+func defaultHWAccel() portout.HWAccelCAPI {
 	if adapters.HWAccel == nil {
 		panic("ffmpeg: Init() must be called before using FFmpeg functions")
 	}
 	return adapters.HWAccel
 }
 
-func defaultStream() out.StreamCAPI {
+func defaultStream() portout.StreamCAPI {
 	if adapters.Stream == nil {
 		panic("ffmpeg: Init() must be called before using FFmpeg functions")
 	}
 	return adapters.Stream
 }
 
-func defaultFilter() out.FilterCAPI {
+func defaultFilter() portout.FilterCAPI {
 	if adapters.Filter == nil {
 		panic("ffmpeg: Init() must be called before using FFmpeg functions")
 	}

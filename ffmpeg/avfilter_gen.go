@@ -7,22 +7,22 @@ import (
 
 	"github.com/bnema/purego-ffmpeg/internal/capi"
 	"github.com/bnema/purego-ffmpeg/internal/core"
-	in "github.com/bnema/purego-ffmpeg/internal/ports/in"
-	out "github.com/bnema/purego-ffmpeg/internal/ports/out"
+	portin "github.com/bnema/purego-ffmpeg/internal/ports/in"
+	portout "github.com/bnema/purego-ffmpeg/internal/ports/out"
 )
 
 var _ = unsafe.Pointer(nil) // ensure import
 var _ = core.CheckError     // ensure import
-var _ out.FilterCAPI        // ensure import
+var _ portout.FilterCAPI    // ensure import
 var _ = capi.Register       // ensure import
 
 // FilterGraph is the public interface for avfilter domain operations.
 // Re-exported from internal/ports/in for consumer convenience.
-type FilterGraph = in.FilterGraph
+type FilterGraph = portin.FilterGraph
 
 type avfilterWrapper struct {
 	ptr  unsafe.Pointer
-	capi out.FilterCAPI
+	capi portout.FilterCAPI
 }
 
 // NewFilterGraphWithPtr wraps an existing pointer with FilterGraph methods.

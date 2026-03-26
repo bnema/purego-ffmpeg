@@ -7,22 +7,22 @@ import (
 
 	"github.com/bnema/purego-ffmpeg/internal/capi"
 	"github.com/bnema/purego-ffmpeg/internal/core"
-	in "github.com/bnema/purego-ffmpeg/internal/ports/in"
-	out "github.com/bnema/purego-ffmpeg/internal/ports/out"
+	portin "github.com/bnema/purego-ffmpeg/internal/ports/in"
+	portout "github.com/bnema/purego-ffmpeg/internal/ports/out"
 )
 
 var _ = unsafe.Pointer(nil) // ensure import
 var _ = core.CheckError     // ensure import
-var _ out.StreamCAPI        // ensure import
+var _ portout.StreamCAPI    // ensure import
 var _ = capi.Register       // ensure import
 
 // Stream is the public interface for stream domain operations.
 // Re-exported from internal/ports/in for consumer convenience.
-type Stream = in.Stream
+type Stream = portin.Stream
 
 type streamWrapper struct {
 	ptr  unsafe.Pointer
-	capi out.StreamCAPI
+	capi portout.StreamCAPI
 }
 
 // NewStreamWithPtr wraps an existing pointer with Stream methods.

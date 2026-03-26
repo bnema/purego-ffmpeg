@@ -7,22 +7,22 @@ import (
 
 	"github.com/bnema/purego-ffmpeg/internal/capi"
 	"github.com/bnema/purego-ffmpeg/internal/core"
-	in "github.com/bnema/purego-ffmpeg/internal/ports/in"
-	out "github.com/bnema/purego-ffmpeg/internal/ports/out"
+	portin "github.com/bnema/purego-ffmpeg/internal/ports/in"
+	portout "github.com/bnema/purego-ffmpeg/internal/ports/out"
 )
 
 var _ = unsafe.Pointer(nil) // ensure import
 var _ = core.CheckError     // ensure import
-var _ out.FrameCAPI         // ensure import
+var _ portout.FrameCAPI     // ensure import
 var _ = capi.Register       // ensure import
 
 // Frame is the public interface for frame domain operations.
 // Re-exported from internal/ports/in for consumer convenience.
-type Frame = in.Frame
+type Frame = portin.Frame
 
 type frameWrapper struct {
 	ptr  unsafe.Pointer
-	capi out.FrameCAPI
+	capi portout.FrameCAPI
 }
 
 // NewFrameWithPtr wraps an existing pointer with Frame methods.

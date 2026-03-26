@@ -7,22 +7,22 @@ import (
 
 	"github.com/bnema/purego-ffmpeg/internal/capi"
 	"github.com/bnema/purego-ffmpeg/internal/core"
-	in "github.com/bnema/purego-ffmpeg/internal/ports/in"
-	out "github.com/bnema/purego-ffmpeg/internal/ports/out"
+	portin "github.com/bnema/purego-ffmpeg/internal/ports/in"
+	portout "github.com/bnema/purego-ffmpeg/internal/ports/out"
 )
 
 var _ = unsafe.Pointer(nil) // ensure import
 var _ = core.CheckError     // ensure import
-var _ out.FormatCAPI        // ensure import
+var _ portout.FormatCAPI    // ensure import
 var _ = capi.Register       // ensure import
 
 // FormatContext is the public interface for format domain operations.
 // Re-exported from internal/ports/in for consumer convenience.
-type FormatContext = in.FormatContext
+type FormatContext = portin.FormatContext
 
 type formatWrapper struct {
 	ptr  unsafe.Pointer
-	capi out.FormatCAPI
+	capi portout.FormatCAPI
 }
 
 // NewFormatContextWithPtr wraps an existing pointer with FormatContext methods.

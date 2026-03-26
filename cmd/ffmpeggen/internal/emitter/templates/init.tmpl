@@ -9,7 +9,7 @@ import (
 	"github.com/bnema/purego-ffmpeg/internal/capi"
 	"github.com/bnema/purego-ffmpeg/internal/core"
 	"github.com/bnema/purego-ffmpeg/internal/loader"
-	out "github.com/bnema/purego-ffmpeg/internal/ports/out"
+	portout "github.com/bnema/purego-ffmpeg/internal/ports/out"
 )
 
 // Option configures Init.
@@ -53,7 +53,7 @@ func Shutdown() {}
 
 {{range .Domains -}}
 {{- if .PortInterface}}
-func default{{.PortInterface | trimSuffix "CAPI"}}() out.{{.PortInterface}} {
+func default{{.PortInterface | trimSuffix "CAPI"}}() portout.{{.PortInterface}} {
 	if adapters.{{.PortInterface | trimSuffix "CAPI"}} == nil {
 		panic("ffmpeg: Init() must be called before using FFmpeg functions")
 	}

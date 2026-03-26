@@ -7,22 +7,22 @@ import (
 
 	"github.com/bnema/purego-ffmpeg/internal/capi"
 	"github.com/bnema/purego-ffmpeg/internal/core"
-	in "github.com/bnema/purego-ffmpeg/internal/ports/in"
-	out "github.com/bnema/purego-ffmpeg/internal/ports/out"
+	portin "github.com/bnema/purego-ffmpeg/internal/ports/in"
+	portout "github.com/bnema/purego-ffmpeg/internal/ports/out"
 )
 
 var _ = unsafe.Pointer(nil) // ensure import
 var _ = core.CheckError     // ensure import
-var _ out.DictCAPI          // ensure import
+var _ portout.DictCAPI      // ensure import
 var _ = capi.Register       // ensure import
 
 // Dictionary is the public interface for dict domain operations.
 // Re-exported from internal/ports/in for consumer convenience.
-type Dictionary = in.Dictionary
+type Dictionary = portin.Dictionary
 
 type dictWrapper struct {
 	ptr  unsafe.Pointer
-	capi out.DictCAPI
+	capi portout.DictCAPI
 }
 
 // NewDictionaryWithPtr wraps an existing pointer with Dictionary methods.

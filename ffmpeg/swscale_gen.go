@@ -7,22 +7,22 @@ import (
 
 	"github.com/bnema/purego-ffmpeg/internal/capi"
 	"github.com/bnema/purego-ffmpeg/internal/core"
-	in "github.com/bnema/purego-ffmpeg/internal/ports/in"
-	out "github.com/bnema/purego-ffmpeg/internal/ports/out"
+	portin "github.com/bnema/purego-ffmpeg/internal/ports/in"
+	portout "github.com/bnema/purego-ffmpeg/internal/ports/out"
 )
 
 var _ = unsafe.Pointer(nil) // ensure import
 var _ = core.CheckError     // ensure import
-var _ out.SwscaleCAPI       // ensure import
+var _ portout.SwscaleCAPI   // ensure import
 var _ = capi.Register       // ensure import
 
 // SwscaleContext is the public interface for swscale domain operations.
 // Re-exported from internal/ports/in for consumer convenience.
-type SwscaleContext = in.SwscaleContext
+type SwscaleContext = portin.SwscaleContext
 
 type swscaleWrapper struct {
 	ptr  unsafe.Pointer
-	capi out.SwscaleCAPI
+	capi portout.SwscaleCAPI
 }
 
 // NewSwscaleContextWithPtr wraps an existing pointer with SwscaleContext methods.

@@ -9,25 +9,25 @@ import (
 	"github.com/bnema/purego-ffmpeg/internal/capi"
 	"github.com/bnema/purego-ffmpeg/internal/core"
 {{- if .PublicType}}
-	in "github.com/bnema/purego-ffmpeg/internal/ports/in"
+	portin "github.com/bnema/purego-ffmpeg/internal/ports/in"
 {{- end}}
-	out "github.com/bnema/purego-ffmpeg/internal/ports/out"
+	portout "github.com/bnema/purego-ffmpeg/internal/ports/out"
 )
 
 var _ = unsafe.Pointer(nil) // ensure import
 var _ = core.CheckError     // ensure import
-var _ out.{{.PortInterface}} // ensure import
+var _ portout.{{.PortInterface}} // ensure import
 var _ = capi.Register       // ensure import
 
 {{- if .PublicType}}
 
 // {{.PublicType}} is the public interface for {{.Name}} domain operations.
 // Re-exported from internal/ports/in for consumer convenience.
-type {{.PublicType}} = in.{{.PublicType}}
+type {{.PublicType}} = portin.{{.PublicType}}
 
 type {{.Name}}Wrapper struct {
 	ptr  unsafe.Pointer
-	capi out.{{.PortInterface}}
+	capi portout.{{.PortInterface}}
 }
 
 // New{{.PublicType}}WithPtr wraps an existing pointer with {{.PublicType}} methods.

@@ -7,12 +7,12 @@ import (
 
 	"github.com/bnema/purego-ffmpeg/internal/capi"
 	"github.com/bnema/purego-ffmpeg/internal/core"
-	out "github.com/bnema/purego-ffmpeg/internal/ports/out"
+	portout "github.com/bnema/purego-ffmpeg/internal/ports/out"
 )
 
 var _ = unsafe.Pointer(nil) // ensure import
 var _ = core.CheckError     // ensure import
-var _ out.HWAccelCAPI       // ensure import
+var _ portout.HWAccelCAPI   // ensure import
 var _ = capi.Register       // ensure import
 // hwaccel domain — free functions (no wrapper type).
 
