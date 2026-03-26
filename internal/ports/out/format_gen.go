@@ -10,7 +10,7 @@ var _ = unsafe.Pointer(nil) // ensure import
 type FormatCAPI interface {
 	AllocContext() unsafe.Pointer
 	FreeContext(s unsafe.Pointer)
-	OpenInput(ps unsafe.Pointer, uRL *byte, fmt unsafe.Pointer, options unsafe.Pointer) int32
+	OpenInput(ps unsafe.Pointer, url *byte, fmt unsafe.Pointer, options unsafe.Pointer) int32
 	FindStreamInfo(ic unsafe.Pointer, options unsafe.Pointer) int32
 	ReadFrame(s unsafe.Pointer, pkt unsafe.Pointer) int32
 	CloseInput(s unsafe.Pointer)

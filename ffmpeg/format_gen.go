@@ -33,8 +33,8 @@ func (w *formatWrapper) FreeContext(s unsafe.Pointer) {
 	w.capi.FreeContext(s)
 }
 
-func (w *formatWrapper) OpenInput(ps unsafe.Pointer, uRL *byte, fmt unsafe.Pointer, options unsafe.Pointer) int32 {
-	return w.capi.OpenInput(ps, uRL, fmt, options)
+func (w *formatWrapper) OpenInput(ps unsafe.Pointer, url *byte, fmt unsafe.Pointer, options unsafe.Pointer) int32 {
+	return w.capi.OpenInput(ps, url, fmt, options)
 }
 
 func (w *formatWrapper) FindStreamInfo(ic unsafe.Pointer, options unsafe.Pointer) int32 {

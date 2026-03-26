@@ -8,8 +8,8 @@ var _ = unsafe.Pointer(nil) // ensure import
 
 // CodecContext is the public interface for codec domain operations.
 type CodecContext interface {
-	FindDecoder(iD int32) unsafe.Pointer
-	FindEncoder(iD int32) unsafe.Pointer
+	FindDecoder(id int32) unsafe.Pointer
+	FindEncoder(id int32) unsafe.Pointer
 	FindDecoderByName(name *byte) unsafe.Pointer
 	FindEncoderByName(name *byte) unsafe.Pointer
 	AllocContext3(codec unsafe.Pointer) unsafe.Pointer

@@ -36,9 +36,9 @@ func (mock *MockFormatCAPI) FreeContext(s unsafe.Pointer) {
 	}
 }
 
-func (mock *MockFormatCAPI) OpenInput(ps unsafe.Pointer, uRL *byte, fmt unsafe.Pointer, options unsafe.Pointer) int32 {
+func (mock *MockFormatCAPI) OpenInput(ps unsafe.Pointer, url *byte, fmt unsafe.Pointer, options unsafe.Pointer) int32 {
 	if mock.OpenInputFunc != nil {
-		return mock.OpenInputFunc(ps, uRL, fmt, options)
+		return mock.OpenInputFunc(ps, url, fmt, options)
 	}
 	var zero int32
 	return zero

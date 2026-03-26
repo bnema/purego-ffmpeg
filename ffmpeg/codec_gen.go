@@ -25,12 +25,12 @@ type codecWrapper struct {
 	capi out.CodecCAPI
 }
 
-func (w *codecWrapper) FindDecoder(iD int32) unsafe.Pointer {
-	return w.capi.FindDecoder(iD)
+func (w *codecWrapper) FindDecoder(id int32) unsafe.Pointer {
+	return w.capi.FindDecoder(id)
 }
 
-func (w *codecWrapper) FindEncoder(iD int32) unsafe.Pointer {
-	return w.capi.FindEncoder(iD)
+func (w *codecWrapper) FindEncoder(id int32) unsafe.Pointer {
+	return w.capi.FindEncoder(id)
 }
 
 func (w *codecWrapper) FindDecoderByName(name *byte) unsafe.Pointer {

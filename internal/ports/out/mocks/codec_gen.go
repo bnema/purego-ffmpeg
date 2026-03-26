@@ -23,17 +23,17 @@ type MockCodecCAPI struct {
 	ParametersFromContextFunc func(unsafe.Pointer, unsafe.Pointer) int32
 }
 
-func (mock *MockCodecCAPI) FindDecoder(iD int32) unsafe.Pointer {
+func (mock *MockCodecCAPI) FindDecoder(id int32) unsafe.Pointer {
 	if mock.FindDecoderFunc != nil {
-		return mock.FindDecoderFunc(iD)
+		return mock.FindDecoderFunc(id)
 	}
 	var zero unsafe.Pointer
 	return zero
 }
 
-func (mock *MockCodecCAPI) FindEncoder(iD int32) unsafe.Pointer {
+func (mock *MockCodecCAPI) FindEncoder(id int32) unsafe.Pointer {
 	if mock.FindEncoderFunc != nil {
-		return mock.FindEncoderFunc(iD)
+		return mock.FindEncoderFunc(id)
 	}
 	var zero unsafe.Pointer
 	return zero

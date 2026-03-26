@@ -20,8 +20,8 @@ func (formatCAPIAdapter) FreeContext(s unsafe.Pointer) {
 	avformat_free_context(s)
 }
 
-func (formatCAPIAdapter) OpenInput(ps unsafe.Pointer, uRL *byte, fmt unsafe.Pointer, options unsafe.Pointer) int32 {
-	return avformat_open_input(ps, uRL, fmt, options)
+func (formatCAPIAdapter) OpenInput(ps unsafe.Pointer, url *byte, fmt unsafe.Pointer, options unsafe.Pointer) int32 {
+	return avformat_open_input(ps, url, fmt, options)
 }
 
 func (formatCAPIAdapter) FindStreamInfo(ic unsafe.Pointer, options unsafe.Pointer) int32 {
@@ -58,12 +58,12 @@ func (formatCAPIAdapter) WriteTrailer(s unsafe.Pointer) int32 {
 
 type codecCAPIAdapter struct{}
 
-func (codecCAPIAdapter) FindDecoder(iD int32) unsafe.Pointer {
-	return avcodec_find_decoder(iD)
+func (codecCAPIAdapter) FindDecoder(id int32) unsafe.Pointer {
+	return avcodec_find_decoder(id)
 }
 
-func (codecCAPIAdapter) FindEncoder(iD int32) unsafe.Pointer {
-	return avcodec_find_encoder(iD)
+func (codecCAPIAdapter) FindEncoder(id int32) unsafe.Pointer {
+	return avcodec_find_encoder(id)
 }
 
 func (codecCAPIAdapter) FindDecoderByName(name *byte) unsafe.Pointer {

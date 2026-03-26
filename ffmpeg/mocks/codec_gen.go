@@ -35,17 +35,17 @@ type MockCodecContext struct {
 	PtrFunc                   func() unsafe.Pointer
 }
 
-func (mock *MockCodecContext) FindDecoder(iD int32) unsafe.Pointer {
+func (mock *MockCodecContext) FindDecoder(id int32) unsafe.Pointer {
 	if mock.FindDecoderFunc != nil {
-		return mock.FindDecoderFunc(iD)
+		return mock.FindDecoderFunc(id)
 	}
 	var zero unsafe.Pointer
 	return zero
 }
 
-func (mock *MockCodecContext) FindEncoder(iD int32) unsafe.Pointer {
+func (mock *MockCodecContext) FindEncoder(id int32) unsafe.Pointer {
 	if mock.FindEncoderFunc != nil {
-		return mock.FindEncoderFunc(iD)
+		return mock.FindEncoderFunc(id)
 	}
 	var zero unsafe.Pointer
 	return zero

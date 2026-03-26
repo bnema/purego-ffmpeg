@@ -1,6 +1,8 @@
 package emitter
 
 import (
+	"fmt"
+	"os"
 	"strings"
 
 	"github.com/bnema/purego-ffmpeg/cmd/ffmpeggen/internal/model"
@@ -73,8 +75,7 @@ func BuildDomainData(headers []*model.Header, domain overrides.Domain) DomainDat
 	for _, fm := range domain.Functions {
 		fn, ok := funcMap[fm.C]
 		if !ok {
-			// Function not found in parsed headers — skip silently.
-			// This can happen if the header doesn't exist on this system.
+			fmt.Fprintf(os.Stderr, "  WARN: %s not found in parsed headers for domain %s\n", fm.C, domain.Name)
 			continue
 		}
 		dfd := DomainFuncData{

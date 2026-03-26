@@ -30,6 +30,8 @@ var (
 )
 
 // Init loads FFmpeg libraries and wires all adapters.
+// Init runs only once; subsequent calls return the cached result,
+// even with different options.
 func Init(opts ...Option) error {
 	initOnce.Do(func() {
 		handles, err := loader.Load(opts...)
@@ -44,21 +46,62 @@ func Init(opts ...Option) error {
 	return initErr
 }
 
-// Shutdown performs global cleanup.
+// Shutdown performs global cleanup. Currently a no-op — FFmpeg library
+// handles are released when the process exits. Reserved for future use.
 func Shutdown() {}
 
-func defaultFormat() out.FormatCAPI { return adapters.Format }
+func defaultFormat() out.FormatCAPI {
+	if adapters.Format == nil {
+		panic("ffmpeg: Init() must be called before using FFmpeg functions")
+	}
+	return adapters.Format
+}
 
-func defaultCodec() out.CodecCAPI { return adapters.Codec }
+func defaultCodec() out.CodecCAPI {
+	if adapters.Codec == nil {
+		panic("ffmpeg: Init() must be called before using FFmpeg functions")
+	}
+	return adapters.Codec
+}
 
-func defaultPacket() out.PacketCAPI { return adapters.Packet }
+func defaultPacket() out.PacketCAPI {
+	if adapters.Packet == nil {
+		panic("ffmpeg: Init() must be called before using FFmpeg functions")
+	}
+	return adapters.Packet
+}
 
-func defaultFrame() out.FrameCAPI { return adapters.Frame }
+func defaultFrame() out.FrameCAPI {
+	if adapters.Frame == nil {
+		panic("ffmpeg: Init() must be called before using FFmpeg functions")
+	}
+	return adapters.Frame
+}
 
-func defaultSwscale() out.SwscaleCAPI { return adapters.Swscale }
+func defaultSwscale() out.SwscaleCAPI {
+	if adapters.Swscale == nil {
+		panic("ffmpeg: Init() must be called before using FFmpeg functions")
+	}
+	return adapters.Swscale
+}
 
-func defaultSwresample() out.SwresampleCAPI { return adapters.Swresample }
+func defaultSwresample() out.SwresampleCAPI {
+	if adapters.Swresample == nil {
+		panic("ffmpeg: Init() must be called before using FFmpeg functions")
+	}
+	return adapters.Swresample
+}
 
-func defaultDict() out.DictCAPI { return adapters.Dict }
+func defaultDict() out.DictCAPI {
+	if adapters.Dict == nil {
+		panic("ffmpeg: Init() must be called before using FFmpeg functions")
+	}
+	return adapters.Dict
+}
 
-func defaultUtil() out.UtilCAPI { return adapters.Util }
+func defaultUtil() out.UtilCAPI {
+	if adapters.Util == nil {
+		panic("ffmpeg: Init() must be called before using FFmpeg functions")
+	}
+	return adapters.Util
+}

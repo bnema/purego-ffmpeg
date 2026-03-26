@@ -1,4 +1,3 @@
-// internal/core/strings_test.go
 package core
 
 import "testing"

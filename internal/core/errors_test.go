@@ -1,4 +1,3 @@
-// internal/core/errors_test.go
 package core
 
 import (

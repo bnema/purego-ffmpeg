@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
 
 	"github.com/ebitengine/purego"
 )
@@ -35,6 +36,8 @@ type config struct {
 	soVersions SOVersions
 }
 
+// defaultSOVersions corresponds to FFmpeg 7.x releases.
+// Override with WithSOVersions for other FFmpeg versions.
 var defaultSOVersions = SOVersions{
 	Avutil:     "60",
 	Avcodec:    "62",
@@ -76,7 +79,7 @@ func Load(opts ...Option) (Handles, error) {
 
 	var handles [5]uintptr
 	for i, l := range libs {
-		soName := l.name + ".so." + l.soVer
+		soName := libFileName(l.name, l.soVer)
 		var fullPath string
 		if dir != "" {
 			fullPath = filepath.Join(dir, soName)
@@ -85,6 +88,10 @@ func Load(opts ...Option) (Handles, error) {
 		}
 		handle, err := purego.Dlopen(fullPath, purego.RTLD_NOW|purego.RTLD_GLOBAL)
 		if err != nil {
+			// Close previously opened handles to avoid resource leaks.
+			for j := 0; j < i; j++ {
+				purego.Dlclose(handles[j]) //nolint:errcheck
+			}
 			return Handles{}, fmt.Errorf("load %s: %w", soName, err)
 		}
 		handles[i] = handle
@@ -97,6 +104,19 @@ func Load(opts ...Option) (Handles, error) {
 		Avformat:   handles[3],
 		Swscale:    handles[4],
 	}, nil
+}
+
+// libFileName returns the platform-specific shared library filename for the
+// given base name and major version number.
+func libFileName(name, version string) string {
+	switch runtime.GOOS {
+	case "darwin":
+		return name + "." + version + ".dylib"
+	case "windows":
+		return name + "-" + version + ".dll"
+	default:
+		return name + ".so." + version
+	}
 }
 
 func resolveDir(explicit string) string {

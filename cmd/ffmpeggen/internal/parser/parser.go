@@ -322,9 +322,11 @@ func parseEnum(name, body string) model.Enum {
 			val = fmt.Sprintf("%d", nextVal)
 			nameToVal[cname] = nextVal
 			nextVal++
-		} else if n, err := strconv.Atoi(val); err == nil {
-			nameToVal[cname] = n
-			nextVal = n + 1
+		} else if n, err := strconv.ParseInt(val, 0, 64); err == nil {
+			// ParseInt with base 0 handles decimal, hex (0x...), and octal (0...).
+			nameToVal[cname] = int(n)
+			nextVal = int(n) + 1
+			val = fmt.Sprintf("%d", n)
 		} else if resolved, ok := nameToVal[val]; ok {
 			val = fmt.Sprintf("%d", resolved)
 			nameToVal[cname] = resolved
@@ -499,8 +501,21 @@ func goParamName(cname string) string {
 	if len(name) == 0 {
 		return cname
 	}
-	// Lowercase first letter
-	name = strings.ToLower(name[:1]) + name[1:]
+	// If the whole name is an acronym (all uppercase), fully lowercase it.
+	// This prevents e.g. "ID" → "iD"; instead it becomes "id".
+	allUpper := true
+	for _, r := range name {
+		if !unicode.IsUpper(r) {
+			allUpper = false
+			break
+		}
+	}
+	if allUpper {
+		name = strings.ToLower(name)
+	} else {
+		// Lowercase first letter only
+		name = strings.ToLower(name[:1]) + name[1:]
+	}
 	// Escape Go keywords
 	if goKeywords[name] {
 		name = name + "_"

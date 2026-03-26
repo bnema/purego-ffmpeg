@@ -12,6 +12,13 @@ import (
 //go:embed templates/*.tmpl
 var templateFS embed.FS
 
+var lowerFirstFn = func(s string) string {
+	if s == "" {
+		return s
+	}
+	return strings.ToLower(s[:1]) + s[1:]
+}
+
 // hexFuncMap is the shared FuncMap used by all hexagonal layer templates.
 var hexFuncMap = template.FuncMap{
 	"title": func(s string) string {
@@ -20,24 +27,14 @@ var hexFuncMap = template.FuncMap{
 		}
 		return strings.ToUpper(s[:1]) + s[1:]
 	},
-	"lower": func(s string) string {
-		if s == "" {
-			return s
-		}
-		return strings.ToLower(s[:1]) + s[1:]
-	},
+	"lower": lowerFirstFn,
 	// trimSuffix receives the pipeline value as the last argument:
 	// {{.Name | trimSuffix "CAPI"}} → trimSuffix("CAPI", .Name)
 	"trimSuffix": func(suffix, s string) string {
 		return strings.TrimSuffix(s, suffix)
 	},
-	"lowerFirst": func(s string) string {
-		if s == "" {
-			return s
-		}
-		return strings.ToLower(s[:1]) + s[1:]
-	},
-	"upper": strings.ToUpper,
+	"lowerFirst": lowerFirstFn,
+	"upper":      strings.ToUpper,
 }
 
 // renderTemplate parses a single template file from the embedded FS, executes it

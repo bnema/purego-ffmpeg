@@ -31,6 +31,8 @@ var (
 )
 
 // Init loads FFmpeg libraries and wires all adapters.
+// Init runs only once; subsequent calls return the cached result,
+// even with different options.
 func Init(opts ...Option) error {
 	initOnce.Do(func() {
 		handles, err := loader.Load(opts...)
@@ -45,11 +47,17 @@ func Init(opts ...Option) error {
 	return initErr
 }
 
-// Shutdown performs global cleanup.
+// Shutdown performs global cleanup. Currently a no-op — FFmpeg library
+// handles are released when the process exits. Reserved for future use.
 func Shutdown() {}
 
 {{range .Domains -}}
 {{- if .PortInterface}}
-func default{{.PortInterface | trimSuffix "CAPI"}}() out.{{.PortInterface}} { return adapters.{{.PortInterface | trimSuffix "CAPI"}} }
+func default{{.PortInterface | trimSuffix "CAPI"}}() out.{{.PortInterface}} {
+	if adapters.{{.PortInterface | trimSuffix "CAPI"}} == nil {
+		panic("ffmpeg: Init() must be called before using FFmpeg functions")
+	}
+	return adapters.{{.PortInterface | trimSuffix "CAPI"}}
+}
 {{end -}}
 {{end}}
