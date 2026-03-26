@@ -308,8 +308,11 @@ func (avfilterCAPIAdapter) BuffersinkGetFrame(ctx unsafe.Pointer, frame unsafe.P
 	return av_buffersink_get_frame(ctx, frame)
 }
 
-// Adapters provides the real CAPI implementations.
-type Adapters struct {
+// Bridge aggregates all per-domain CAPI adapters.
+// Individual domain adapters are accessed via exported fields;
+// method-name collisions across domains (e.g. Alloc, FreePtr)
+// prevent a single struct from implementing portout.CAPI via embedding.
+type Bridge struct {
 	Format     portout.FormatCAPI
 	Codec      portout.CodecCAPI
 	Packet     portout.PacketCAPI
@@ -323,9 +326,9 @@ type Adapters struct {
 	Filter     portout.FilterCAPI
 }
 
-// NewAdapters returns Adapters wired to real purego bindings.
-func NewAdapters() Adapters {
-	return Adapters{
+// NewBridge returns a Bridge wired to real purego bindings.
+func NewBridge() *Bridge {
+	return &Bridge{
 		Format:     formatCAPIAdapter{},
 		Codec:      codecCAPIAdapter{},
 		Packet:     packetCAPIAdapter{},

@@ -23,16 +23,19 @@ func ({{$domainName}}CAPIAdapter) {{.GoMethod}}({{range $i, $p := .Params}}{{if 
 {{end}}
 {{- end}}
 
-// Adapters provides the real CAPI implementations.
-type Adapters struct {
+// Bridge aggregates all per-domain CAPI adapters.
+// Individual domain adapters are accessed via exported fields;
+// method-name collisions across domains (e.g. Alloc, FreePtr)
+// prevent a single struct from implementing portout.CAPI via embedding.
+type Bridge struct {
 {{- range .Domains}}
 	{{.PortInterface | trimSuffix "CAPI"}}	portout.{{.PortInterface}}
 {{- end}}
 }
 
-// NewAdapters returns Adapters wired to real purego bindings.
-func NewAdapters() Adapters {
-	return Adapters{
+// NewBridge returns a Bridge wired to real purego bindings.
+func NewBridge() *Bridge {
+	return &Bridge{
 {{- range .Domains}}
 		{{.PortInterface | trimSuffix "CAPI"}}:	{{.Name}}CAPIAdapter{},
 {{- end}}

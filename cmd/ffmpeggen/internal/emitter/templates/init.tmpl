@@ -27,7 +27,7 @@ func WithSOVersions(v SOVersions) Option { return loader.WithSOVersions(v) }
 var (
 	initOnce sync.Once
 	initErr  error
-	adapters capi.Adapters
+	bridge   *capi.Bridge
 )
 
 // Init loads FFmpeg libraries and wires all adapters.
@@ -41,8 +41,8 @@ func Init(opts ...Option) error {
 			return
 		}
 		capi.Register(capi.Handles(handles))
-		adapters = capi.NewAdapters()
-		core.Strerror = adapters.Util.Strerror
+		bridge = capi.NewBridge()
+		core.Strerror = bridge.Util.Strerror
 	})
 	return initErr
 }
@@ -54,10 +54,10 @@ func Shutdown() {}
 {{range .Domains -}}
 {{- if .PortInterface}}
 func default{{.PortInterface | trimSuffix "CAPI"}}() portout.{{.PortInterface}} {
-	if adapters.{{.PortInterface | trimSuffix "CAPI"}} == nil {
+	if bridge == nil {
 		panic("ffmpeg: Init() must be called before using FFmpeg functions")
 	}
-	return adapters.{{.PortInterface | trimSuffix "CAPI"}}
+	return bridge.{{.PortInterface | trimSuffix "CAPI"}}
 }
 {{end -}}
 {{end}}

@@ -26,7 +26,7 @@ func WithSOVersions(v SOVersions) Option { return loader.WithSOVersions(v) }
 var (
 	initOnce sync.Once
 	initErr  error
-	adapters capi.Adapters
+	bridge   *capi.Bridge
 )
 
 // Init loads FFmpeg libraries and wires all adapters.
@@ -40,8 +40,8 @@ func Init(opts ...Option) error {
 			return
 		}
 		capi.Register(capi.Handles(handles))
-		adapters = capi.NewAdapters()
-		core.Strerror = adapters.Util.Strerror
+		bridge = capi.NewBridge()
+		core.Strerror = bridge.Util.Strerror
 	})
 	return initErr
 }
@@ -51,78 +51,78 @@ func Init(opts ...Option) error {
 func Shutdown() {}
 
 func defaultFormat() portout.FormatCAPI {
-	if adapters.Format == nil {
+	if bridge == nil {
 		panic("ffmpeg: Init() must be called before using FFmpeg functions")
 	}
-	return adapters.Format
+	return bridge.Format
 }
 
 func defaultCodec() portout.CodecCAPI {
-	if adapters.Codec == nil {
+	if bridge == nil {
 		panic("ffmpeg: Init() must be called before using FFmpeg functions")
 	}
-	return adapters.Codec
+	return bridge.Codec
 }
 
 func defaultPacket() portout.PacketCAPI {
-	if adapters.Packet == nil {
+	if bridge == nil {
 		panic("ffmpeg: Init() must be called before using FFmpeg functions")
 	}
-	return adapters.Packet
+	return bridge.Packet
 }
 
 func defaultFrame() portout.FrameCAPI {
-	if adapters.Frame == nil {
+	if bridge == nil {
 		panic("ffmpeg: Init() must be called before using FFmpeg functions")
 	}
-	return adapters.Frame
+	return bridge.Frame
 }
 
 func defaultSwscale() portout.SwscaleCAPI {
-	if adapters.Swscale == nil {
+	if bridge == nil {
 		panic("ffmpeg: Init() must be called before using FFmpeg functions")
 	}
-	return adapters.Swscale
+	return bridge.Swscale
 }
 
 func defaultSwresample() portout.SwresampleCAPI {
-	if adapters.Swresample == nil {
+	if bridge == nil {
 		panic("ffmpeg: Init() must be called before using FFmpeg functions")
 	}
-	return adapters.Swresample
+	return bridge.Swresample
 }
 
 func defaultDict() portout.DictCAPI {
-	if adapters.Dict == nil {
+	if bridge == nil {
 		panic("ffmpeg: Init() must be called before using FFmpeg functions")
 	}
-	return adapters.Dict
+	return bridge.Dict
 }
 
 func defaultUtil() portout.UtilCAPI {
-	if adapters.Util == nil {
+	if bridge == nil {
 		panic("ffmpeg: Init() must be called before using FFmpeg functions")
 	}
-	return adapters.Util
+	return bridge.Util
 }
 
 func defaultHWAccel() portout.HWAccelCAPI {
-	if adapters.HWAccel == nil {
+	if bridge == nil {
 		panic("ffmpeg: Init() must be called before using FFmpeg functions")
 	}
-	return adapters.HWAccel
+	return bridge.HWAccel
 }
 
 func defaultStream() portout.StreamCAPI {
-	if adapters.Stream == nil {
+	if bridge == nil {
 		panic("ffmpeg: Init() must be called before using FFmpeg functions")
 	}
-	return adapters.Stream
+	return bridge.Stream
 }
 
 func defaultFilter() portout.FilterCAPI {
-	if adapters.Filter == nil {
+	if bridge == nil {
 		panic("ffmpeg: Init() must be called before using FFmpeg functions")
 	}
-	return adapters.Filter
+	return bridge.Filter
 }
