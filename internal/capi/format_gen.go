@@ -17,7 +17,7 @@ var (
 	avformat_write_header          func(unsafe.Pointer, unsafe.Pointer) int32
 	av_interleaved_write_frame     func(unsafe.Pointer, unsafe.Pointer) int32
 	av_write_trailer               func(unsafe.Pointer) int32
-	avio_alloc_context             func(int32, int32, unsafe.Pointer, uintptr, uintptr, uintptr) unsafe.Pointer
+	avio_alloc_context             func(unsafe.Pointer, int32, int32, unsafe.Pointer, uintptr, uintptr, uintptr) unsafe.Pointer
 	avio_context_free              func(unsafe.Pointer)
 )
 

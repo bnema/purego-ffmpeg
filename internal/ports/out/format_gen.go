@@ -19,6 +19,6 @@ type FormatCAPI interface {
 	WriteHeader(s unsafe.Pointer, options unsafe.Pointer) int32
 	InterleavedWriteFrame(s unsafe.Pointer, pkt unsafe.Pointer) int32
 	WriteTrailer(s unsafe.Pointer) int32
-	AvioAllocContext(bufSize int32, writeFlag int32, opaque unsafe.Pointer, readCb uintptr, writeCb uintptr, seekCb uintptr) unsafe.Pointer
+	AvioAllocContext(buffer unsafe.Pointer, bufSize int32, writeFlag int32, opaque unsafe.Pointer, readCb uintptr, writeCb uintptr, seekCb uintptr) unsafe.Pointer
 	AvioContextFree(ctx unsafe.Pointer)
 }

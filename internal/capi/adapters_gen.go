@@ -56,8 +56,8 @@ func (formatCAPIAdapter) WriteTrailer(s unsafe.Pointer) int32 {
 	return av_write_trailer(s)
 }
 
-func (formatCAPIAdapter) AvioAllocContext(bufSize int32, writeFlag int32, opaque unsafe.Pointer, readCb uintptr, writeCb uintptr, seekCb uintptr) unsafe.Pointer {
-	return avio_alloc_context(bufSize, writeFlag, opaque, readCb, writeCb, seekCb)
+func (formatCAPIAdapter) AvioAllocContext(buffer unsafe.Pointer, bufSize int32, writeFlag int32, opaque unsafe.Pointer, readCb uintptr, writeCb uintptr, seekCb uintptr) unsafe.Pointer {
+	return avio_alloc_context(buffer, bufSize, writeFlag, opaque, readCb, writeCb, seekCb)
 }
 
 func (formatCAPIAdapter) AvioContextFree(ctx unsafe.Pointer) {

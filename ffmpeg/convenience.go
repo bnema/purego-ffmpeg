@@ -290,7 +290,11 @@ func FmtCtxNbStreams(ctx unsafe.Pointer) uint32 {
 }
 
 // FmtCtxStream returns the AVStream* at index idx from AVFormatContext.streams[idx].
+// Returns nil if idx is out of range.
 func FmtCtxStream(ctx unsafe.Pointer, idx int) unsafe.Pointer {
+	if idx < 0 || uint32(idx) >= FmtCtxNbStreams(ctx) {
+		return nil
+	}
 	streamsPtr := *(*unsafe.Pointer)(unsafe.Add(ctx, capi.OffsetAVFormatContextStreamsPtr))
 	if streamsPtr == nil {
 		return nil
@@ -317,12 +321,13 @@ func FmtCtxSetFlags(ctx unsafe.Pointer, v int32) {
 
 // AvioAllocContext allocates an AVIOContext for custom I/O.
 // readCb/writeCb/seekCb are purego function pointers (use purego.NewCallback).
+// The internal buffer is allocated by FFmpeg (nil is passed for the buffer parameter).
 func AvioAllocContext(bufSize int, writeFlag bool, opaque unsafe.Pointer, readCb, writeCb, seekCb uintptr) unsafe.Pointer {
 	wf := int32(0)
 	if writeFlag {
 		wf = 1
 	}
-	return defaultFormat().AvioAllocContext(int32(bufSize), wf, opaque, readCb, writeCb, seekCb)
+	return defaultFormat().AvioAllocContext(nil, int32(bufSize), wf, opaque, readCb, writeCb, seekCb)
 }
 
 func AvioContextFree(ctx unsafe.Pointer) {
@@ -374,6 +379,8 @@ func HWFrameTransferData(dst, src unsafe.Pointer, flags int32) int32 {
 	return FrameTransferData(dst, src, flags)
 }
 
+// HWFramesCtxSetFormat sets the pixel format on an AVHWFramesContext.
+// ctx must point to AVHWFramesContext (obtained via BufferRefData), not AVBufferRef.
 func HWFramesCtxSetFormat(ctx unsafe.Pointer, v int32) {
 	*(*int32)(unsafe.Add(ctx, capi.OffsetAVHWFramesContextFormat)) = v
 }
