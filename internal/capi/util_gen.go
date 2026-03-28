@@ -15,9 +15,17 @@ var (
 	av_rescale_q             func(int64, AVRational, AVRational) int64
 	av_image_get_buffer_size func(int32, int32, int32, int32) int32
 	av_strerror              func(int32, *byte, uintptr) int32
+	av_buffer_ref            func(unsafe.Pointer) unsafe.Pointer
+	av_buffer_unref          func(unsafe.Pointer)
+	av_get_sample_fmt_name   func(int32) *byte
 )
 
 var _ = unsafe.Pointer(nil) // ensure import
+
+// Offset constants for AVBufferRef field accessors.
+const (
+	OffsetAVBufferRefData = 8
+)
 
 // RegisterUtil registers all util domain purego symbols.
 func RegisterUtil(handle uintptr) {
@@ -30,4 +38,7 @@ func RegisterUtil(handle uintptr) {
 	tryRegisterLibFunc(&av_rescale_q, handle, "av_rescale_q")
 	tryRegisterLibFunc(&av_image_get_buffer_size, handle, "av_image_get_buffer_size")
 	tryRegisterLibFunc(&av_strerror, handle, "av_strerror")
+	tryRegisterLibFunc(&av_buffer_ref, handle, "av_buffer_ref")
+	tryRegisterLibFunc(&av_buffer_unref, handle, "av_buffer_unref")
+	tryRegisterLibFunc(&av_get_sample_fmt_name, handle, "av_get_sample_fmt_name")
 }

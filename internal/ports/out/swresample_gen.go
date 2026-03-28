@@ -12,4 +12,5 @@ type SwresampleCAPI interface {
 	Init(s unsafe.Pointer) int32
 	Convert(s unsafe.Pointer, out unsafe.Pointer, outCount int32, in unsafe.Pointer, inCount int32) int32
 	FreePtr(s unsafe.Pointer)
+	GetDelay(s unsafe.Pointer, base int64) int64
 }

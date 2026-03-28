@@ -12,4 +12,7 @@ type HWAccelCAPI interface {
 	FindTypeByName(name *byte) int32
 	FrameTransferData(dst unsafe.Pointer, src unsafe.Pointer, flags int32) int32
 	IterateTypes(prev int32) int32
+	HWFrameCtxAlloc(deviceCtx unsafe.Pointer) unsafe.Pointer
+	HWFrameCtxInit(ref unsafe.Pointer) int32
+	HWFrameGetBuffer(hwFramesCtx unsafe.Pointer, frame unsafe.Pointer, flags int32) int32
 }

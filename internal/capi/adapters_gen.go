@@ -56,6 +56,14 @@ func (formatCAPIAdapter) WriteTrailer(s unsafe.Pointer) int32 {
 	return av_write_trailer(s)
 }
 
+func (formatCAPIAdapter) AvioAllocContext(bufSize int32, writeFlag int32, opaque unsafe.Pointer, readCb uintptr, writeCb uintptr, seekCb uintptr) unsafe.Pointer {
+	return avio_alloc_context(bufSize, writeFlag, opaque, readCb, writeCb, seekCb)
+}
+
+func (formatCAPIAdapter) AvioContextFree(ctx unsafe.Pointer) {
+	avio_context_free(ctx)
+}
+
 type codecCAPIAdapter struct{}
 
 func (codecCAPIAdapter) FindDecoder(id int32) unsafe.Pointer {
@@ -198,6 +206,10 @@ func (swresampleCAPIAdapter) FreePtr(s unsafe.Pointer) {
 	swr_free(s)
 }
 
+func (swresampleCAPIAdapter) GetDelay(s unsafe.Pointer, base int64) int64 {
+	return swr_get_delay(s, base)
+}
+
 type dictCAPIAdapter struct{}
 
 func (dictCAPIAdapter) Get(m unsafe.Pointer, key *byte, prev unsafe.Pointer, flags int32) unsafe.Pointer {
@@ -254,6 +266,18 @@ func (utilCAPIAdapter) Strerror(errnum int32, errbuf *byte, errbufSize uintptr) 
 	return av_strerror(errnum, errbuf, errbufSize)
 }
 
+func (utilCAPIAdapter) BufferRef(buf unsafe.Pointer) unsafe.Pointer {
+	return av_buffer_ref(buf)
+}
+
+func (utilCAPIAdapter) BufferUnref(buf unsafe.Pointer) {
+	av_buffer_unref(buf)
+}
+
+func (utilCAPIAdapter) GetSampleFmtName(sampleFmt int32) *byte {
+	return av_get_sample_fmt_name(sampleFmt)
+}
+
 type hwaccelCAPIAdapter struct{}
 
 func (hwaccelCAPIAdapter) DeviceCtxCreate(deviceCtx unsafe.Pointer, type_ int32, device *byte, opts unsafe.Pointer, flags int32) int32 {
@@ -270,6 +294,18 @@ func (hwaccelCAPIAdapter) FrameTransferData(dst unsafe.Pointer, src unsafe.Point
 
 func (hwaccelCAPIAdapter) IterateTypes(prev int32) int32 {
 	return av_hwdevice_iterate_types(prev)
+}
+
+func (hwaccelCAPIAdapter) HWFrameCtxAlloc(deviceCtx unsafe.Pointer) unsafe.Pointer {
+	return av_hwframe_ctx_alloc(deviceCtx)
+}
+
+func (hwaccelCAPIAdapter) HWFrameCtxInit(ref unsafe.Pointer) int32 {
+	return av_hwframe_ctx_init(ref)
+}
+
+func (hwaccelCAPIAdapter) HWFrameGetBuffer(hwFramesCtx unsafe.Pointer, frame unsafe.Pointer, flags int32) int32 {
+	return av_hwframe_get_buffer(hwFramesCtx, frame, flags)
 }
 
 type streamCAPIAdapter struct{}

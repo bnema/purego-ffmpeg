@@ -32,6 +32,12 @@ func NewStreamWithPtr(ptr unsafe.Pointer) *streamWrapper {
 	return &streamWrapper{ptr: ptr}
 }
 
+// WrapStream wraps a raw AVStream pointer for field access.
+// This is a convenience alias for NewStreamWithPtr.
+func WrapStream(ptr unsafe.Pointer) *streamWrapper {
+	return NewStreamWithPtr(ptr)
+}
+
 func (w *streamWrapper) Index() int32 {
 	if w.ptr == nil {
 		var zero int32
@@ -46,6 +52,11 @@ func (w *streamWrapper) CodecParameters() unsafe.Pointer {
 		return zero
 	}
 	return *(*unsafe.Pointer)(unsafe.Add(w.ptr, capi.OffsetAVStreamCodecParameters))
+}
+
+// Codecpar is an alias for CodecParameters, matching the C field name.
+func (w *streamWrapper) Codecpar() unsafe.Pointer {
+	return w.CodecParameters()
 }
 
 func (w *streamWrapper) TimeBase() AVRational {

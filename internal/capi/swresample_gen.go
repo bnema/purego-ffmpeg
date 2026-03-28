@@ -6,10 +6,11 @@ import "unsafe"
 
 // purego function pointer variables for swresample domain.
 var (
-	swr_alloc   func() unsafe.Pointer
-	swr_init    func(unsafe.Pointer) int32
-	swr_convert func(unsafe.Pointer, unsafe.Pointer, int32, unsafe.Pointer, int32) int32
-	swr_free    func(unsafe.Pointer)
+	swr_alloc     func() unsafe.Pointer
+	swr_init      func(unsafe.Pointer) int32
+	swr_convert   func(unsafe.Pointer, unsafe.Pointer, int32, unsafe.Pointer, int32) int32
+	swr_free      func(unsafe.Pointer)
+	swr_get_delay func(unsafe.Pointer, int64) int64
 )
 
 var _ = unsafe.Pointer(nil) // ensure import
@@ -20,4 +21,5 @@ func RegisterSwresample(handle uintptr) {
 	tryRegisterLibFunc(&swr_init, handle, "swr_init")
 	tryRegisterLibFunc(&swr_convert, handle, "swr_convert")
 	tryRegisterLibFunc(&swr_free, handle, "swr_free")
+	tryRegisterLibFunc(&swr_get_delay, handle, "swr_get_delay")
 }

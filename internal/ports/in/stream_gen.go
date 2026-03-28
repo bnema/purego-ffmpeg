@@ -13,6 +13,7 @@ var _ = unsafe.Pointer(nil) // ensure import
 type Stream interface {
 	Index() int32
 	CodecParameters() unsafe.Pointer
+	Codecpar() unsafe.Pointer
 	TimeBase() AVRational
 	SetTimeBase(v AVRational)
 	Duration() int64

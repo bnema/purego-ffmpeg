@@ -10,9 +10,21 @@ var (
 	av_hwdevice_find_type_by_name func(*byte) int32
 	av_hwframe_transfer_data      func(unsafe.Pointer, unsafe.Pointer, int32) int32
 	av_hwdevice_iterate_types     func(int32) int32
+	av_hwframe_ctx_alloc          func(unsafe.Pointer) unsafe.Pointer
+	av_hwframe_ctx_init           func(unsafe.Pointer) int32
+	av_hwframe_get_buffer         func(unsafe.Pointer, unsafe.Pointer, int32) int32
 )
 
 var _ = unsafe.Pointer(nil) // ensure import
+
+// Offset constants for AVHWFramesContext field accessors.
+const (
+	OffsetAVHWFramesContextInitialPoolSize = 56
+	OffsetAVHWFramesContextFormat          = 60
+	OffsetAVHWFramesContextSWFormat        = 64
+	OffsetAVHWFramesContextWidth           = 68
+	OffsetAVHWFramesContextHeight          = 72
+)
 
 // RegisterHwaccel registers all hwaccel domain purego symbols.
 func RegisterHwaccel(handle uintptr) {
@@ -20,4 +32,7 @@ func RegisterHwaccel(handle uintptr) {
 	tryRegisterLibFunc(&av_hwdevice_find_type_by_name, handle, "av_hwdevice_find_type_by_name")
 	tryRegisterLibFunc(&av_hwframe_transfer_data, handle, "av_hwframe_transfer_data")
 	tryRegisterLibFunc(&av_hwdevice_iterate_types, handle, "av_hwdevice_iterate_types")
+	tryRegisterLibFunc(&av_hwframe_ctx_alloc, handle, "av_hwframe_ctx_alloc")
+	tryRegisterLibFunc(&av_hwframe_ctx_init, handle, "av_hwframe_ctx_init")
+	tryRegisterLibFunc(&av_hwframe_get_buffer, handle, "av_hwframe_get_buffer")
 }

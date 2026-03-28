@@ -35,6 +35,22 @@ const (
 	OffsetAVCodecContextSampleFormat = 348
 	OffsetAVCodecContextHWDeviceCtx  = 560
 	OffsetAVCodecContextHWFramesCtx  = 552
+
+	OffsetAVCodecContextFramerate = 100
+	OffsetAVCodecContextBitRate   = 56
+	OffsetAVCodecContextGopSize   = 332
+	OffsetAVCodecContextFlags     = 64
+	OffsetAVCodecContextChLayout  = 352
+
+	// AVCodecParameters offsets
+	OffsetAVCodecParametersCodecType  = 0
+	OffsetAVCodecParametersCodecID    = 4
+	OffsetAVCodecParametersCodecTag   = 8
+	OffsetAVCodecParametersFormat     = 44
+	OffsetAVCodecParametersBitRate    = 48
+	OffsetAVCodecParametersWidth      = 72
+	OffsetAVCodecParametersHeight     = 76
+	OffsetAVCodecParametersSampleRate = 152
 )
 
 // RegisterCodec registers all codec domain purego symbols.

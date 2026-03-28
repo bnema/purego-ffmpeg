@@ -17,6 +17,8 @@ var (
 	avformat_write_header          func(unsafe.Pointer, unsafe.Pointer) int32
 	av_interleaved_write_frame     func(unsafe.Pointer, unsafe.Pointer) int32
 	av_write_trailer               func(unsafe.Pointer) int32
+	avio_alloc_context             func(int32, int32, unsafe.Pointer, uintptr, uintptr, uintptr) unsafe.Pointer
+	avio_context_free              func(unsafe.Pointer)
 )
 
 var _ = unsafe.Pointer(nil) // ensure import
@@ -27,6 +29,8 @@ const (
 	OffsetAVFormatContextStreamsPtr = 48
 	OffsetAVFormatContextDuration   = 104
 	OffsetAVFormatContextBitRate    = 112
+	OffsetAVFormatContextPB         = 32
+	OffsetAVFormatContextFlags      = 128
 )
 
 // RegisterFormat registers all format domain purego symbols.
@@ -42,4 +46,6 @@ func RegisterFormat(handle uintptr) {
 	tryRegisterLibFunc(&avformat_write_header, handle, "avformat_write_header")
 	tryRegisterLibFunc(&av_interleaved_write_frame, handle, "av_interleaved_write_frame")
 	tryRegisterLibFunc(&av_write_trailer, handle, "av_write_trailer")
+	tryRegisterLibFunc(&avio_alloc_context, handle, "avio_alloc_context")
+	tryRegisterLibFunc(&avio_context_free, handle, "avio_context_free")
 }

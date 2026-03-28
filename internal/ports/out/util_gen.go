@@ -17,4 +17,7 @@ type UtilCAPI interface {
 	RescaleQ(a int64, bq AVRational, cq AVRational) int64
 	ImageGetBufferSize(pixFmt int32, width int32, height int32, align int32) int32
 	Strerror(errnum int32, errbuf *byte, errbufSize uintptr) int32
+	BufferRef(buf unsafe.Pointer) unsafe.Pointer
+	BufferUnref(buf unsafe.Pointer)
+	GetSampleFmtName(sampleFmt int32) *byte
 }
