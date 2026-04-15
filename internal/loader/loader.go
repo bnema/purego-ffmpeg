@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/ebitengine/purego"
+	"github.com/bnema/purego"
 )
 
 // Handles holds all FFmpeg shared library handles.

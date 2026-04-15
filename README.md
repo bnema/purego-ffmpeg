@@ -1,6 +1,6 @@
 # purego-ffmpeg
 
-Go bindings for the FFmpeg C API using [purego](https://github.com/ebitengine/purego) — no cgo required.
+Go bindings for the FFmpeg C API using [purego](https://github.com/bnema/purego) — no cgo required.
 
 Linux only. `CGO_ENABLED=0`.
 
